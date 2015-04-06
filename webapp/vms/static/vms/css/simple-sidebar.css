@@ -1,0 +1,189 @@
+    /*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    padding: 10px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #6c9dc6;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color:  #428bca;
+    background: #eeeeee;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .active > a,
+.sidebar-nav > .active > a:hover,
+.sidebar-nav > .active > a:focus {
+color: #fff;
+background-color: #428bca;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 19px;
+    line-height: 60px;
+    color:  #68A2D5;
+}
+
+
+.navbar-toggle{
+    float:left;
+    border: 1px solid #e7e7e7;
+    padding: 6px;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 25px;
+  height: 2px;
+  background-color: #aaa;
+  border-radius: 1px;
+  margin:5px;
+}
+
+button {
+    font-size: 14px;
+    padding: 4px 13px 4px 13px;
+    color: #fffff8;
+    background-color:  #428bca;
+    border: 1.5px solid #428bca;
+    border-radius: 6px;
+}
+button:hover {
+    background-color: #fffff8;
+    color:  #428bca;
+}
+
+button.submit{
+    margin: 20px 0px 30px 15px;
+}
+
+button.comment{
+    margin: 10px 0px 10px 4px;
+    font-size: 12px;
+    padding: 3px 10px 3px 10px;
+    color: #428bca;
+    background-color:  #fffff8;
+}
+
+button.comment:hover {
+    color: #fffff8;
+    background-color:  #428bca;
+}
+
+#brand-toggle {
+    font-size: 19px;
+    color:  #68A2D5;
+    border-bottom: 1px solid #eee;
+}
+
+label {
+    font-weight: normal;
+    margin: 15px;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 0px 40px 10px 40px;
+    }
+
+    #page-content-wrapper {
+        color: #444;
+    }
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+
+    #brand-toggle{
+        display: none;
+    }
+
+}

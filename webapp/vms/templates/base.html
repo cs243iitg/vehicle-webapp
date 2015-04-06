@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>vms Portal</title>
+
+    <!-- Bootstrap core CSS -->
+    {% load staticfiles %}
+    <link href= "{% static 'vms/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+
+    <link href= "{% static 'vms/css/simple-sidebar.css' %}" rel="stylesheet" type="text/css">
+
+    <!--link href="{% static 'vms/dashboard.css' %}" rel="stylesheet" type="text/css"-->
+
+    <script src="{% static 'vms/js/ie-emulation-modes-warning.js' %}"></script>
+
+  </head>
+
+  <body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">Vehicle Management</li>
+                <li {% block sidebar-one %}{% endblock %}>
+                <a href="/vms/home/">Home</a>
+            </li>
+            <li {% block sidebar-two %}{% endblock %}>
+                <a href="/vms/new-permission/">Vehicle Logs</a>
+            </li>
+
+            <li {% block sidebar-three %}{% endblock %}>
+                <a href="/vms/pending-permissions/">Theft Reports</a>
+            </li>
+            <li {% block sidebar-four %}{% endblock %}>
+                <a href="/vms/permissions-done/">Parking Slots</a>
+            </li>
+            
+            <li><a href="/vms/logout/">Logout</a></li>
+            </ul>
+        </div>
+
+
+        <div id="page-content-wrapper">
+            <a class="navbar-toggle" href="#menu-toggle" id="menu-toggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <div id="brand-toggle">vms Portal</div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% block main %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'vms/js/jquery-1.11.0.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vms/js/docs.min.js' %}"></script>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+  </body>
+</html>

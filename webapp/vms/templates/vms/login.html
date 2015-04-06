@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Vehicle Management</title>
+	{% load staticfiles %}
+    <link href= "{% static 'vms/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vms/login.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'vms/js/ie-emulation-modes-warning.js' %}"></script>
+  </head>
+
+  <body>
+    <div class="container">
+		<form method="post" action="/vms/auth/"class="form-signin" role="form">
+			{% csrf_token %}
+			<h2 class="form-signin-heading">Please sign in</h2>
+            {% if form_errors %}
+                <p><font color="red">Your username and password didn't match. Please try again.</font></p>
+            {% endif %}
+            <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'vms/js/jquery.js"></script>
+    <script src="{% static 'vms/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vms/js/docs.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'vms/assets/js/ie10-viewport-bug-workaround.js' %}"></script>
+  </body>
+</html>

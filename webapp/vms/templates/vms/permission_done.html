@@ -1,0 +1,41 @@
+<!-- Shows Permissions on which decisions had been made -->
+{% extends "base.html" %}
+{% block permissions-done %} class="active" {% endblock %}
+{% block main %}
+<h1 class="page-header">Permissions Decided Upon</h1>
+<table class="table table-striped">
+  <thead>
+          <th>Applicant name</th>
+          <th>Permission Type</th>
+          <th>Status</th>
+          <th>Comment</th>
+
+  </thead>
+  <tbody>
+      {% for task in tasks %}
+          {% if full_name.username in task.approved_or_denied_by %}
+                <tr>
+                  <td>{{ task.user_name}}</td>
+                  <td>{{ task.template_id }}</td>
+                  <td><a href="/Permission/{{ task.id }}/done/ ">{{ task.status }}</a></td>
+                  <td>{{ task.comment }}</td>
+              </tr>  
+          {% else %}
+                {% for group in groups %}
+                    {% if group.name  in task.approved_or_denied_by %}
+                      <tr>
+                          <td>{{ task.user_name}}</td>
+                          <td>{{ task.template_id }}</td>
+                          <td><a href="/Permission/{{ task.id }}/done/">{{ task.status }}</a></td>
+                          <td>{{ task.comment }}</td>
+                      </tr>
+                    {% endif %}  
+                {% endfor%}
+          {% endif %}
+      {% endfor %}
+
+<tbody>
+            
+</table>
+
+{% endblock %}

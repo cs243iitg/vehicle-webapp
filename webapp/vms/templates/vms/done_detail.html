@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block permissions-done %} class="active" {% endblock %}
+{% block main %}
+<table class="table table-striped">
+    <tr><td><b>Task ID</b></td><td>{{task.id}}</td></tr>
+    <tr><td><b>Type of Permission</b></td><td>{{task.template_id}}</td></tr>
+    <tr><td><b>Name of the Applicant</b></td><td>{{task.user_name}}</td></tr>
+    <tr><td><b>Department</b></td><td>{{task.user_department}}</td></tr>
+    <tr><td><b>Designation</b></td><td>{{task.user_designation}}</td></tr>
+    <tr><td><b>From Date</b></td><td>{{task.from_date}}</td></tr>
+    <tr><td><b>To Date</td><td>{{task.to_date}}</td></tr>
+    <tr><td><b>Purposes</b></td><td>{{task.purpose}}</td></tr>
+    <tr><td><b>Facilities Required</b></td><td>{{task.facilities_required}}</td></tr>
+    <tr><td><b>Status</b></td><td>{{task.status}}</td></tr>
+    <tr><td><b>Comment</b></td><td>{{task.comment}}</td></tr>
+    
+</table>
+<form action="/Permission/permissions-done/">
+    <td>
+        <button type="submit">Go Back</button>
+    </td>
+</form>
+{% endblock %}

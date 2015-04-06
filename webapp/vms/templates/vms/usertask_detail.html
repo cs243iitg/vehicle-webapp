@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block home %} class="active" {% endblock %}
+{% block main %}
+
+<h2 class="sub-header">{{task.template_id}}</h2>
+<hr>
+
+<table class="table table-striped">
+    <tr><td><b>Task ID</b></td><td>{{task.id}}</td></tr>
+    <tr><td><b>Type of Permission</b></td><td>{{task.template_id}}</td></tr>
+    <tr><td><b>Department</b></td><td>{{task.user_department}}</td></tr>
+    <tr><td><b>Designation</b></td><td>{{task.user_designation}}</td></tr>
+    <tr><td><b>From Date</b></td><td>{{task.from_date}}</td></tr>
+    <tr><td><b>From Time</b></td><td>{{task.from_time}}</td></tr>
+    <tr><td><b>To Date</b></td><td>{{task.to_date}}</td></tr>
+    <tr><td><b>To Time</td><td>{{task.to_time}}</td></tr>
+    <tr><td><b>Purposes</b></td><td>{{task.purpose}}</td></tr>
+    <tr><td><b>Facilities Required</b></td><td>{{task.facilities_required}}</td></tr>
+    <tr><td><b>Status</b></td><td>{{task.status}}</td></tr>
+    <tr><td><b>Comment</b></td><td>{{task.comment}}</td></tr>
+    <tr><td>    
+</table>
+<hr>
+<div class="container" style=" margin-bottom: 30px">
+    <div class="col-md-4" style="background-color: #f5f5f5; padding-top: 10px; padding-bottom:20px;">
+
+        {% if task.comment_set.all %}
+            <h4>Previous Comments</h4>
+        {% else %}
+            <h4>Comments</h4>
+            <p>No previous Comments.</p>
+        {% endif %}
+
+        <table class="table">
+            {% for comment in task.comment_set.all %}
+            <tr>
+                <td style="color: #428bca; font-weight: bold;">{{ comment.user }}</td>
+                <td>{{ comment.text }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <form action="/Permission/{{ task.id }}/user/comment/" method="post">
+            {% csrf_token %}
+            {{ comment_form }}
+            </br><button type="submit" class="comment">Comment</button>
+        </form>
+
+    </div>
+</div>
+
+<form action="/Permission/home/">
+    <td>
+        <button type="submit">Go Back</button>
+    </td>
+</form>
+{% endblock %}
