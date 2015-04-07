@@ -212,7 +212,7 @@ class TheftReport(models.Model):
     remarks = models.TextField(max_length=1000, blank=True, null=True)
 
     def __str__(self):
-        return self.route
+        return self.registration_number
 
 
 class BusTiming(models.Model):

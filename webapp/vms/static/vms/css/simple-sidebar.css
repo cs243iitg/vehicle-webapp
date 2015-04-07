@@ -120,13 +120,14 @@ button {
     border: 1.5px solid #428bca;
     border-radius: 6px;
 }
+
 button:hover {
     background-color: #fffff8;
     color:  #428bca;
 }
 
-button.submit{
-    margin: 20px 0px 30px 15px;
+button.submit {
+    margin: 15px;
 }
 
 button.comment{
