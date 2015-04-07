@@ -38,7 +38,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'vms',
     'rest_framework',
-    'datetimewidget',
+    'rest',
+    'rest_framework.authtoken',
+    'datetimewidget'
+
 )
 
 MIDDLEWARE_CLASSES = (
