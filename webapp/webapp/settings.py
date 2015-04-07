@@ -39,7 +39,9 @@ INSTALLED_APPS = (
     'vms',
     'rest_framework',
     'rest',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'datetimewidget'
+
 )
 
 MIDDLEWARE_CLASSES = (

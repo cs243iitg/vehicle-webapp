@@ -8,6 +8,8 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
+from .forms import TheftForm
+from .models import TheftReport
 
 
 #------------------------------------------------------------
@@ -16,12 +18,14 @@ from django.shortcuts import get_object_or_404
 
 def login(request):
     """
-    displays login page at the start
+    Displays login page at the start
     """
     c = {}
     c.update(csrf(request))
     if request.method == 'POST':
-        return render_to_response('vms/login.html', {'form_errors': form_errors})
+        return render_to_response('vms/login.html', {
+            'form_errors': form_errors,
+        })
     else:
         return render_to_response('vms/login.html', c)
 
@@ -29,10 +33,12 @@ def login(request):
 @login_required(login_url="/vms")
 def logout(request):
     """
-    logs out user, only if he is already logged in.
+    Logs the user out, if he is logged in.
     """
     auth.logout(request)
-    return HttpResponseRedirect('/vms/', {'form_errors': "You've succesfully logged out."})
+    return HttpResponseRedirect('/vms/', {
+        'form_errors': "You've succesfully logged out."
+    })
 
 
 def auth_view(request):
@@ -44,12 +50,9 @@ def auth_view(request):
     user = auth.authenticate(username=username, password=password)
 
     if user is not None:
-        # Since the user is authenticated, Log the user in.
         auth.login(request, user)
         return HttpResponseRedirect('/vms/home')
-
     else:
-        # Return an 'invalid login' error message.
         return HttpResponseRedirect('/vms/')
 
 #------------------------------------------------------------
@@ -57,8 +60,48 @@ def auth_view(request):
 @login_required(login_url="/vms/")
 def home(request):
     """
-    displays home page for user, with his previous tasks
+    Home page for user, with his previous tasks
     """
-    return render_to_response('vms/home.html',
-                            {'username': request.user.username,},
-                            context_instance=RequestContext(request))
+    return render_to_response('vms/home.html',{
+        'username': request.user.username,
+    }, context_instance=RequestContext(request))
+
+
+@login_required(login_url="/vms/")
+def report_theft(request):
+    """
+    Displays theft report form for user
+    """
+    if request.method == 'POST':
+        form = TheftForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.reporter = request.user
+            task.save()
+            return HttpResponseRedirect("/vms/your-theft-reports")
+    else:
+        form = TheftForm()
+    return render_to_response("vms/report_theft.html", {
+        'form':form,
+    }, context_instance=RequestContext(request))
+
+
+@login_required(login_url="/vms/")
+def user_theft_reports(request):
+    """
+    Displays to users their theft reports
+    """
+    reports = TheftReport.objects.filter(reporter=request.user)
+    return render_to_response("vms/user_theft_reports.html", {
+        "reports": reports,
+    }, context_instance=RequestContext(request))
+
+@login_required(login_url="/vms/")
+def cancel_theft_report(request, theft_report_id):
+    """
+    Cancels theft report with specified id
+    """
+    theft_report = TheftReport.objects.get(id=theft_report_id)
+    if request.user == theft_report.reporter:
+        theft_report.delete()
+    return HttpResponseRedirect("/vms/your-theft-reports")

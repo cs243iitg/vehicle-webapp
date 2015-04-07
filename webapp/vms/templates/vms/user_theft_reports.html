@@ -1,0 +1,48 @@
+<!-- Shows pending Permission -->
+{% extends "base.html" %}
+{% block sidebar-two %} class="active" {% endblock %}
+{% block main %}
+<h2 class="page-header">Theft Reports</h2>
+
+{% if message %}
+    <p>Your report has been submitted</p>
+{% endif %}
+
+<table class="table table-bordered table-hover">
+{% if reports %}
+    <p>Here is the list of your theft reports:</p>
+    </br>
+    <thead>
+        <th>Reporter</th>
+        <th>Registration No.</th>
+        <th>Type</th>
+        <th>Model</th>
+        <th>Theft Time</th>
+        <th>Theft Place</th>
+        <th></th>
+    </thead>
+    <tbody>
+    {% for report in reports %}
+        {% if report %}
+        <tr>
+            <td>{{ report.reporter_name }}</td>
+            <td>{{ report.registration_number }}</td>
+            <td>{{ report.vehicle_type }}</td>
+            <td>{{ report.vehicle_model }}</a></td>
+            <td>{{ report.theft_time }}</td>
+            <td>{{ report.theft_place }}</td>
+            <td>
+                <a href="/vms/{{ report.id }}/cancel-theft-report" onclick="return confirm('Are you sure you want to delete this report?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+{% else %}
+</table>
+<p>You haven't yet submitted any theft reports. Click <a href="/vms/report-theft">here</a> to submit one.</p>
+
+{% endif %}
+{% endblock %}

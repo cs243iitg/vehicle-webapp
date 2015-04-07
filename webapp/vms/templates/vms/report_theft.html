@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block  javascript %}
+
+    {% load staticfiles %}
+    <script src="{% static 'vms/js/jquery-1.11.0.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap.min.js' %}"></script>
+
+    {{ form.media }}
+{% endblock %}
+
+{% block  sidebar-two %} class="active" {% endblock %}
+{% block main %}
+
+<h2 class="page-header">Report Theft
+    <span style="font-size: 14px; margin-left: 20px;">
+        <a href="/vms/your-theft-reports">View your reports</a>
+    </span>
+</h2>
+</br>
+<form action="/vms/submit-theft-report/" method="POST">
+	{% csrf_token %}
+    <div class="row">
+    	<table class="col-sm-12 col-md-11">
+            {% for field in form %}
+                <tr>
+                    <td class="col-sm-3 col-md-3">{{ field.label_tag }}</td>
+                    <td class="col-sm-6 col-md-4">{{ field }}</td>
+                    <td class="col-sm-3 col-md-5">{{ field.errors }}</td>
+                </tr>
+            {% endfor %}
+    	</table>
+    </div>
+    </br>
+    <div class="row">
+	       <button type="submit" class="btn btn-default col-md-offset-5 col-xs-offset-7">Submit</button>
+    </div>
+</form>
+
+{% endblock %}
