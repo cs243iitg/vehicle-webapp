@@ -40,6 +40,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'datetimewidget',
     'crispy_forms',
+    'rest',
+    'rest_framework.authtoken',
 )
 
 MIDDLEWARE_CLASSES = (

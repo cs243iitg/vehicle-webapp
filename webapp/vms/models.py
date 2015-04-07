@@ -217,8 +217,10 @@ class TheftReport(models.Model):
     remarks = models.TextField(max_length=1000, blank=True, null=True)
     status = models.CharField(max_length=20, default="not found")
 
+
     def __str__(self):
         return self.registration_number
+
 
 
 class BusTiming(models.Model):
