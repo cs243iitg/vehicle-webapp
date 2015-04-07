@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block sidebar-two %} class="active" {% endblock %}
+{% block main %}
+<h2 class="page-header">Vehicle Registrations</h2>
+
+{% if message %}
+    <p>Your registration details are sent to security for processing.</p>
+{% endif %}
+
+<table class="table table-bordered table-hover">
+{% if registrations %}
+    </br>
+    <thead>
+        <th>Name</th>
+        <th>Vehicle Model</th>
+        <th>Registration No.</th>
+        <th>Pass No.</th>
+        <th>Registration Status</th>
+    </thead>
+    <tbody>
+    {% for registration in registrations %}
+        {% if registration %}
+        <tr>
+            <td>{{ registration.name }}</td>
+            <td>{{ registration.make_and_model }}</td>
+            <td>{{ registration.vehicle_registration_number }}</td>
+            <td>{{ registration.vehicle_pass_no }}</td>
+            <td>{{ registration.status }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+{% else %}
+</table>
+<p>You have no vehicles registered. Click <a href="/vms/register-vehicle">here</a> to register one.</p>
+
+{% endif %}
+{% endblock %}

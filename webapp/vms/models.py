@@ -8,8 +8,6 @@ class StudentVehicle(models.Model):
     """
     Personal Details
     """
-    user_photo = models.ImageField()
-    vehicle_photo = models.ImageField()
     name = models.CharField(max_length=255)
     roll_number = models.IntegerField()
     department = models.CharField(max_length=100)
@@ -18,9 +16,8 @@ class StudentVehicle(models.Model):
     hostel_name = models.CharField(max_length=32)
     room_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
-    driving_license_number = models.CharField(max_length=15)
-    driving_license_issue_date = models.DateField()
-    driving_license_expiry_date = models.DateField()
+    user_photo = models.ImageField()
+    identity_card = models.FileField(upload_to='identity_card')
     """
     Parents' Contact Details
     """
@@ -32,13 +29,12 @@ class StudentVehicle(models.Model):
     permanent_address_district = models.CharField(max_length=100)
     permanent_address_state = models.CharField(max_length=100)
     permanent_address_pincode = models.IntegerField()
-    parents_emailid = models.EmailField(max_length=75)
     parents_contact_no = models.IntegerField()
+    parents_emailid = models.EmailField(max_length=75)
     """
     Vehicle Details
     """
     vehicle_registration_number = models.CharField(max_length=100)
-    registered_with_security_section = models.BooleanField()
     color = models.CharField(max_length=32)
     make_and_model = models.CharField(max_length=100)
     chassis_number = models.CharField(max_length=100)
@@ -47,17 +43,26 @@ class StudentVehicle(models.Model):
     relation_with_owner = models.CharField(max_length=32)
     vehicle_insurance_no = models.CharField(max_length=100)
     insurance_valid_upto = models.DateField()
-
-    declaration = models.BooleanField()
-    date_of_application = models.DateTimeField()
-
-    identity_card = models.FileField(upload_to='identity_card')
-    driving_license = models.FileField(upload_to='driving_license')
     vehicle_registration_card = models.FileField(
         upload_to='vehicle_registration_card')
     vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
-
-    vehicle_pass_no = models.CharField(max_length=32)
+    vehicle_photo = models.ImageField()
+    """
+    Driving License
+    """
+    driving_license_number = models.CharField(max_length=15)
+    driving_license_issue_date = models.DateField()
+    driving_license_expiry_date = models.DateField()
+    driving_license = models.FileField(upload_to='driving_license')
+    declaration = models.TextField(blank=True, null=True,
+        default="By submitting this form, I hereby declare that " +
+                "I will be obliged to the following terms and conditions:\n\n" +
+                "1) I will abide by the rules of Traffic,\n" +
+                "2) I will not cause inconvenience to other road users.")
+    
+    date_of_application = models.DateTimeField(blank=True, null=True)
+    registered_with_security_section = models.BooleanField()
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -210,6 +215,7 @@ class TheftReport(models.Model):
     theft_time = models.DateTimeField(blank=True, null=True)
     theft_place = models.CharField(max_length=100, blank=True, null=True)
     remarks = models.TextField(max_length=1000, blank=True, null=True)
+    status = models.CharField(max_length=20, default="not found")
 
     def __str__(self):
         return self.registration_number

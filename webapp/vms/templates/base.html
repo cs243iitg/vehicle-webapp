@@ -17,6 +17,7 @@
     <link href= "{% static 'vms/css/simple-sidebar.css' %}" rel="stylesheet" type="text/css">
     {% block javascript %}{% endblock %}
     <script src="{% static 'vms/js/ie-emulation-modes-warning.js' %}"></script>
+    <script src="{% static 'vms/js/pace.min.js' %}"></script>
 
   </head>
 
@@ -29,12 +30,15 @@
                     <a href="/vms/home/">Home</a>
                 </li>
                 <li {% block sidebar-two %}{% endblock %}>
-                    <a href="/vms/report-theft/">Report Theft</a>
+                    <a href="/vms/register-vehicle/">Register Vehicle</a>
                 </li>
                 <li {% block sidebar-three %}{% endblock %}>
-                    <a href="/vms/new-permission/">Vehicle Logs</a>
+                    <a href="/vms/report-theft/">Report Theft</a>
                 </li>
                 <li {% block sidebar-four %}{% endblock %}>
+                    <a href="/vms/new-permission/">Vehicle Logs</a>
+                </li>
+                <li {% block sidebar-five %}{% endblock %}>
                     <a href="/vms/permissions-done/">Parking Slots</a>
                 </li>
                 

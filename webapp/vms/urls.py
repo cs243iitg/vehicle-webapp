@@ -12,4 +12,8 @@ urlpatterns = [
         url('submit-theft-report/$', views.report_theft),
         url('your-theft-reports/$', views.user_theft_reports),
         url(r'^(?P<theft_report_id>\d+)/cancel-theft-report/$',views.cancel_theft_report),
+
+        url('register-vehicle/$', views.register_vehicle),
+        url('submit-vehicle-registration/$', views.register_vehicle),
+        url('your-vehicle-registrations/$', views.user_vehicle_registrations),
 ]

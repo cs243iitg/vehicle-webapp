@@ -8,9 +8,8 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-from .forms import TheftForm
-from .models import TheftReport
-
+from .forms import TheftForm, StudentVehicleForm
+from .models import TheftReport, StudentVehicle
 
 #------------------------------------------------------------
 #       User Authentication
@@ -55,6 +54,8 @@ def auth_view(request):
     else:
         return HttpResponseRedirect('/vms/')
 
+#------------------------------------------------------------
+#       Theft Reporting for User
 #------------------------------------------------------------
 
 @login_required(login_url="/vms/")
@@ -105,3 +106,50 @@ def cancel_theft_report(request, theft_report_id):
     if request.user == theft_report.reporter:
         theft_report.delete()
     return HttpResponseRedirect("/vms/your-theft-reports")
+
+#------------------------------------------------------------
+#       Theft Reports for Admin
+#------------------------------------------------------------
+
+@login_required(login_url="/vms/")
+def admin_theft_reports(request):
+    """
+    Displays to users their theft reports
+    """
+    reports = TheftReport.objects.all()
+    return render_to_response("vms/user_theft_reports.html", {
+        "reports": reports,
+    }, context_instance=RequestContext(request))
+
+
+#------------------------------------------------------------
+#       Student Vehicle Registration
+#------------------------------------------------------------
+
+@login_required(login_url="/vms/")
+def register_vehicle(request):
+    """
+    Displays form for registering vehicle
+    """
+    if request.method == 'POST':
+        form = StudentVehicleForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.reporter = request.user
+            task.save()
+            return HttpResponseRedirect("/vms/submit-vehicle-registration")
+    else:
+        form = StudentVehicleForm()
+    return render_to_response("vms/register_student_vehicle.html", {
+        'form':form,
+    }, context_instance=RequestContext(request))
+
+def user_vehicle_registrations(request):
+    """
+    Displays vehicle registrations of a user
+    """
+    registrations = StudentVehicle.objects.filter(
+        registered_in_the_name_of=request.user)
+    return render_to_response("vms/user_vehicle_registrations.html", {
+        "registrations": registrations,
+    }, context_instance=RequestContext(request))
