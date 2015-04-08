@@ -200,7 +200,6 @@ label {
 }
 
 
-
 @media(min-width:768px) {
     #wrapper {
         padding-left: 250px;
@@ -230,8 +229,15 @@ label {
         margin-right: 0;
     }
 
-    #brand-toggle{
+    #brand-toggle {
         display: none;
     }
 
+    .control-label {
+        text-align: left!important;
+    }
+
+    .control-label::after { 
+      content: ":";
+  }
 }

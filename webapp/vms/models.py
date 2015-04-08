@@ -61,7 +61,7 @@ class StudentVehicle(models.Model):
                 "2) I will not cause inconvenience to other road users.")
     
     date_of_application = models.DateTimeField(blank=True, null=True)
-    registered_with_security_section = models.BooleanField()
+    registered_with_security_section = models.BooleanField(default=False)
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
 
     def __str__(self):

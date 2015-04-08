@@ -4,12 +4,14 @@ from django.views import generic
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
+from django.contrib import messages
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm
 from .models import TheftReport, StudentVehicle
+from datetime import datetime
 
 #------------------------------------------------------------
 #       User Authentication
@@ -79,6 +81,7 @@ def report_theft(request):
             task = form.save(commit=False)
             task.reporter = request.user
             task.save()
+            messages.success(request, 'Your theft report is submitted.')
             return HttpResponseRedirect("/vms/your-theft-reports")
     else:
         form = TheftForm()
@@ -132,18 +135,23 @@ def register_vehicle(request):
     Displays form for registering vehicle
     """
     if request.method == 'POST':
-        form = StudentVehicleForm(request.POST)
+        form = StudentVehicleForm(request.POST, request.FILES)
         if form.is_valid():
             task = form.save(commit=False)
-            task.reporter = request.user
+            task.date_of_application = datetime.now().date()
+            task.vehicle_pass_no = "Not generated"
             task.save()
-            return HttpResponseRedirect("/vms/submit-vehicle-registration")
+            messages.success(request,
+                'Your vehicle registration is sent to security for ' + 
+                'processing. You will be contacted through your webmail.')
+            return HttpResponseRedirect("/vms/your-vehicle-registrations")
     else:
         form = StudentVehicleForm()
     return render_to_response("vms/register_student_vehicle.html", {
         'form':form,
     }, context_instance=RequestContext(request))
 
+@login_required(login_url="/vms/")
 def user_vehicle_registrations(request):
     """
     Displays vehicle registrations of a user
@@ -153,3 +161,13 @@ def user_vehicle_registrations(request):
     return render_to_response("vms/user_vehicle_registrations.html", {
         "registrations": registrations,
     }, context_instance=RequestContext(request))
+
+@login_required(login_url="/vms/")
+def cancel_student_vehicle_registration(request, student_vehicle_id):
+    """
+    Cancels student's vehicle registration of specified id
+    """
+    student_vehicle = StudentVehicle.objects.get(id=student_vehicle_id)
+    if request.user == student_vehicle.registered_in_the_name_of:
+        student_vehicle.delete()
+    return HttpResponseRedirect("/vms/your-vehicle-registrations")

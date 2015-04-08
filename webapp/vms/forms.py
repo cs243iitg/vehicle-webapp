@@ -7,7 +7,7 @@ from datetimewidget.widgets import DateTimeWidget, DateWidget
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from crispy_forms.bootstrap import TabHolder, Tab, Div, Field
-from crispy_forms.bootstrap import PrependedText, InlineCheckboxes
+from crispy_forms.bootstrap import AppendedText, PrependedText, InlineCheckboxes
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 
 class TheftForm(forms.ModelForm):
@@ -86,17 +86,19 @@ class StudentVehicleForm(forms.ModelForm):
                 'class': 'form-control',
                 'tabindex': index+1,
             })
+        for field in self.fields.values():
+            field.error_messages = {'required':''}
         self.helper = FormHelper()
         self.helper.form_id = 'id_student_vehicle_form'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-md-3'
+        self.helper.label_class = 'col-md-2 col-md-offset-1'
         self.helper.field_class = 'col-md-4'
         self.helper.form_method = 'post'
         self.helper.form_action = '/vms/submit-vehicle-registration/'
         self.helper.layout = Layout(
             TabHolder(
                 Tab('Personal Details',
-                    'name',
+                    'name', 
                     'roll_number',
                     'department',
                     'programme',
@@ -152,6 +154,7 @@ class StudentVehicleForm(forms.ModelForm):
                 )
             ),
             ButtonHolder(
-                Submit('submit', 'Submit', css_class='button col-md-offset-5')
+                Submit('submit', 'Submit',
+                       css_class='btn-primary col-md-offset-5 form-submit')
             )
         )
