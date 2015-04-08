@@ -31,7 +31,7 @@ def theft_report(request):
     elif request.method == 'POST':
         serializer = TheftReportSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(reporter=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -50,9 +50,9 @@ def theft_detail(request, pk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = TheftReportSerializer(snippet, data=request.data)
+        serializer = TheftReportSerializer(theft_report, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(reporter=request.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
