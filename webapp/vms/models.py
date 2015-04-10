@@ -171,6 +171,7 @@ class SuspiciousVehicle(models.Model):
     """
     Details of suspicious vehicle
     """
+    reporter=models.ForeignKey(User)
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
@@ -243,7 +244,6 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    reporter_name = models.CharField(max_length=255)
     registration_number = models.CharField(max_length=50)
     reporter = models.ForeignKey(User, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, null=True,
@@ -303,7 +303,7 @@ class BusTiming(models.Model):
     bus_no = models.CharField(max_length=10 ,blank=False)
     starting_point = models.ForeignKey('Place', related_name="starting_point")
     ending_point=models.ForeignKey('Place', related_name="ending_point")
-    availability = models.CharField(max_length=3,choices=DAYS, default=None)
+    availability = models.CharField(max_length=3, choices=DAYS, default=None)
     working_day=models.BooleanField()
     def __str__(self):
         return self.bus_no
