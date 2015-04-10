@@ -1,5 +1,5 @@
 from django.test import TestCase
-from vms.models import StudentVehicle, FacultyVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Route, Place, BusTiming , PersonPass, Day , Available
+from vms.models import StudentVehicle, FacultyVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming , PersonPass, Day
 from datetime import datetime
 
 
@@ -41,12 +41,12 @@ class VisitorLogTestCase(TestCase):
 		VisitorLog.objects.create(vehicle_number = "8956" , in_gate="K.V. gate",out_gate="Main gate",vehicle_type ="auto" , vehicle_model= "Hyundai Verna" ,driver_name="raja",license_number="34255",place_to_visit="manas",purpose_of_visit="cab",in_time=datetime.strptime('2015-07-05 06:34:57','%Y-%m-%d %H:%M:%S'), out_time =datetime.strptime('2015-07-05 06:35:57','%Y-%m-%d %H:%M:%S'))
 		VisitorLog.objects.create(vehicle_number = "3556" , in_gate="Main gate",out_gate="ASEB gate",vehicle_type ="bike" , vehicle_model= "Hyundai Verna" ,driver_name="manoj",license_number="24345",place_to_visit="kapili",purpose_of_visit="cab",in_time=datetime.strptime('2015-07-05 06:34:57','%Y-%m-%d %H:%M:%S'), out_time =datetime.strptime('2015-07-05 06:35:00','%Y-%m-%d %H:%M:%S'))
 
-class RouteTestCase(TestCase):
-	def setup(self):
-		Route.objects.create(place="PBWT-" , bus="B1")
-		Route.objects.create(place="BHM-" , bus="B2")
-		Route.objects.create(place="ADMN" , bus="B2")
-		Route.objects.create(place="JG-" , bus="B1")
+#class RouteTestCase(TestCase):
+	# def setup(self):
+	# 	Route.objects.create(place="PBWT-" , bus="B1")
+	# 	Route.objects.create(place="BHM-" , bus="B2")
+	# 	Route.objects.create(place="ADMN" , bus="B2")
+	# 	Route.objects.create(place="JG-" , bus="B1")
 
 
 class PlaceTestCase(TestCase):

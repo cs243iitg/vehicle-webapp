@@ -51,8 +51,8 @@ def auth_view(request):
     user = auth.authenticate(username=username, password=password)
 
     if user is not None:
-        auth.login(request, user)
-        return HttpResponseRedirect('/vms/home')
+        auth.login(request, user)        
+        return HttpResponseRedirect('/vms/users/dashboard') #CHANGE THIS!! -- SHOULD WORK ACCORDING TO USER
     else:
         return HttpResponseRedirect('/vms/')
 
@@ -65,15 +65,27 @@ def home(request):
     """
     Home page for user, with his previous tasks
     """
-    return render_to_response('vms/home.html',{
+    return render(request, 'users/dashboard.html',{
         'username': request.user.username,
-    }, context_instance=RequestContext(request))
+        'is_user': True,
+    })
+
+
+@login_required(login_url="/vms/")
+def admin_home(request):
+    """
+    Function to return home page of administrator
+    """
+    return render(request, 'admin/admin.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
 
 
 @login_required(login_url="/vms/")
 def report_theft(request):
     """
-    Displays theft report form for user
+    Displays theft report form for user -- NOTE: This form is common to admin and user
     """
     if request.method == 'POST':
         form = TheftForm(request.POST)
@@ -85,25 +97,27 @@ def report_theft(request):
             return HttpResponseRedirect("/vms/your-theft-reports")
     else:
         form = TheftForm()
-    return render_to_response("vms/report_theft.html", {
+    return render(request, "users/theft.html", {
         'form':form,
-    }, context_instance=RequestContext(request))
-
+        'is_admin': True if request.path == "/vms/admin/theft/" else False,
+        'is_user': True if request.path == "/vms/users/theft/" else False,
+    })
 
 @login_required(login_url="/vms/")
 def user_theft_reports(request):
     """
-    Displays to users their theft reports
+    Displays to users their theft reports -- NOTE: NO PAGE EXISTS FOR THIS AS YET
     """
     reports = TheftReport.objects.filter(reporter=request.user)
-    return render_to_response("vms/user_theft_reports.html", {
+    return render_to_response("users/theft_reports.html", {
         "reports": reports,
+        'is_user': True,
     }, context_instance=RequestContext(request))
 
 @login_required(login_url="/vms/")
 def cancel_theft_report(request, theft_report_id):
     """
-    Cancels theft report with specified id
+    Cancels theft report with specified id -- NOTE: NO PAGE EXISTS FOR THIS AS YET
     """
     theft_report = TheftReport.objects.get(id=theft_report_id)
     if request.user == theft_report.reporter:
@@ -117,11 +131,12 @@ def cancel_theft_report(request, theft_report_id):
 @login_required(login_url="/vms/")
 def admin_theft_reports(request):
     """
-    Displays to users their theft reports
+    Displays to admin all users' theft reports
     """
     reports = TheftReport.objects.all()
     return render_to_response("vms/user_theft_reports.html", {
         "reports": reports,
+        'is_admin': True,
     }, context_instance=RequestContext(request))
 
 
@@ -132,7 +147,7 @@ def admin_theft_reports(request):
 @login_required(login_url="/vms/")
 def register_vehicle(request):
     """
-    Displays form for registering vehicle
+    Displays form for registering vehicle -- NOTE: This form is common to users and admin
     """
     if request.method == 'POST':
         form = StudentVehicleForm(request.POST, request.FILES)
@@ -147,9 +162,11 @@ def register_vehicle(request):
             return HttpResponseRedirect("/vms/your-vehicle-registrations")
     else:
         form = StudentVehicleForm()
-    return render_to_response("vms/register_student_vehicle.html", {
+    return render(request, "users/register.html", {
         'form':form,
-    }, context_instance=RequestContext(request))
+        'is_admin': True if request.path == "/vms/admin/register-vehicle/" else False,
+        'is_user': True if request.path == "/vms/users/register-vehicle/" else False,
+    })
 
 @login_required(login_url="/vms/")
 def user_vehicle_registrations(request):
@@ -171,3 +188,69 @@ def cancel_student_vehicle_registration(request, student_vehicle_id):
     if request.user == student_vehicle.registered_in_the_name_of:
         student_vehicle.delete()
     return HttpResponseRedirect("/vms/your-vehicle-registrations")
+
+@login_required(login_url="/vms/")
+def parking_availability(request):
+    """
+    DUMMY: Function to serve the parking spaces that are available
+    """
+    return render(request, 'users/parking.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
+
+@login_required(login_url="/vms/")
+def suspicious_vehicles(request):
+    """
+    DUMMY: Function to report suspicious vehicles
+    """
+    return render(request, 'users/suspicious.html', {
+        'username': request.user.username,
+        'is_user': True,
+        })
+
+def admin_bustiming(request):
+    """
+    DUMMY: Function to allow the administrator to update the timings of busses
+    """
+    return render(request, 'admin/bustiming.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
+
+def admin_passes(request):
+    """
+    DUMMY: Function to allow the administrator create/delete/update the passes issued
+    """
+    return render(request, 'admin/passes.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
+def admin_logs(request):
+    """
+    DUMMY: Function to add logs
+    """
+
+    return render(request, 'admin/logs.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
+
+def admin_suspicious_display(request):
+    """
+    DUMMY: Function to allow admin to view all suspicious reported activity
+    """
+
+    return render(request, 'admin/suspicious.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
+
+def admin_registered_vehicles(request):
+    """
+    DUMMY: Function to display all the registered vehicles to the admin
+    """
+    return render(request, 'admin/registered.html', {
+        'username': request.user.username,
+        'is_admin': True,
+        })
