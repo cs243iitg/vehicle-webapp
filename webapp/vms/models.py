@@ -61,33 +61,60 @@ class StudentVehicle(models.Model):
                 "2) I will not cause inconvenience to other road users.")
     
     date_of_application = models.DateTimeField(blank=True, null=True)
-    registered_with_security_section = models.BooleanField(default=False)
+    registered_with_security_section = models.BooleanField()
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        files_uploaded = [
-            "identity_card","driving_license",
-            "vehicle_registration_card","vehicle_insurance"
-        ]
-        extensions_allowed = [".jpg",".jpeg",".png",".pdf",".gif"]
-        path_identity_card = self.identity_card.path
-        path_driving_license = self.driving_license.path
-        path_vehicle_registration_card = self.vehicle_registration_card.path
-        path_vehicle_insurance = self.vehicle_insurance.path
-        if os.path.splitext(path_identity_card)[1] in extensions_allowed:
-            return super(StudentVehicle,self).save(*args, **kwargs)
-        if os.path.splitext(path_driving_license)[1] in extensions_allowed:
-            return super(StudentVehicle,self).save(*args, **kwargs)
-        if os.path.splitext(path_vehicle_registration_card)[1] \
-                            in extensions_allowed:
-            return super(StudentVehicle,self).save(*args, **kwargs)
-        if os.path.splitext(path_vehicle_insurance)[1] in extensions_allowed:
-            return super(StudentVehicle,self).save(*args, **kwargs)
+class FacultyVehicle(models.Model):
+    """
+    Personal Details
+    """
+    name = models.CharField(max_length=255)
+    employee_no=models.IntegerField()
+    department = models.CharField(max_length=100)
+    date_of_birth = models.DateField()
+    block_number = models.CharField(max_length=5)
+    flat_number = models.CharField(max_length=5)
+    mobile_number = models.IntegerField()
+    user_photo = models.ImageField()
+    identity_card = models.FileField(upload_to='identity_card')
+    parking_slot_no =models.CharField(max_length=50)    
+    """
+    Vehicle Details
+    """
+    vehicle_registration_number = models.CharField(max_length=100)
+    color = models.CharField(max_length=32)
+    make_and_model = models.CharField(max_length=100)
+    chassis_number = models.CharField(max_length=100)
+    engine_number = models.CharField(max_length=100)
+    registered_in_the_name_of = models.ForeignKey(User)
+    vehicle_insurance_no = models.CharField(max_length=100)
+    insurance_valid_upto = models.DateField()
+    vehicle_registration_card = models.FileField(
+        upload_to='vehicle_registration_card')
+    vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
+    vehicle_photo = models.ImageField()
+    """
+    Driving License
+    """
+    driving_license_number = models.CharField(max_length=15)
+    driving_license_issue_date = models.DateField()
+    driving_license_expiry_date = models.DateField()
+    driving_license = models.FileField(upload_to='driving_license')
+    declaration = models.TextField(blank=True, null=True,
+        default="By submitting this form, I hereby declare that " +
+                "I will be obliged to the following terms and conditions:\n\n" +
+                "1) I will abide by the rules of Traffic,\n" +
+                "2) I will not cause inconvenience to other road users.")
+    
+    date_of_application = models.DateTimeField(blank=True, null=True)
+    registered_with_security_section = models.BooleanField()
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
 
-
+    def __str__(self):
+        return self.name
 
 class Guard(models.Model):
     """
@@ -113,7 +140,7 @@ class ParkingSlot(models.Model):
     """
     Details of parking slot along with number of vehicles
     """
-    parking_slot_name = models.CharField(max_length = 100)
+    parking_area_name = models.CharField(max_length = 100)
     security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
     total_slots = models.IntegerField(default=0, blank=True, null=True)
     available_slots = models.IntegerField(default=0, blank=True, null=True)
@@ -121,11 +148,30 @@ class ParkingSlot(models.Model):
     def __str__(self):
         return self.parking_slot_name
 
+class VehiclePass(models.Model):
+
+    pass_number=models.IntegerField()
+    vehicle_no=models.CharField(max_length=20)
+    issue_date=models.DateField()
+    expiry_date=models.DateField()
+    vehicle_type = models.CharField(max_length=50, blank=True, null=True,
+                                    choices=[
+                                        ('bicycle', 'bicycle'),
+                                        ('bike', 'bike'),
+                                        ('car', 'car'),
+                                        ('truck', 'truck'),
+                                        ('courier', 'courier'),
+                                        ('auto', 'auto'),
+                                        ('other', 'other'),
+                                    ])
+    def __str__(self):
+        return self.pass_no
 
 class SuspiciousVehicle(models.Model):
     """
     Details of suspicious vehicle
     """
+    reporter=models.ForeignKey(User)
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
@@ -198,7 +244,6 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    reporter_name = models.CharField(max_length=255)
     registration_number = models.CharField(max_length=50)
     reporter = models.ForeignKey(User, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, null=True,
@@ -221,12 +266,44 @@ class TheftReport(models.Model):
     def __str__(self):
         return self.registration_number
 
+class Route(models.Model):
+    place=models.ForeignKey('Place')
+    bus=models.ForeignKey('BusTiming')
 
+    class Meta:
+        ordering=('id',)
+
+class Place(models.Model):
+    place_name=models.CharField(max_length=32)
+    def __str__(self):
+        return self.place_name
 
 class BusTiming(models.Model):
-    route = models.CharField(max_length=255)
-    from_time = models.TimeField()
-    to_time = models.TimeField()
 
+    """route contains all the passing points"""
+    MONDAY='MON'
+    TUESDAY='TUE'
+    WEDNESDAY='WED'
+    THURSDAY='THU'
+    FRIDAY='FRI'
+    SATURDAY='SAT'
+    SUNDAY='SUN'
+    DAYS = (
+        (MONDAY, 'Monday'),
+        (TUESDAY, 'Tuesday'),
+        (WEDNESDAY,'Wednesday'),
+        (THURSDAY,'Thursday'),
+        (FRIDAY,'Friday'),
+        (SATURDAY,'Saturday'),
+        (SUNDAY,'Sunday'),
+    )
+    bus_route = models.ManyToManyField('Place', through='Route', related_name="bus_route")
+    from_time = models.TimeField()
+    #to_time = models.TimeField()
+    bus_no = models.CharField(max_length=10 ,blank=False)
+    starting_point = models.ForeignKey('Place', related_name="starting_point")
+    ending_point=models.ForeignKey('Place', related_name="ending_point")
+    availability = models.CharField(max_length=3, choices=DAYS, default=None)
+    working_day=models.BooleanField()
     def __str__(self):
-        return self.route
+        return self.bus_no
