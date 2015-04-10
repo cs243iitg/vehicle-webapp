@@ -1,5 +1,17 @@
 from django.contrib import admin
-from vms.models import StudentVehicle, FacultyVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Route, Place, BusTiming
+from vms.models import IITGUser,StudentVehicle, FacultyVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import ugettext, ugettext_lazy as _
+
+class IITGUserAdmin(UserAdmin):
+    model=IITGUser
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser','is_security','is_student',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
 
 class StudentVehicleAdmin(admin.ModelAdmin):
     model = StudentVehicle
@@ -33,16 +45,17 @@ class VehiclePassAdmin(admin.ModelAdmin):
     model = VehiclePass
     list_display = ('vehicle_no','pass_number' , 'issue_date' , 'expiry_date')    
 
-class RouteAdminInline(admin.TabularInline):
-    model=Route
-    extra=1
+# class RouteAdminInline(admin.TabularInline):
+#     model=Route
+#     extra=1
 
 class PlaceAdmin(admin.ModelAdmin):
     model=Place
 
 class BusTimingAdmin(admin.ModelAdmin):
-    inlines= [RouteAdminInline,]
+    model=BusTiming
 
+admin.site.register(IITGUser, IITGUserAdmin)
 admin.site.register(StudentVehicle, StudentVehicleAdmin)
 admin.site.register(FacultyVehicle, FacultyVehicleAdmin)
 admin.site.register(Gate, GateAdmin)
@@ -53,6 +66,5 @@ admin.site.register(VisitorLog, VisitorLogAdmin)
 admin.site.register(VehiclePass, VehiclePassAdmin)
 admin.site.register(Guard)
 admin.site.register(TheftReport)
-admin.site.register(Route)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(BusTiming, BusTimingAdmin)
