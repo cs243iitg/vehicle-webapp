@@ -279,14 +279,31 @@ class Place(models.Model):
         return self.place_name
 
 class BusTiming(models.Model):
+
     """route contains all the passing points"""
-    bus_route = models.ManyToManyField('Place', through='Route')
+    MONDAY='MON'
+    TUESDAY='TUE'
+    WEDNESDAY='WED'
+    THURSDAY='THU'
+    FRIDAY='FRI'
+    SATURDAY='SAT'
+    SUNDAY='SUN'
+    DAYS = (
+        (MONDAY, 'Monday'),
+        (TUESDAY, 'Tuesday'),
+        (WEDNESDAY,'Wednesday'),
+        (THURSDAY,'Thursday'),
+        (FRIDAY,'Friday'),
+        (SATURDAY,'Saturday'),
+        (SUNDAY,'Sunday'),
+    )
+    bus_route = models.ManyToManyField('Place', through='Route', related_name="bus_route")
     from_time = models.TimeField()
     #to_time = models.TimeField()
     bus_no = models.CharField(max_length=10 ,blank=False)
-    starting_point = models.CharField(max_length=25,blank=False)
-    ending_point=models.CharField(max_length=25, blank=False)
-    availability = models.CharField(max_length=255, blank=False)
+    starting_point = models.ForeignKey('Place', related_name="starting_point")
+    ending_point=models.ForeignKey('Place', related_name="ending_point")
+    availability = models.CharField(max_length=3,choices=DAYS, default=None)
     working_day=models.BooleanField()
     def __str__(self):
-        return self.route
+        return self.bus_no
