@@ -5,6 +5,7 @@ import os
 
 
 # Create your models here.
+
 class IITGUser(models.Model):
     user=models.OneToOneField(User)
     is_student = models.BooleanField(_('Is student'), default=False,
