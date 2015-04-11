@@ -201,7 +201,8 @@ def parking_availability(request):
     """
     return render(request, 'users/parking.html', {
         'username': request.user.username,
-        'is_admin': True,
+        'is_admin': True if request.path == "/vms/admin/register-vehicle/" else False,
+        'is_user': True if request.path == "/vms/users/register-vehicle/" else False,
         })
 
 @login_required(login_url="/vms/")
