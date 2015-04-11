@@ -10,6 +10,69 @@ from crispy_forms.bootstrap import TabHolder, Tab, Div, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, InlineCheckboxes
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 
+class SuspiciousVehicleForm(forms.ModelForm):
+    """
+    User form for Reporting Suspicious Vehicle
+    """
+
+    class Meta:
+        model = models.SuspiciousVehicle
+        exclude = ('reporter',)
+        widgets = {
+            'remarks': forms.Textarea(attrs={'rows':6}),
+            
+        }
+        labels = {
+            'vehicle_image': _('Vehicle Photo'),
+            'vehicle_number': _('Registration Number'),
+            'vehicle_type': _('Vehicle Type'),
+            'vehicle_model': _('Vehicle Model'),
+        }
+
+
+    def __init__(self, *args, **kwargs):
+        super(SuspiciousVehicleForm, self).__init__(*args, **kwargs)
+        for index, field in enumerate(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'tabindex': index+1,
+            })
+
+class PersonPassForm(forms.ModelForm):
+    """
+    Admin form for Blocking Passes
+    """
+
+    class Meta:
+        model = models.PersonPass
+        exclude = ('is_blocked',)
+        widgets = {
+            'expiry_date': DateWidget(usel10n = True, bootstrap_version=3,),
+            'issue_date': DateWidget(usel10n = True, bootstrap_version=3,),
+          
+        }
+        labels = {
+            'user_photo': _('Your photo'),
+            'old_card_reference': _('Old Card Number'),
+            'age': _('Age'),
+            'pass_number': _('Pass Number'),
+            'name': _('Name'),
+            'identified_by': _('Office'),
+            'work_area': _('Work Area'),
+            'working_time': _('Working Time'),
+            'nature_of_work': _('Job'),
+        }
+
+ 
+    def __init__(self, *args, **kwargs):
+        super(PersonPassForm, self).__init__(*args, **kwargs)
+        for index, field in enumerate(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'tabindex': index+1,
+            })
+        
+
 class TheftForm(forms.ModelForm):
     """
     User form for reporting theft

@@ -1,0 +1,28 @@
+{% include "site_base.html" %}        
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid form-horizontal">
+                <h2 class="page-header">Register Vehicle
+                <span style="font-size: 14px; margin-left: 20px;">
+                    <a href="/vms/your-vehicle-registrations">(DOES NOT WORK)View your status</a>
+                </span>
+                </h2>
+                </br>
+                {% load crispy_forms_tags %}
+                {% crispy form form.helper %}
+                <p class="col-md-offset-8" style="color: #888">All fields are mandatory</p>
+
+                {% block  javascript %}
+
+                {% load staticfiles %}
+                <script src="{% static 'vms/js/jquery-1.11.0.js' %}"></script>
+                <script src="{% static 'vms/js/bootstrap.min.js' %}"></script>
+                {{ form.media }}        
+
+                {% endblock %}
+            </div>
+        </div>
+</body>
+
+</html>

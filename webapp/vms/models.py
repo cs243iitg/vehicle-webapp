@@ -1,13 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, AbstractUser
+from django.utils.translation import ugettext_lazy as _
 import os
 
 
 # Create your models here.
+class IITGUser(User):
+    is_student = models.BooleanField(_('student_or_professor'), default=False,
+        help_text=_('Designates whether the user is a student or a professor.'))
+    is_security = models.BooleanField(_('security_personnal'), default=False,
+        help_text=_('Designates whether this user is security personnal or not.'))
+
 class StudentVehicle(models.Model):
     """
     Personal Details
     """
+    user = models.ForeignKey(IITGUser)
     name = models.CharField(max_length=255)
     roll_number = models.IntegerField()
     department = models.CharField(max_length=100)
@@ -39,7 +47,7 @@ class StudentVehicle(models.Model):
     make_and_model = models.CharField(max_length=100)
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
-    registered_in_the_name_of = models.ForeignKey(User)
+    registered_in_the_name_of = models.CharField(max_length=100)
     relation_with_owner = models.CharField(max_length=32)
     vehicle_insurance_no = models.CharField(max_length=100)
     insurance_valid_upto = models.DateField()
@@ -71,6 +79,7 @@ class FacultyVehicle(models.Model):
     """
     Personal Details
     """
+    user=models.ForeignKey(IITGUser)
     name = models.CharField(max_length=255)
     employee_no=models.IntegerField()
     department = models.CharField(max_length=100)
@@ -89,7 +98,7 @@ class FacultyVehicle(models.Model):
     make_and_model = models.CharField(max_length=100)
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
-    registered_in_the_name_of = models.ForeignKey(User)
+    registered_in_the_name_of = models.CharField(max_length=100)
     vehicle_insurance_no = models.CharField(max_length=100)
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(
@@ -150,7 +159,7 @@ class ParkingSlot(models.Model):
 
 class VehiclePass(models.Model):
 
-    pass_number=models.IntegerField()
+    pass_number=models.CharField(max_length=10)
     vehicle_no=models.CharField(max_length=20)
     issue_date=models.DateField()
     expiry_date=models.DateField()
@@ -165,13 +174,29 @@ class VehiclePass(models.Model):
                                         ('other', 'other'),
                                     ])
     def __str__(self):
-        return self.pass_no
+        return self.pass_numer
+
+class PersonPass(models.Model):
+    old_card_reference=models.CharField(max_length=10)
+    pass_number=models.CharField(max_length=10) 
+    name = models.CharField(max_length=255) 
+    user_photo = models.ImageField() 
+    age=models.IntegerField() 
+    identified_by = models.CharField(max_length=255) 
+    work_area = models.CharField(max_length=255) 
+    working_time = models.CharField(max_length=255) 
+    nature_of_work = models.CharField(max_length=255) 
+    issue_date=models.DateField() 
+    expiry_date=models.DateField() 
+    is_blocked=models.BooleanField() 
+    def __str__(self): 
+        return self.pass_number
 
 class SuspiciousVehicle(models.Model):
     """
     Details of suspicious vehicle
     """
-    reporter=models.ForeignKey(User)
+    reporter=models.ForeignKey(IITGUser)
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
@@ -245,7 +270,7 @@ class VisitorLog(models.Model):
 
 class TheftReport(models.Model):
     registration_number = models.CharField(max_length=50)
-    reporter = models.ForeignKey(User, blank=True, null=True)
+    reporter = models.ForeignKey(IITGUser, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, null=True,
                                     choices=[
                                         ('bicycle', 'bicycle'),
@@ -266,44 +291,37 @@ class TheftReport(models.Model):
     def __str__(self):
         return self.registration_number
 
-class Route(models.Model):
-    place=models.ForeignKey('Place')
-    bus=models.ForeignKey('BusTiming')
+# class Route(models.Model):
+#     place=models.ForeignKey('Place')
+#     bus=models.ForeignKey('BusTiming')
+#     numbering=models.PositiveSmallIntegerField()
+#     class Meta:
+#         ordering=('numbering',)
 
-    class Meta:
-        ordering=('id',)
+#     def __str__(self):
+#         return str(self.place)+" "+str(self.numbering)+" "+str(self.bus)
 
 class Place(models.Model):
     place_name=models.CharField(max_length=32)
     def __str__(self):
         return self.place_name
 
+class Day(models.Model):
+    day=models.CharField(max_length=32)
+    def __str__(self):
+        return self.day
+
 class BusTiming(models.Model):
 
     """route contains all the passing points"""
-    MONDAY='MON'
-    TUESDAY='TUE'
-    WEDNESDAY='WED'
-    THURSDAY='THU'
-    FRIDAY='FRI'
-    SATURDAY='SAT'
-    SUNDAY='SUN'
-    DAYS = (
-        (MONDAY, 'Monday'),
-        (TUESDAY, 'Tuesday'),
-        (WEDNESDAY,'Wednesday'),
-        (THURSDAY,'Thursday'),
-        (FRIDAY,'Friday'),
-        (SATURDAY,'Saturday'),
-        (SUNDAY,'Sunday'),
-    )
-    bus_route = models.ManyToManyField('Place', through='Route', related_name="bus_route")
+    bus_route = models.CharField(max_length=512)
     from_time = models.TimeField()
     #to_time = models.TimeField()
     bus_no = models.CharField(max_length=10 ,blank=False)
     starting_point = models.ForeignKey('Place', related_name="starting_point")
     ending_point=models.ForeignKey('Place', related_name="ending_point")
-    availability = models.CharField(max_length=3, choices=DAYS, default=None)
+    availability = models.ManyToManyField('Day')
     working_day=models.BooleanField()
     def __str__(self):
         return self.bus_no
+
