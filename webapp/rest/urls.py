@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^theft-report/$', views.theft_report),
     url(r'^suspicious-vehicle/$', views.suspicious_vehicle),
     url(r'^theft-report/(?P<pk>[0-9]+)$', views.theft_detail),
-    url(r'^api-token-auth/', rest_views.obtain_auth_token)
+    url(r'^api-token-auth/', rest_views.obtain_auth_token),
+    url(r'^parking-slot/$', views.parking_slot)
+
 
 ]

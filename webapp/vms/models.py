@@ -157,7 +157,7 @@ class ParkingSlot(models.Model):
     available_slots = models.IntegerField(default=0, blank=True, null=True)
 
     def __str__(self):
-        return self.parking_slot_name
+        return self.parking_area_name
 
 class VehiclePass(models.Model):
 

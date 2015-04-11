@@ -7,8 +7,11 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from vms.models import TheftReport
+from vms.models import SuspiciousVehicle
+from vms.models import ParkingSlot
 from rest.serializers import TheftReportSerializer
 from rest.serializers import SuspiciousVehicleSerializer
+from rest.serializers import ParkingSlotSerializer
 from rest.permissions import IsReporter
 
 
@@ -78,3 +81,13 @@ def suspicious_vehicle(request):
             serializer.save(reporter=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#list of parking slots
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def parking_slot(request):
+    if request.method == 'GET':
+        parking_slots = ParkingSlot.objects.all()
+        serializer = ParkingSlotSerializer(parking_slots, many=True)
+        return Response(serializer.data)
