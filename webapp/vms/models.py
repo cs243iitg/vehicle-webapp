@@ -7,7 +7,7 @@ import os
 # Create your models here.
 class IITGUser(User):
     is_student = models.BooleanField(_('student_or_professor'), default=False,
-        help_text=_('Designates whether the user is a student or a professor.'))
+        help_text=_('Designates whether the user is a student'))
     is_security = models.BooleanField(_('security_personnal'), default=False,
         help_text=_('Designates whether this user is security personnal or not.'))
 

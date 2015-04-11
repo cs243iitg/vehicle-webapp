@@ -22,6 +22,11 @@ urlpatterns = [
     url('users/register-vehicle/$', views.register_vehicle),
     url('users/suspicious/$', views.suspicious_vehicles),
     url('users/theft/$', views.report_theft),
+    url('users/user_theft_reports', views.user_theft_reports),
+    url(r'^users/(?P<theft_report_id>\d+)/cancel-theft-report/$', views.cancel_theft_report),
+    url('users/your-vehicle-registrations/$', views.user_vehicle_registrations),    
+    url(r'^users/(?P<student_vehicle_id>\d+)/cancel-vehicle-registration/$', views.cancel_student_vehicle_registration),
+    url('users/register-vehicle/$', views.register_vehicle),
     #Admin urls
     url('admin/dashboard/$', views.admin_home),
     url('admin/bus_timing/$', views.admin_bustiming),
@@ -30,10 +35,9 @@ urlpatterns = [
     url('admin/logs', views.admin_logs),
     url('admin/suspicious_display', views.admin_suspicious_display),
     url('admin/register-vehicle', views.register_vehicle),
-    url('admin/registered-vehicles', views.admin_registered_vehicles),
+    url('admin/registered-vehicles', views.admin_registered_vehicles),    
     #EndSection
 
-    url('register-vehicle/$', views.register_vehicle),
     url('submit-vehicle-registration/$', views.register_vehicle),
     url('your-vehicle-registrations/$', views.user_vehicle_registrations),
     url(r'^(?P<student_vehicle_id>\d+)/cancel-vehicle-registration/$',
