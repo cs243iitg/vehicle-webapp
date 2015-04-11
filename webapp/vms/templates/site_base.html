@@ -210,7 +210,7 @@
             <!-- /.navbar-top-links -->
 
 
-            {% if is_user %}
+            {% if user.is_active %}
             <div  class="navbar-default sidebar"  role="navigation" >
             	<img style="margin-top:-47px; margin-left:20px; display:inline; " width="150px" height="150px" src="{% static 'vms/images/logo-iitg.gif' %}" />
             	
@@ -224,6 +224,9 @@
                             
                             
                             <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Guards On Duty</a>
                         </li>
                         <li>
                             <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>  Vehicle Registration</a>
