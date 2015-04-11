@@ -8,6 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from vms.models import TheftReport
 from rest.serializers import TheftReportSerializer
+from rest.serializers import SuspiciousVehicleSerializer
 from rest.permissions import IsReporter
 
 
@@ -59,3 +60,21 @@ def theft_detail(request, pk):
     elif request.method == 'DELETE':
         TheftReport.delete(theft_report)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#list of suspicious vehicles
+@api_view(['GET', 'POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def suspicious_vehicle(request):
+    if request.method == 'GET':
+        suspicious_vehicles = SuspiciousVehicle.objects.filter(reporter=request.user)
+        serializer = SuspiciousVehicleSerializer(suspicious_vehicles, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = SuspiciousVehicleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(reporter=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
