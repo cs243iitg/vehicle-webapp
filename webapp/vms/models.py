@@ -295,7 +295,7 @@ class TheftReport(models.Model):
     theft_time = models.DateTimeField(blank=True, null=True)
     theft_place = models.CharField(max_length=100, blank=True, null=True)
     remarks = models.TextField(max_length=1000, blank=True, null=True)
-    status = models.CharField(max_length=100, default="Submitted", choices=["Submitted", "Received by Security Section", "Search in Progress", "Vehicle Found", "Case Closed (Vehicle Not Found)", "Vehicle Returned"])
+    status = models.CharField(max_length=100, default="Submitted", choices=[("Submitted", "Submitted"), ("Received by Security Section", "Received by Security Section"), ("Search in Progress","Search in Progress"), ("Vehicle Found","Vehicle Found"), ("Case Closed (Vehicle Not Found)","Case Closed (Vehicle Not Found)"), ("Vehicle Returned","Vehicle Returned")])
 
 
     def __str__(self):
