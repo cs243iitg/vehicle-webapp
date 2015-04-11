@@ -5,17 +5,19 @@ import os
 
 
 # Create your models here.
-class IITGUser(User):
-    is_student = models.BooleanField(_('student_or_professor'), default=False,
-        help_text=_('Designates whether the user is a student'))
-    is_security = models.BooleanField(_('security_personnal'), default=False,
+
+class IITGUser(models.Model):
+    user=models.OneToOneField(User)
+    is_student = models.BooleanField(_('Is student'), default=False,
+        help_text=_('Designates whether the user is a student or a professor.'))
+    is_security = models.BooleanField(_('Is security personnal'), default=False,
         help_text=_('Designates whether this user is security personnal or not.'))
 
 class StudentVehicle(models.Model):
     """
     Personal Details
     """
-    user = models.ForeignKey(IITGUser)
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=255)
     roll_number = models.IntegerField()
     department = models.CharField(max_length=100)
@@ -75,11 +77,11 @@ class StudentVehicle(models.Model):
     def __str__(self):
         return self.name
 
-class FacultyVehicle(models.Model):
+class EmployeeVehicle(models.Model):
     """
     Personal Details
     """
-    user=models.ForeignKey(IITGUser)
+    user=models.ForeignKey(User)
     name = models.CharField(max_length=255)
     employee_no=models.IntegerField()
     department = models.CharField(max_length=100)
@@ -130,6 +132,7 @@ class Guard(models.Model):
     Details of all security guards
     """
     guard_name = models.CharField(max_length=255)
+    guard_phone_number=models.IntegerField()
 
     def __str__(self):
         return self.guard_name
@@ -196,7 +199,7 @@ class SuspiciousVehicle(models.Model):
     """
     Details of suspicious vehicle
     """
-    reporter=models.ForeignKey(IITGUser)
+    reporter=models.ForeignKey(User)
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
@@ -270,7 +273,7 @@ class VisitorLog(models.Model):
 
 class TheftReport(models.Model):
     registration_number = models.CharField(max_length=50)
-    reporter = models.ForeignKey(IITGUser, blank=True, null=True)
+    reporter = models.ForeignKey(User, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, null=True,
                                     choices=[
                                         ('bicycle', 'bicycle'),

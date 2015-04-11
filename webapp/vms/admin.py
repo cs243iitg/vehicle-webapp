@@ -1,24 +1,25 @@
 from django.contrib import admin
-from vms.models import IITGUser,StudentVehicle, FacultyVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming
+from vms.models import IITGUser,StudentVehicle, EmployeeVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.contrib.auth.models import User
 
-class IITGUserAdmin(UserAdmin):
-    model=IITGUser
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser','is_security','is_student',
-                                       'groups', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-    )
+class IITGUserInline(admin.StackedInline):
+    model = IITGUser
+    can_delete = False
+    verbose_name_plural = 'user'
+
+# Define a new User admin
+class UserAdmin(UserAdmin):
+    inlines = (IITGUserInline, )
+
 
 class StudentVehicleAdmin(admin.ModelAdmin):
     model = StudentVehicle
     list_display = ('name', 'roll_number', 'vehicle_registration_number')
 
-class FacultyVehicleAdmin(admin.ModelAdmin):
-    model = FacultyVehicle
+class EmployeeVehicleAdmin(admin.ModelAdmin):
+    model = EmployeeVehicle
     list_display = ('name', 'employee_no', 'vehicle_registration_number')    
 
 class GateAdmin(admin.ModelAdmin):
@@ -55,9 +56,11 @@ class PlaceAdmin(admin.ModelAdmin):
 class BusTimingAdmin(admin.ModelAdmin):
     model=BusTiming
 
-admin.site.register(IITGUser, IITGUserAdmin)
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(StudentVehicle, StudentVehicleAdmin)
-admin.site.register(FacultyVehicle, FacultyVehicleAdmin)
+admin.site.register(EmployeeVehicle, EmployeeVehicleAdmin)
 admin.site.register(Gate, GateAdmin)
 admin.site.register(ParkingSlot, ParkingSlotAdmin)
 admin.site.register(SuspiciousVehicle, SuspiciousVehicleAdmin)
