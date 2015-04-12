@@ -13,9 +13,6 @@ from .forms import TheftForm, StudentVehicleForm
 from .models import TheftReport, StudentVehicle, BusTiming
 from datetime import datetime
 
-#------------------------------------------------------------
-#       User Authentication
-#------------------------------------------------------------
 
 def login(request):
     """
@@ -77,18 +74,7 @@ def home(request):
 
 
 @login_required(login_url="/vms/")
-def admin_home(request):
-    """
-    Function to return home page of administrator
-    """
-    return render(request, 'admin/admin.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })
-
-
-@login_required(login_url="/vms/")
-def report_theft(request):
+def theft_report_form(request):
     """
     Displays theft report form for user -- NOTE: This form is common to admin and user
     """
@@ -109,7 +95,7 @@ def report_theft(request):
     })
 
 @login_required(login_url="/vms/")
-def user_theft_reports(request):
+def vehicles_missing(request):
     """
     Displays to users their theft reports
     """
@@ -120,83 +106,7 @@ def user_theft_reports(request):
     }, context_instance=RequestContext(request))
 
 @login_required(login_url="/vms/")
-def cancel_theft_report(request, theft_report_id):
-    """
-    Cancels theft report with specified id
-    """
-    theft_report = TheftReport.objects.get(id=theft_report_id)
-    if request.user == theft_report.reporter:
-        theft_report.delete()
-    return HttpResponseRedirect("/users/user_theft_reports")
-
-#------------------------------------------------------------
-#       Theft Reports for Admin
-#------------------------------------------------------------
-
-@login_required(login_url="/vms/")
-def admin_theft_reports(request):
-    """
-    Displays to admin all users' theft reports
-    """
-    reports = TheftReport.objects.all()
-    return render_to_response("vms/user_theft_reports.html", {
-        "reports": reports,
-        'is_admin': True,
-    }, context_instance=RequestContext(request))
-
-
-#------------------------------------------------------------
-#       Student Vehicle Registration
-#------------------------------------------------------------
-
-@login_required(login_url="/vms/")
-def register_vehicle(request):
-    """
-    Displays form for registering vehicle -- NOTE: This form is common to users and admin
-    """
-    if request.method == 'POST':
-        form = StudentVehicleForm(request.POST, request.FILES)
-        if form.is_valid():
-            task = form.save(commit=False)
-            task.date_of_application = datetime.now().date()
-            task.vehicle_pass_no = "Not generated"
-            task.save()
-            messages.success(request,
-                'Your vehicle registration is sent to security for ' + 
-                'processing. You will be contacted through your webmail.')
-            return HttpResponseRedirect("/vms/your-vehicle-registrations")
-    else:
-        form = StudentVehicleForm()
-    return render(request, "users/register.html", {
-        'form':form,
-        'is_admin': True if request.path == "/vms/admin/register-vehicle/" else False,
-        'is_user': True if request.path == "/vms/users/register-vehicle/" else False,
-    })
-
-@login_required(login_url="/vms/")
-def user_vehicle_registrations(request):
-    """
-    Displays vehicle registrations of a user
-    """
-    registrations = StudentVehicle.objects.filter(
-        registered_in_the_name_of=request.user)
-    return render_to_response("users/vehicle_registrations.html", {
-        "registrations": registrations,
-        "is_user" : True,
-    }, context_instance=RequestContext(request))
-
-@login_required(login_url="/vms/")
-def cancel_student_vehicle_registration(request, student_vehicle_id):
-    """
-    Cancels student's vehicle registration of specified id
-    """
-    student_vehicle = StudentVehicle.objects.get(id=student_vehicle_id)
-    if request.user == student_vehicle.registered_in_the_name_of:
-        student_vehicle.delete()
-    return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
-
-@login_required(login_url="/vms/")
-def parking_availability(request):
+def parking_slot_availability(request):
     """
     DUMMY: Function to serve the parking spaces that are available
     """
@@ -207,7 +117,7 @@ def parking_availability(request):
         })
 
 @login_required(login_url="/vms/")
-def suspicious_vehicles(request):
+def suspicious_vehicle_report_form(request):
     """
     DUMMY: Function to report suspicious vehicles
     """
@@ -216,34 +126,7 @@ def suspicious_vehicles(request):
         'is_user': True,
         })
 
-def admin_bustiming(request):
-    """
-    DUMMY: Function to allow the administrator to update the timings of busses
-    """
-    return render(request, 'admin/bustiming.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })
-
-def admin_passes(request):
-    """
-    DUMMY: Function to allow the administrator create/delete/update the passes issued
-    """
-    return render(request, 'admin/passes.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })
-def admin_logs(request):
-    """
-    DUMMY: Function to add logs
-    """
-
-    return render(request, 'admin/logs.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })
-
-def admin_suspicious_display(request):
+def suspicious_vehicles(request):
     """
     DUMMY: Function to allow admin to view all suspicious reported activity
     """
@@ -253,11 +136,3 @@ def admin_suspicious_display(request):
         'is_admin': True,
         })
 
-def admin_registered_vehicles(request):
-    """
-    DUMMY: Function to display all the registered vehicles to the admin
-    """
-    return render(request, 'admin/registered.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })

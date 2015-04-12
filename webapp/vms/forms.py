@@ -9,6 +9,12 @@ from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from crispy_forms.bootstrap import TabHolder, Tab, Div, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, InlineCheckboxes
 from crispy_forms.bootstrap import Accordion, AccordionGroup
+from django.contrib.auth import forms as UserForms
+
+class EditUserForm(UserForms.UserChangeForm):
+    class Meta:
+        model=models.IITGUser
+        exclude=('',)
 
 class SuspiciousVehicleForm(forms.ModelForm):
     """
