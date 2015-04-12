@@ -1,5 +1,5 @@
 from django.test import TestCase
-from vms.models import IITGUser, StudentVehicle, EmployeeVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming , PersonPass, Day
+from vms.models import IITGUser, StudentVehicle, EmployeeVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , VehiclePass, Place, BusTiming , PersonPass, Day, OnDutyGuard
 from datetime import datetime
 from django.contrib.auth.models import User
 
@@ -35,22 +35,22 @@ TheftReport TestCase
 
 """
 try:
-	t1=TheftReport.objects.create(registration_number="1234" , reporter=IITGUser.objects.all()[0] ,vehicle_type="bike",  vehicle_model="d-24", theft_time=datetime.strptime('2015-07-05 06:35:57','%Y-%m-%d %H:%M:%S'), theft_place="core1" , remarks="none" ,status="found" ).save()
+	t1=TheftReport.objects.create(registration_number="1234" , reporter=User.objects.all()[0] , theft_time=datetime.strptime('2015-07-05 06:35:57','%Y-%m-%d %H:%M:%S'), theft_place="core1" , remarks="none" ,status="found" ).save()
 except Exception as e:
 	print ("theft not reported"+ str(e))
 
 try:
-	t2=TheftReport.objects.create(registration_number="5352" , reporter=IITGUser.objects.all()[2] ,vehicle_type="bicycle",  vehicle_model="if-54", theft_time=datetime.strptime('2015-07-05 06:36:57','%Y-%m-%d %H:%M:%S'), theft_place="core2" , remarks="none" ,status="found" ).save()
+	t2=TheftReport.objects.create(registration_number="5352" , reporter=User.objects.all()[2] , theft_time=datetime.strptime('2015-07-05 06:36:57','%Y-%m-%d %H:%M:%S'), theft_place="core2" , remarks="none" ,status="found" ).save()
 except Exception as e:
 	print ("theft not reported"+ str(e))
 
 try:
-	t3=TheftReport.objects.create(registration_number="4242" , reporter=IITGUser.objects.all()[3] ,vehicle_type="car",  vehicle_model="asd", theft_time=datetime.strptime('2015-07-05 06:37:57','%Y-%m-%d %H:%M:%S'), theft_place="Admin" , remarks="none" ,status="not found" ).save()
+	t3=TheftReport.objects.create(registration_number="4242" , reporter=User.objects.all()[3] , theft_time=datetime.strptime('2015-07-05 06:37:57','%Y-%m-%d %H:%M:%S'), theft_place="Admin" , remarks="none" ,status="not found" ).save()
 except Exception as e:
 	print ("theft not reported"+ str(e))
 
 try:
-	t4=TheftReport.objects.create(registration_number="4235" , reporter=IITGUser.objects.all()[0] ,vehicle_type="auto",  vehicle_model="a3f", theft_time=datetime.strptime('2015-07-05 06:38:57','%Y-%m-%d %H:%M:%S'), theft_place="hostel" , remarks="none" ,status="not found" ).save()
+	t4=TheftReport.objects.create(registration_number="4235" , reporter=User.objects.all()[0] , theft_time=datetime.strptime('2015-07-05 06:38:57','%Y-%m-%d %H:%M:%S'), theft_place="hostel" , remarks="none" ,status="not found" ).save()
 except Exception as e:
 	print ("theft not reported"+ str(e))
 
@@ -280,6 +280,14 @@ except Exception as e:
 
 
 """
+Guard TestCase
+"""
+try:
+	g1=Guard.objects.create(user=User.objects.create_user(username="g1",password="g1"),guard_phone_number="8011034051", is_security=True).save()
+except Exception as e:
+	print (str(e))
+
+"""
 OnDutyGuard TestCase
 
 """
@@ -290,11 +298,11 @@ except Exception as e:
 	print ("OnDutyGuard not formed "+ str(e))
 
 try:
-	o2=OnDutyGuard.objects.create(guard = g2 , place = "main gate" , is_gate = True).save()
+	o2=OnDutyGuard.objects.create(guard = g1 , place = "main gate" , is_gate = True).save()
 except Exception as e:
 	print ("OnDutyGuard not formed "+ str(e))
 
 try:
-	o2=OnDutyGuard.objects.create(guard = g3 , place = "Admn" , is_gate = False).save()
+	o2=OnDutyGuard.objects.create(guard = g1 , place = "Admn" , is_gate = False).save()
 except Exception as e:
 	print ("OnDutyGuard not formed "+ str(e))

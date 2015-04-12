@@ -9,10 +9,9 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-from .forms import TheftForm, StudentVehicleForm
+from .forms import TheftForm, StudentVehicleForm, EditUserForm
 from .models import TheftReport, StudentVehicle, BusTiming
 from datetime import datetime
-
 #------------------------------------------------------------
 #       User Authentication
 #------------------------------------------------------------
@@ -46,7 +45,8 @@ def block_passes(request):
     pass
 
 def add_users(request):
-    return render_to_response('admin/add_users.html',{'user':request.user,},context_instance=RequestContext(request))
+    form=EditUserForm()
+    return render_to_response('admin/add_users.html',{'form':form,'user':request.user,},context_instance=RequestContext(request))
 
 def edit_user_details(request):
     pass
