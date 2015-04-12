@@ -226,7 +226,7 @@
                         {% endif %}
 
                         <li>
-                            <a href="/vms/parking-availability"><i class="fa fa-edit fa-fw"></i>Parking Slot Availability</a>
+                            <a href="/vms/parking-slot-availability"><i class="fa fa-edit fa-fw"></i>Parking Slot Availability</a>
                         </li>
 
                         {% if user.is_superuser %}
@@ -237,37 +237,43 @@
                         
                         {% if user.is_superuser or user.user.is_security %}
                         <li>
-                            <a href="/vms/admin/logs"><i class="fa fa-edit fa-fw"></i>Entry/Exit Log</a>
+                            <a href="/vms/security/log"><i class="fa fa-edit fa-fw"></i>Entry/Exit Log</a>
                         </li>
                         {% endif %}
                         
                         {% if user.user.is_security %}
                         <li>
-                            <a href="##########"><i class="fa fa-edit fa-fw"></i>Entry/Exit Form</a>
+                            <a href="/vms/security/log-form"><i class="fa fa-edit fa-fw"></i>Entry/Exit Form</a>
                         </li>
                         {% endif %}
                         {% if user.is_superuser %}
                         <li>
-                            <a href="########"><i class="fa fa-edit fa-fw"></i>Upload Entry/Exit</a>
+                            <a href="/vms/admin/upload-log"><i class="fa fa-edit fa-fw"></i>Upload Entry/Exit</a>
                         </li>
                         {% endif %}
                         <li>
-                            <a href="/vms/users/theft"><i class="fa fa-edit fa-fw"></i>Theft Report Form</a>
+                            <a href="/vms/theft-report-form"><i class="fa fa-edit fa-fw"></i>Theft Report Form</a>
                         </li>
                         <li>
-                            <a href="########"><i class="fa fa-edit fa-fw"></i>Vehicles Missing</a>
+                            <a href="/vms/vehicles-missing"><i class="fa fa-edit fa-fw"></i>Vehicles Missing</a>
                         </li>
                         <li>
-                            <a href="/vms/users/suspicious"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicle Report Form</a>
+                            <a href="/vms/suspicious-vehicle-report-form"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicle Report Form</a>
                         </li>
                         <li>
-                            <a href="#########"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicles</a>
+                            <a href="/vms/suspicious-vehicles"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicles</a>
                         </li>
                         
                         <!-- This will lead to page where you can block a pass and also see the list. However, blocking feature only for the superusers -->             
                         {% if user.is_superuser or user.user.is_security %}
                         <li>
-                            <a href="########"><i class="fa fa-edit fa-fw"></i>Entry Passes</a>
+                            <a href="/vms/security/passes"><i class="fa fa-edit fa-fw"></i>Entry Passes</a>
+                        </li>
+                        {% endif %}
+
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="/vms/admin/block-passes"><i class="fa fa-edit fa-fw"></i>Blocked Passes</a>
                         </li>
                         {% endif %}
                                     
@@ -278,29 +284,27 @@
                         {% endif %}
                         {% if not user.user.is_security and not user.user.is_student %}
                         <li>
-                            <a href="#######"><i class="fa fa-car fa-car"></i>Employee Vehicle Registration Form</a>
+                            <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Employee Vehicle Registration Form</a>
                         </li>
                         {% endif %}
                         {% if user.is_superuser %}
                         <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Vehicles Registered</a>
-                        </li>
-                        {% endif %}
-                        {% if user.is_superuser %}
-                        <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Add Users</a>
+                            <a href="/vms/admin/registered-vehicles"><i class="fa fa-edit fa-fw"></i>Vehicles Registered</a>
                         </li>
                         <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Edit User Details</a>
+                            <a href="/vms/admin/add-users"><i class="fa fa-edit fa-fw"></i>Add Users</a>
                         </li>
                         <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Guards List</a>
+                            <a href="/vms/admin/edit-user-details"><i class="fa fa-edit fa-fw"></i>Edit User Details</a>
                         </li>
                         <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Admin Role Panel</a>
+                            <a href="/vms/admin/security"><i class="fa fa-edit fa-fw"></i>Guards List</a>
                         </li>
                         <li>
-                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Update Bus Details</a>
+                            <a href="/vms/admin/admin-role"><i class="fa fa-edit fa-fw"></i>Admin Role Panel</a>
+                        </li>
+                        <li>
+                            <a href="/vms/admin/update-bus-details"><i class="fa fa-edit fa-fw"></i>Update Bus Details</a>
                         </li>
                         {% endif %}
 
