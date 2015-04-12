@@ -47,17 +47,16 @@ class StudentVehicle(models.Model):
     """
     Vehicle Details
     """
-    vehicle_registration_number = models.CharField(max_length=100)
+    vehicle_registration_number = models.CharField(max_length=100, unique=True)
     color = models.CharField(max_length=32)
     make_and_model = models.CharField(max_length=100)
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
     registered_in_the_name_of = models.CharField(max_length=100)
     relation_with_owner = models.CharField(max_length=32)
-    vehicle_insurance_no = models.CharField(max_length=100)
+    vehicle_insurance_no = models.CharField(max_length=100, uniquue=True)
     insurance_valid_upto = models.DateField()
-    vehicle_registration_card = models.FileField(
-        upload_to='vehicle_registration_card')
+    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card')
     vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
     vehicle_photo = models.ImageField()
     """
@@ -104,7 +103,7 @@ class EmployeeVehicle(models.Model):
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
     registered_in_the_name_of = models.CharField(max_length=100)
-    vehicle_insurance_no = models.CharField(max_length=100)
+    vehicle_insurance_no = models.CharField(max_length=100, unique=True)
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(
         upload_to='vehicle_registration_card')
@@ -143,7 +142,7 @@ class Gate(models.Model):
     """
     Entry/Exit gates for vehicles
     """
-    gate_name = models.CharField(max_length=50)
+    gate_name = models.CharField(max_length=50, unique=True)
     # security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
 
     def __str__(self):
@@ -154,7 +153,7 @@ class ParkingSlot(models.Model):
     """
     Details of parking slot along with number of vehicles
     """
-    parking_area_name = models.CharField(max_length = 100)
+    parking_area_name = models.CharField(max_length = 100, unique=True)
     # security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
     total_slots = models.IntegerField(default=0, blank=True, null=True)
     available_slots = models.IntegerField(default=0, blank=True, null=True)
@@ -163,13 +162,13 @@ class ParkingSlot(models.Model):
         return self.parking_area_name
 
 class OnDutyGuard(models.Model):
-    guard = models.ForeignKey('Guard')
+    guard = models.ForeignKey('Guard', unique=True)
     place = models.CharField(max_length=100)
     is_gate = models.BooleanField()
 
 class VehiclePass(models.Model):
 
-    pass_number=models.CharField(max_length=10)
+    pass_number=models.CharField(max_length=10, unique=True)
     vehicle_no=models.CharField(max_length=20)
     issue_date=models.DateField()
     expiry_date=models.DateField()
@@ -319,7 +318,7 @@ class Place(models.Model):
         return self.place_name
 
 class Day(models.Model):
-    day=models.CharField(max_length=32)
+    day=models.CharField(max_length=32, unique=True)
     def __str__(self):
         return self.day
 
