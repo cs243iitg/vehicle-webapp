@@ -4,7 +4,7 @@ from vms.models import *
 class TheftReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = TheftReport
-        fields = ('id', 'registration_number', 'vehicle_type', 'vehicle_model', 'theft_time', 'theft_place', 'remarks')
+        fields = ('id', 'registration_number', 'theft_time', 'theft_place', 'remarks', 'status')
 
 class SuspiciousVehicleSerializer(serializers.ModelSerializer):
     class Meta:

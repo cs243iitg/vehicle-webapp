@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from vms.models import TheftReport
 from vms.models import SuspiciousVehicle
 from vms.models import ParkingSlot
+from vms.models import StudentVehicle
+from vms.models import EmployeeVehicle
 from rest.serializers import TheftReportSerializer
 from rest.serializers import SuspiciousVehicleSerializer
 from rest.serializers import ParkingSlotSerializer
@@ -35,17 +37,15 @@ def theft_report(request):
     elif request.method == 'POST':
         serializer = TheftReportSerializer(data=request.data)
         if serializer.is_valid():
-            #look for vehicle in the database
-            vehicles = []
-            if(request.user.is_student):
-                vehicles = StudentVehicle.objects.filter(vehicle_registration_number=request.data.registration_number)
-                if(len(vehicles)>0):
-                    serializer.save(reporter=request.user, stud_vehicle=vehicles[0])
-            elif(request.user.is_staff):
-                vehicles = EmployeeVehicle.objects.filter(vehicle_registration_number=request.data.registration_number)
-                if(len(vehicles)>0):
-                    serializer.save(reporter=request.user, emp_vehicle=vehicles[0])
+            #check if vehicle exists in db
+            vehicles_student = StudentVehicle.objects.filter(vehicle_registration_number=serializer.data['registration_number'])
+            vehicles_emp = EmployeeVehicle.objects.filter(vehicle_registration_number=serializer.data['registration_number'])
+            if(len(vehicles_student) > 0):
+                serializer.save(reporter=request.user, stud_vehicle=vehicles_student[0])
+            elif(len(vehicles_emp) > 0):
+                serializer.save(reporter=request.user, emp_vehicle=vehicles_emp[0])
             else:
+                #vehicle does not exist stud_vehicle and emp_vehicle are left blank
                 serializer.save(reporter=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
