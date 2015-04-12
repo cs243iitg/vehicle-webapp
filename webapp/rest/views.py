@@ -35,7 +35,18 @@ def theft_report(request):
     elif request.method == 'POST':
         serializer = TheftReportSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(reporter=request.user)
+            #look for vehicle in the database
+            vehicles = []
+            if(request.user.is_student):
+                vehicles = StudentVehicle.objects.filter(vehicle_registration_number=request.data.registration_number)
+                if(len(vehicles)>0):
+                    serializer.save(reporter=request.user, stud_vehicle=vehicles[0])
+            elif(request.user.is_staff):
+                vehicles = EmployeeVehicle.objects.filter(vehicle_registration_number=request.data.registration_number)
+                if(len(vehicles)>0):
+                    serializer.save(reporter=request.user, emp_vehicle=vehicles[0])
+            else:
+                serializer.save(reporter=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
