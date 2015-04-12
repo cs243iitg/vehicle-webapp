@@ -5,12 +5,16 @@ import os
 
 
 # Create your models here.
+
 class IITGUser(models.Model):
-    user=models.OneToOneField(User)
+    user=models.OneToOneField(User, related_name='user', default=False)
     is_student = models.BooleanField(_('Is student'), default=False,
         help_text=_('Designates whether the user is a student or a professor.'))
     is_security = models.BooleanField(_('Is security personnal'), default=False,
         help_text=_('Designates whether this user is security personnal or not.'))
+
+    def __str__(self):
+        return self.user.username
 
 class StudentVehicle(models.Model):
     """
@@ -43,17 +47,16 @@ class StudentVehicle(models.Model):
     """
     Vehicle Details
     """
-    vehicle_registration_number = models.CharField(max_length=100)
+    vehicle_registration_number = models.CharField(max_length=100, unique=True)
     color = models.CharField(max_length=32)
     make_and_model = models.CharField(max_length=100)
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
     registered_in_the_name_of = models.CharField(max_length=100)
     relation_with_owner = models.CharField(max_length=32)
-    vehicle_insurance_no = models.CharField(max_length=100)
+    vehicle_insurance_no = models.CharField(max_length=100, uniquue=True)
     insurance_valid_upto = models.DateField()
-    vehicle_registration_card = models.FileField(
-        upload_to='vehicle_registration_card')
+    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card')
     vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
     vehicle_photo = models.ImageField()
     """
@@ -71,7 +74,7 @@ class StudentVehicle(models.Model):
     
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.BooleanField()
-    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -100,7 +103,7 @@ class EmployeeVehicle(models.Model):
     chassis_number = models.CharField(max_length=100)
     engine_number = models.CharField(max_length=100)
     registered_in_the_name_of = models.CharField(max_length=100)
-    vehicle_insurance_no = models.CharField(max_length=100)
+    vehicle_insurance_no = models.CharField(max_length=100, unique=True)
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(
         upload_to='vehicle_registration_card')
@@ -121,27 +124,26 @@ class EmployeeVehicle(models.Model):
     
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.BooleanField()
-    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name
 
-class Guard(models.Model):
+class Guard(IITGUser):
     """
     Details of all security guards
     """
-    guard_name = models.CharField(max_length=255)
     guard_phone_number=models.IntegerField()
-
+    
     def __str__(self):
-        return self.guard_name
+        return self.user.username
 
 class Gate(models.Model):
     """
     Entry/Exit gates for vehicles
     """
-    gate_name = models.CharField(max_length=50)
-    security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
+    gate_name = models.CharField(max_length=50, unique=True)
+    # security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
 
     def __str__(self):
         return self.gate_name
@@ -151,17 +153,24 @@ class ParkingSlot(models.Model):
     """
     Details of parking slot along with number of vehicles
     """
-    parking_area_name = models.CharField(max_length = 100)
-    security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
+    parking_area_name = models.CharField(max_length = 100, unique=True)
+    # security_on_duty = models.ForeignKey(Guard, blank=True, null=True)
     total_slots = models.IntegerField(default=0, blank=True, null=True)
     available_slots = models.IntegerField(default=0, blank=True, null=True)
 
     def __str__(self):
         return self.parking_area_name
 
+
+class OnDutyGuard(models.Model):
+    guard = models.ForeignKey('Guard', unique=True)
+    place = models.CharField(max_length=100)
+    is_gate = models.BooleanField()
+
+
 class VehiclePass(models.Model):
 
-    pass_number=models.CharField(max_length=10)
+    pass_number=models.CharField(max_length=10, unique=True)
     vehicle_no=models.CharField(max_length=20)
     issue_date=models.DateField()
     expiry_date=models.DateField()
@@ -180,7 +189,7 @@ class VehiclePass(models.Model):
 
 class PersonPass(models.Model):
     old_card_reference=models.CharField(max_length=10)
-    pass_number=models.CharField(max_length=10) 
+    pass_number=models.CharField(max_length=10, unique=True) 
     name = models.CharField(max_length=255) 
     user_photo = models.ImageField() 
     age=models.IntegerField() 
@@ -199,7 +208,7 @@ class SuspiciousVehicle(models.Model):
     Details of suspicious vehicle
     """
     reporter=models.ForeignKey(User)
-    vehicle_number = models.CharField(max_length=20)
+    vehicle_number = models.CharField(max_length=20, unique=True)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
                                         ('bicycle', 'bicycle'),
@@ -271,23 +280,25 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    registration_number = models.CharField(max_length=50)
-    reporter = models.ForeignKey(User, blank=True, null=True)
-    vehicle_type = models.CharField(max_length=50, null=True,
-                                    choices=[
-                                        ('bicycle', 'bicycle'),
-                                        ('bike', 'bike'),
-                                        ('car', 'car'),
-                                        ('truck', 'truck'),
-                                        ('courier', 'courier'),
-                                        ('auto', 'auto'),
-                                        ('other', 'other'),
-                                    ])
-    vehicle_model = models.CharField(max_length=100, null=True)
+    registration_number = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
+    reporter = models.ForeignKey(User, blank=True, null=True) #VEHICLE SHOULD BE USERS
+    stud_vehicle = models.ForeignKey('StudentVehicle', blank=True)
+    emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True)
+    # vehicle_type = models.CharField(max_length=50, null=True,
+    #                                 choices=[
+    #                                     ('bicycle', 'bicycle'),
+    #                                     ('bike', 'bike'),
+    #                                     ('car', 'car'),
+    #                                     ('truck', 'truck'),
+    #                                     ('courier', 'courier'),
+    #                                     ('auto', 'auto'),
+    #                                     ('other', 'other'),
+    #                                 ])
+    # vehicle_model = models.CharField(max_length=100, null=True)
     theft_time = models.DateTimeField(blank=True, null=True)
     theft_place = models.CharField(max_length=100, blank=True, null=True)
     remarks = models.TextField(max_length=1000, blank=True, null=True)
-    status = models.CharField(max_length=20, default="not found")
+    status = models.CharField(max_length=100, default="Submitted", choices=[("Submitted", "Submitted"), ("Received by Security Section", "Received by Security Section"), ("Search in Progress","Search in Progress"), ("Vehicle Found","Vehicle Found"), ("Case Closed (Vehicle Not Found)","Case Closed (Vehicle Not Found)"), ("Vehicle Returned","Vehicle Returned")])
 
 
     def __str__(self):
@@ -304,12 +315,12 @@ class TheftReport(models.Model):
 #         return str(self.place)+" "+str(self.numbering)+" "+str(self.bus)
 
 class Place(models.Model):
-    place_name=models.CharField(max_length=32)
+    place_name=models.CharField(max_length=32, unique=True)
     def __str__(self):
         return self.place_name
 
 class Day(models.Model):
-    day=models.CharField(max_length=32)
+    day=models.CharField(max_length=32, unique=True)
     def __str__(self):
         return self.day
 
@@ -319,7 +330,7 @@ class BusTiming(models.Model):
     bus_route = models.CharField(max_length=512)
     from_time = models.TimeField()
     #to_time = models.TimeField()
-    bus_no = models.CharField(max_length=10 ,blank=False)
+    bus_no = models.CharField(max_length=10 ,blank=False, unique=True)
     starting_point = models.ForeignKey('Place', related_name="starting_point")
     ending_point=models.ForeignKey('Place', related_name="ending_point")
     availability = models.ManyToManyField('Day')

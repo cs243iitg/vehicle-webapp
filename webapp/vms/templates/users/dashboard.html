@@ -64,32 +64,34 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Bus time</th>
                                             <th>Bus Number</th>
+                                            <th>Start Time</th>
+                                            <th>Starting Point</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% if buses.0 %}
                                         <tr class="success">
-                                            <td>1</td>
-                                            <td></td>
-                                            <td></td>
-                                            
+                                            <td>{{buses.0.bus_no}}</td>
+                                            <td>{{buses.0.from_time}}</td>
+                                            <td>{{buses.0.starting_point.place_name}}</td>                                            
                                         </tr>
+                                        {% endif %}
+                                        {% if buses.1 %}
                                         <tr class="info">
-                                            <td>2</td>
-                                            <td></td>
-                                            <td></td>
-                                            
+                                            <td>{{buses.0.bus_no}}</td>
+                                            <td>{{buses.0.from_time}}</td>
+                                            <td>{{buses.0.starting_point.place_name}}</td>                                            
                                         </tr>
+                                        {% endif %}
+                                        {% if buses.2 %}
                                         <tr class="warning">
-                                            <td>3</td>
-                                            <td></td>
-                                            <td></td>
-                                            
+                                           <td>{{buses.0.bus_no}}</td>
+                                            <td>{{buses.0.from_time}}</td>
+                                            <td>{{buses.0.starting_point.place_name}}</td>                                            
                                         </tr>
-                                       
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm
-from .models import TheftReport, StudentVehicle
+from .models import TheftReport, StudentVehicle, BusTiming
 from datetime import datetime
 
 #------------------------------------------------------------
@@ -44,7 +44,7 @@ def logout(request):
 
 def auth_view(request):
     """
-    Authenticates user from the username and password from POST
+    Authenticates user from the username and password from POST -- REQUIRES CHANGES DEPENDING ON MODEL
     """
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -65,9 +65,14 @@ def home(request):
     """
     Home page for user, with his previous tasks
     """
+    today = str.lower(datetime.now().strftime("%A"))    
+    buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
+
     return render(request, 'users/dashboard.html',{
-        'username': request.user.username,
+        'username': request.user.first_name,
         'is_user': True,
+        'user': request.user,
+        'buses': buses[0:3],        
     })
 
 
@@ -106,7 +111,7 @@ def report_theft(request):
 @login_required(login_url="/vms/")
 def user_theft_reports(request):
     """
-    Displays to users their theft reports -- NOTE: NO PAGE EXISTS FOR THIS AS YET
+    Displays to users their theft reports
     """
     reports = TheftReport.objects.filter(reporter=request.user)
     return render_to_response("users/theft_reports.html", {
@@ -117,12 +122,12 @@ def user_theft_reports(request):
 @login_required(login_url="/vms/")
 def cancel_theft_report(request, theft_report_id):
     """
-    Cancels theft report with specified id -- NOTE: NO PAGE EXISTS FOR THIS AS YET
+    Cancels theft report with specified id
     """
     theft_report = TheftReport.objects.get(id=theft_report_id)
     if request.user == theft_report.reporter:
         theft_report.delete()
-    return HttpResponseRedirect("/vms/your-theft-reports")
+    return HttpResponseRedirect("/users/user_theft_reports")
 
 #------------------------------------------------------------
 #       Theft Reports for Admin
@@ -175,8 +180,9 @@ def user_vehicle_registrations(request):
     """
     registrations = StudentVehicle.objects.filter(
         registered_in_the_name_of=request.user)
-    return render_to_response("vms/user_vehicle_registrations.html", {
+    return render_to_response("users/vehicle_registrations.html", {
         "registrations": registrations,
+        "is_user" : True,
     }, context_instance=RequestContext(request))
 
 @login_required(login_url="/vms/")
@@ -187,7 +193,7 @@ def cancel_student_vehicle_registration(request, student_vehicle_id):
     student_vehicle = StudentVehicle.objects.get(id=student_vehicle_id)
     if request.user == student_vehicle.registered_in_the_name_of:
         student_vehicle.delete()
-    return HttpResponseRedirect("/vms/your-vehicle-registrations")
+    return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
 
 @login_required(login_url="/vms/")
 def parking_availability(request):
@@ -196,7 +202,8 @@ def parking_availability(request):
     """
     return render(request, 'users/parking.html', {
         'username': request.user.username,
-        'is_admin': True,
+        'is_admin': True if request.path == "/vms/admin/register-vehicle/" else False,
+        'is_user': True if request.path == "/vms/users/register-vehicle/" else False,
         })
 
 @login_required(login_url="/vms/")

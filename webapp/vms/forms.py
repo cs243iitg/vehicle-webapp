@@ -157,7 +157,7 @@ class StudentVehicleForm(forms.ModelForm):
         self.helper.label_class = 'col-md-2 col-md-offset-1'
         self.helper.field_class = 'col-md-4'
         self.helper.form_method = 'post'
-        self.helper.form_action = '/vms/submit-vehicle-registration/'
+        self.helper.form_action = '/vms/users/submit-vehicle-registration/'
         self.helper.layout = Layout(
             TabHolder(
                 Tab('Personal Details',
