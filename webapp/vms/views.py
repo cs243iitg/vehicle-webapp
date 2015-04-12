@@ -136,5 +136,3 @@ def suspicious_vehicles(request):
         'is_admin': True,
         })
 
-def parking_slot_update(request):
-    pass

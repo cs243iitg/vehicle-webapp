@@ -46,7 +46,7 @@ def block_passes(request):
     pass
 
 def add_users(request):
-    pass
+    return render_to_response('admin/add_users.html',{'user':request.user,},context_instance=RequestContext(request))
 
 def edit_user_details(request):
     pass
