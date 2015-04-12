@@ -54,7 +54,7 @@ class StudentVehicle(models.Model):
     engine_number = models.CharField(max_length=100)
     registered_in_the_name_of = models.CharField(max_length=100)
     relation_with_owner = models.CharField(max_length=32)
-    vehicle_insurance_no = models.CharField(max_length=100, uniquue=True)
+    vehicle_insurance_no = models.CharField(max_length=100, unique=True)
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card')
     vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
@@ -162,7 +162,7 @@ class ParkingSlot(models.Model):
         return self.parking_area_name
 
 class OnDutyGuard(models.Model):
-    guard = models.ForeignKey('Guard', unique=True)
+    guard = models.OneToOneField('Guard')
     place = models.CharField(max_length=100)
     is_gate = models.BooleanField()
 
