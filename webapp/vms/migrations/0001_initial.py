@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BusTiming',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('bus_route', models.CharField(max_length=512)),
                 ('from_time', models.TimeField()),
                 ('bus_no', models.CharField(max_length=10)),
@@ -25,14 +25,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Day',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('day', models.CharField(max_length=32)),
             ],
         ),
         migrations.CreateModel(
             name='EmployeeVehicle',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=255)),
                 ('employee_no', models.IntegerField()),
                 ('department', models.CharField(max_length=100)),
@@ -68,14 +68,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Gate',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('gate_name', models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
             name='Guard',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('guard_name', models.CharField(max_length=255)),
                 ('guard_phone_number', models.IntegerField()),
             ],
@@ -83,16 +83,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='IITGUser',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
-                ('is_student', models.BooleanField(default=False, help_text='Designates whether the user is a student or a professor.', verbose_name='Is student')),
-                ('is_security', models.BooleanField(default=False, help_text='Designates whether this user is security personnal or not.', verbose_name='Is security personnal')),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
+                ('is_student', models.BooleanField(help_text='Designates whether the user is a student or a professor.', default=False, verbose_name='Is student')),
+                ('is_security', models.BooleanField(help_text='Designates whether this user is security personnal or not.', default=False, verbose_name='Is security personnal')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='OnDutyGuard',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('place', models.CharField(max_length=100)),
                 ('is_gate', models.BooleanField()),
                 ('guard', models.ForeignKey(to='vms.Guard')),
@@ -101,7 +101,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ParkingSlot',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('parking_area_name', models.CharField(max_length=100)),
                 ('total_slots', models.IntegerField(blank=True, default=0, null=True)),
                 ('available_slots', models.IntegerField(blank=True, default=0, null=True)),
@@ -110,7 +110,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PersonPass',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('old_card_reference', models.CharField(max_length=10)),
                 ('pass_number', models.CharField(max_length=10)),
                 ('name', models.CharField(max_length=255)),
@@ -128,14 +128,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Place',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('place_name', models.CharField(max_length=32)),
             ],
         ),
         migrations.CreateModel(
             name='ResidentLog',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('registration_number', models.CharField(max_length=50)),
                 ('vehicle_type', models.CharField(blank=True, choices=[('bicycle', 'bicycle'), ('bike', 'bike'), ('car', 'car'), ('truck', 'truck'), ('courier', 'courier'), ('auto', 'auto'), ('other', 'other')], null=True, max_length=50)),
                 ('vehicle_model', models.CharField(blank=True, null=True, max_length=100)),
@@ -146,7 +146,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='StudentVehicle',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=255)),
                 ('roll_number', models.IntegerField()),
                 ('department', models.CharField(max_length=100)),
@@ -193,11 +193,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SuspiciousVehicle',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('vehicle_number', models.CharField(max_length=20)),
                 ('vehicle_type', models.CharField(blank=True, choices=[('bicycle', 'bicycle'), ('bike', 'bike'), ('car', 'car'), ('truck', 'truck'), ('courier', 'courier'), ('auto', 'auto'), ('other', 'other')], null=True, max_length=50)),
                 ('vehicle_model', models.CharField(blank=True, null=True, max_length=100)),
-                ('vehicle_image', models.ImageField(blank=True, null=True, upload_to='')),
+                ('vehicle_image', models.ImageField(upload_to='', blank=True, null=True)),
                 ('remarks', models.TextField(blank=True, null=True, max_length=1000)),
                 ('reporter', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
@@ -205,21 +205,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TheftReport',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('registration_number', models.CharField(max_length=50)),
                 ('theft_time', models.DateTimeField(blank=True, null=True)),
                 ('theft_place', models.CharField(blank=True, null=True, max_length=100)),
                 ('remarks', models.TextField(blank=True, null=True, max_length=1000)),
                 ('status', models.CharField(default='Submitted', choices=[('Submitted', 'Submitted'), ('Received by Security Section', 'Received by Security Section'), ('Search in Progress', 'Search in Progress'), ('Vehicle Found', 'Vehicle Found'), ('Case Closed (Vehicle Not Found)', 'Case Closed (Vehicle Not Found)'), ('Vehicle Returned', 'Vehicle Returned')], max_length=100)),
                 ('emp_vehicle', models.ForeignKey(blank=True, to='vms.EmployeeVehicle')),
-                ('reporter', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True, blank=True)),
+                ('reporter', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('stud_vehicle', models.ForeignKey(blank=True, to='vms.StudentVehicle')),
             ],
         ),
         migrations.CreateModel(
             name='VehiclePass',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('pass_number', models.CharField(max_length=10)),
                 ('vehicle_no', models.CharField(max_length=20)),
                 ('issue_date', models.DateField()),
@@ -230,7 +230,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VisitorLog',
             fields=[
-                ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('vehicle_number', models.CharField(max_length=20)),
                 ('vehicle_type', models.CharField(blank=True, choices=[('bicycle', 'bicycle'), ('bike', 'bike'), ('car', 'car'), ('truck', 'truck'), ('courier', 'courier'), ('auto', 'auto'), ('other', 'other')], null=True, max_length=50)),
                 ('vehicle_model', models.CharField(blank=True, null=True, max_length=100)),
@@ -240,8 +240,8 @@ class Migration(migrations.Migration):
                 ('purpose_of_visit', models.TextField(blank=True, null=True, max_length=1000)),
                 ('in_time', models.DateTimeField(blank=True, null=True)),
                 ('out_time', models.DateTimeField(blank=True, null=True)),
-                ('in_gate', models.ForeignKey(related_name='in_gate_log', null=True, to='vms.Gate')),
-                ('out_gate', models.ForeignKey(related_name='out_gate_log', null=True, to='vms.Gate')),
+                ('in_gate', models.ForeignKey(related_name='in_gate_log', to='vms.Gate', null=True)),
+                ('out_gate', models.ForeignKey(related_name='out_gate_log', to='vms.Gate', null=True)),
             ],
         ),
         migrations.AddField(
@@ -252,11 +252,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bustiming',
             name='ending_point',
-            field=models.ForeignKey(related_name='ending_point', to='vms.Place'),
+            field=models.ForeignKey(to='vms.Place', related_name='ending_point'),
         ),
         migrations.AddField(
             model_name='bustiming',
             name='starting_point',
-            field=models.ForeignKey(related_name='starting_point', to='vms.Place'),
+            field=models.ForeignKey(to='vms.Place', related_name='starting_point'),
         ),
     ]

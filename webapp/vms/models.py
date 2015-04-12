@@ -7,11 +7,14 @@ import os
 # Create your models here.
 
 class IITGUser(models.Model):
-    user=models.OneToOneField(User)
+    user=models.OneToOneField(User, related_name='user', default=False)
     is_student = models.BooleanField(_('Is student'), default=False,
         help_text=_('Designates whether the user is a student or a professor.'))
     is_security = models.BooleanField(_('Is security personnal'), default=False,
         help_text=_('Designates whether this user is security personnal or not.'))
+
+    def __str__(self):
+        return self.user.username
 
 class StudentVehicle(models.Model):
     """
@@ -72,7 +75,7 @@ class StudentVehicle(models.Model):
     
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.BooleanField()
-    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name
@@ -122,20 +125,19 @@ class EmployeeVehicle(models.Model):
     
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.BooleanField()
-    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True)
+    vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name
 
-class Guard(models.Model):
+class Guard(IITGUser):
     """
     Details of all security guards
     """
-    guard_name = models.CharField(max_length=255)
     guard_phone_number=models.IntegerField()
     
     def __str__(self):
-        return self.guard_name
+        return self.user.username
 
 class Gate(models.Model):
     """
@@ -186,7 +188,7 @@ class VehiclePass(models.Model):
 
 class PersonPass(models.Model):
     old_card_reference=models.CharField(max_length=10)
-    pass_number=models.CharField(max_length=10) 
+    pass_number=models.CharField(max_length=10, unique=True) 
     name = models.CharField(max_length=255) 
     user_photo = models.ImageField() 
     age=models.IntegerField() 
@@ -205,7 +207,7 @@ class SuspiciousVehicle(models.Model):
     Details of suspicious vehicle
     """
     reporter=models.ForeignKey(User)
-    vehicle_number = models.CharField(max_length=20)
+    vehicle_number = models.CharField(max_length=20, unique=True)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
                                         ('bicycle', 'bicycle'),
@@ -277,7 +279,7 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    registration_number = models.CharField(max_length=50) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
+    registration_number = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
     reporter = models.ForeignKey(User, blank=True, null=True) #VEHICLE SHOULD BE USERS
     stud_vehicle = models.ForeignKey('StudentVehicle', blank=True)
     emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True)
@@ -312,7 +314,7 @@ class TheftReport(models.Model):
 #         return str(self.place)+" "+str(self.numbering)+" "+str(self.bus)
 
 class Place(models.Model):
-    place_name=models.CharField(max_length=32)
+    place_name=models.CharField(max_length=32, unique=True)
     def __str__(self):
         return self.place_name
 
@@ -327,7 +329,7 @@ class BusTiming(models.Model):
     bus_route = models.CharField(max_length=512)
     from_time = models.TimeField()
     #to_time = models.TimeField()
-    bus_no = models.CharField(max_length=10 ,blank=False)
+    bus_no = models.CharField(max_length=10 ,blank=False, unique=True)
     starting_point = models.ForeignKey('Place', related_name="starting_point")
     ending_point=models.ForeignKey('Place', related_name="ending_point")
     availability = models.ManyToManyField('Day')

@@ -71,6 +71,7 @@ def home(request):
     return render(request, 'users/dashboard.html',{
         'username': request.user.first_name,
         'is_user': True,
+        'user': request.user,
         'buses': buses[0:3],        
     })
 

@@ -210,42 +210,108 @@
             <!-- /.navbar-top-links -->
 
 
-            {% if user.is_active %}
             <div  class="navbar-default sidebar"  role="navigation" >
             	<img style="margin-top:-47px; margin-left:20px; display:inline; " width="150px" height="150px" src="{% static 'vms/images/logo-iitg.gif' %}" />
             	
                 <div  height="200px" class="sidebar-nav navbar-collapse" style="margin-top: 30px;" >
                     <ul class="nav" id="side-menu" >
+                        <li>
+                            <a href="/vms/dashboard"><i class="fa fa-dashboard fa-fw"></i>Dashboard</a>
+                        </li>
                         
+                        {% if user.is_superuser %}
                         <li>
-                            <a href="/vms/users/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="/vms/admin/guards-on-duty"><i class="fa fa-car fa-car"></i>Guards On Duty</a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a href="/vms/parking-availability"><i class="fa fa-edit fa-fw"></i>Parking Slot Availability</a>
+                        </li>
+
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="/vms/admin/parking-slot-update"><i class="fa fa-edit fa-fw"></i>Parking Slot Update</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% if user.is_superuser or user.user.is_security %}
+                        <li>
+                            <a href="/vms/admin/logs"><i class="fa fa-edit fa-fw"></i>Entry/Exit Log</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% if user.user.is_security %}
+                        <li>
+                            <a href="##########"><i class="fa fa-edit fa-fw"></i>Entry/Exit Form</a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="########"><i class="fa fa-edit fa-fw"></i>Upload Entry/Exit</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="/vms/users/theft"><i class="fa fa-edit fa-fw"></i>Theft Report Form</a>
                         </li>
                         <li>
-                            
-                            
-                            <!-- /.nav-second-level -->
+                            <a href="########"><i class="fa fa-edit fa-fw"></i>Vehicles Missing</a>
                         </li>
                         <li>
-                            <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Guards On Duty</a>
+                            <a href="/vms/users/suspicious"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicle Report Form</a>
                         </li>
                         <li>
-                            <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>  Vehicle Registration</a>
+                            <a href="#########"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicles</a>
+                        </li>
+                        
+                        <!-- This will lead to page where you can block a pass and also see the list. However, blocking feature only for the superusers -->             
+                        {% if user.is_superuser or user.user.is_security %}
+                        <li>
+                            <a href="########"><i class="fa fa-edit fa-fw"></i>Entry Passes</a>
+                        </li>
+                        {% endif %}
+                                    
+                        {% if not user.user.is_security and user.user.is_student %}
+                        <li>
+                            <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Student Vehicle Registration Form</a>
+                        </li>
+                        {% endif %}
+                        {% if not user.user.is_security and not user.user.is_student %}
+                        <li>
+                            <a href="#######"><i class="fa fa-car fa-car"></i>Employee Vehicle Registration Form</a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Vehicles Registered</a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Add Users</a>
                         </li>
                         <li>
-                            <a href="/vms/users/theft"><i class="fa fa-edit fa-fw"></i>Theft report</a>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Edit User Details</a>
                         </li>
                         <li>
-                            <a href="/vms/users/suspicious"><i class="fa fa-edit fa-fw"></i>Suspicious Vehicle report</a>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Guards List</a>
                         </li>
                         <li>
-                            <a href="/vms/users/parking"><i class="fa fa-edit fa-fw"></i>Parking slot status</a>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Admin Role Panel</a>
                         </li>
+                        <li>
+                            <a href="#######"><i class="fa fa-edit fa-fw"></i>Update Bus Details</a>
+                        </li>
+                        {% endif %}
+
+                        
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
             </div>
-            {% elif is_admin %}
 
+            <!-- 
+                user.is_superuser line ober here elif
             <div  class="navbar-default sidebar"  role="navigation" >
                 <img style="margin-top:-47px; margin-left:20px; display:inline; " width="150px" height="150px" src="{% static 'vms/images/logo-iitg.gif' %}" />
                 
@@ -255,19 +321,15 @@
                         <li>
                             <a href="/vms/admin/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>                            
-                            
-                            <!-- /.nav-second-level -->
-                        </li>
                         <li>
                             <a href="/vms/admin/bus_timing"><i class="fa fa-car fa-car"></i>  Bus timing update</a>
                         </li>
                         <li>
                             <a href="/vms/admin/passes"><i class="fa fa-edit fa-fw"></i> Campus Pass Management</a>
                         </li>
-                        <!-- Karthik:Merged block passes with the view passes feature<li>
+                        Karthik:Merged block passes with the view passes feature<li>
                             <a href="block.html"><i class="fa fa-edit fa-fw"></i> Block passes</a>
-                        </li> -->
+                        </li>
                         <li>
                             <a href="/vms/admin/theft"><i class="fa fa-edit fa-fw"></i> Theft report</a>
                         </li>
@@ -289,9 +351,9 @@
                         
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
-            </div>
+                
+             </div> 
 
-            {% endif %}
+end if statement in this line
             <!-- /.navbar-static-side -->
         </nav>

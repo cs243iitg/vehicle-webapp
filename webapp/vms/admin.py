@@ -12,6 +12,12 @@ class IITGUserInline(admin.StackedInline):
 # Define a new User admin
 class UserAdmin(UserAdmin):
     inlines = (IITGUserInline, )
+    list_display=('username','first_name','last_name','is_superuser','is_staff','user_is_student','user_is_security')
+    def user_is_student(self,x):    
+        return x.user.is_student
+
+    def user_is_security(self,x):
+        return x.user.is_security
 
 
 class StudentVehicleAdmin(admin.ModelAdmin):
@@ -20,7 +26,8 @@ class StudentVehicleAdmin(admin.ModelAdmin):
 
 class EmployeeVehicleAdmin(admin.ModelAdmin):
     model = EmployeeVehicle
-    list_display = ('name', 'employee_no', 'vehicle_registration_number')    
+    list_display = ('name', 'employee_no', 'vehicle_registration_number')  
+    readonly_fields=['declaration',]  
 
 
 
@@ -59,6 +66,7 @@ class BusTimingAdmin(admin.ModelAdmin):
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(IITGUser)
 admin.site.register(StudentVehicle, StudentVehicleAdmin)
 admin.site.register(EmployeeVehicle, EmployeeVehicleAdmin)
 admin.site.register(Gate)
