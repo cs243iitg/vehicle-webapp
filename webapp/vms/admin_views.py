@@ -45,11 +45,11 @@ def block_passes(request):
     pass
 
 def add_users(request):
-    form=EditUserForm()
-    return render_to_response('admin/add_users.html',{'form':form,'user':request.user,},context_instance=RequestContext(request))
+    pass
 
 def edit_user_details(request):
-    pass
+    form=EditUserForm()
+    return render_to_response('admin/edit_users.html',{'form':form,'user':request.user,},context_instance=RequestContext(request))
 
 def security(request):
     pass

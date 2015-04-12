@@ -13,8 +13,15 @@ from django.contrib.auth import forms as UserForms
 
 class EditUserForm(UserForms.UserChangeForm):
     class Meta:
-        model=models.IITGUser
-        exclude=('',)
+        model = models.IITGUser
+        fields = ('user',)
+
+###########################################
+#NOT DONE
+###########################################
+
+class AdminRoleForm(models.ModelForm):
+    
 
 class SuspiciousVehicleForm(forms.ModelForm):
     """
