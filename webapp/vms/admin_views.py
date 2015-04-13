@@ -57,6 +57,21 @@ def upload_log(request):
 
 def parking_slot_update(request):
     if request.method == "POST":
+        parkings=ParkingSlot.objects.all()
+        str1=""
+        for key in request.POST:
+            str1=str1+" "+str(key)+"#"+str(request.POST[key])
+        return HttpResponse(str1)
+        parking=parkings.get(parking_area_name=request.POST['parking_area_name'])
+        parking.total_slots=request.POST['total_slots']
+        parking.available_slots=request.POST['available_slots']
+        parking.save()
+        parkings=ParkingSlot.objects.all()
+        return render(request, 'admin/parking_slot_update.html',{
+        'parkings':parkings,
+        'parking1':parkings[0],
+        'message':"Information of the parking area is updated"
+        }) 
 
     parkings=ParkingSlot.objects.all()
     return render(request, 'admin/parking_slot_update.html',{

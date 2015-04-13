@@ -6,32 +6,32 @@
             </h2>
             </br>
             <h4>{{message}}</h4>
-            <form class="form-inline" role="form" action="/admin/parking-slot-update/" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
                 <div class="form-group">
                     <table class="table table-striped">
+                    {% for parking in parkings %}
+                <form class="form-inline" role="form" action="/vms/admin/parking-slot-update/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <tr>
                         <td><label>Parking Name</label></td>
-                        <td><select id="parking" name="parking" onchange="myFunction()">
-                        {% for parking in parkings %}
-                            <option>{{parking.parking_area_name}}</option>
-                        {% endfor %}
-                        </select></td>
+                        <td><input name="parking_area_name" value="{{parking.parking_area_name}}"></label></td>
                     </tr>
                     <tr>
                         <td><label>Total Slots</label></td>
-                        <td><input id="total_slots" value="{{parking1.total_slots}}" class="form-control" name="total_slots" type="number"/></td>
+                        <td><input id="total_slots" value="{{parking.total_slots}}" class="form-control" name="total_slots" type="number"/></td>
                     </tr>
                     <tr>
                         <td><label>Available Slots</label></td>
                         <td><input class="form-control" name="available_slots" type="number" /></td>
-                    </tr></table>
-                </div>
-                <div class="row">
+                    <td><div class="row">
                        <button type="submit" class="btn btn-default col-md-offset-5 col-xs-offset-7">Submit</button>
+                    </div></td>
+                    </tr>
+                </form>
+                {% endfor %}
+                </table>
                 </div>
-            </form>
 </br>
+
                 
         </div>
             <!-- /.container-fluid -->
@@ -43,16 +43,4 @@
         <!-- /#page-wrapper -->
         </div>
 </body>
-<script type="text/javascript">
-    parking_area=document.getElementById('parking').value
-    var parking_area={};
-    {% for parking in parkings %}
-        parking_area["{{parking.parking_area_name}}"]={{parking.total_slots}};
-    {% endfor %}
-    function myFunction()
-    {
-        place=document.getElementById('parking').value
-        document.getElementById('total_slots').value=parking_area[place]
-    }
-</script>
 </html>
