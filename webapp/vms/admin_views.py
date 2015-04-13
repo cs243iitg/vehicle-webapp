@@ -4,14 +4,16 @@ from django.views import generic
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-from .forms import TheftForm, StudentVehicleForm, EditUserForm
-from .models import TheftReport, StudentVehicle, BusTiming
+from .forms import TheftForm, StudentVehicleForm
+from .models import TheftReport, StudentVehicle, BusTiming, Guard
 from datetime import datetime
+
 #------------------------------------------------------------
 #       User Authentication
 #------------------------------------------------------------
@@ -44,18 +46,8 @@ def cancel_student_vehicle_registration(request, student_vehicle_id):
 def block_passes(request):
     pass
 
-def add_users(request):
-    pass
-
-def edit_user_details(request):
-    form=EditUserForm()
-    return render_to_response('admin/edit_users.html',{'form':form,'user':request.user,},context_instance=RequestContext(request))
-
-def security(request):
-    pass
-
-def admin_role(request):
-    pass
+def add_guards(request):
+    return HttpResponse("CSV Upload to be included")
 
 def update_bus_details(request):
     pass
@@ -68,6 +60,13 @@ def parking_slot_update(request):
 
 def guards_on_duty(request):
     pass
+
+def security(request):
+    guards=Guard.objects.all()
+    return render(request, 'admin/security.html',{
+        'guards':guards,
+        'user':request.user,
+        })
 
 def registered_vehicles(request):
     """

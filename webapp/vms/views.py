@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm
-from .models import TheftReport, StudentVehicle, BusTiming
+from .models import TheftReport, StudentVehicle, BusTiming, EmployeeVehicle
 from datetime import datetime
 
 
@@ -83,15 +83,22 @@ def theft_report_form(request):
         if form.is_valid():
             task = form.save(commit=False)
             task.reporter = request.user
-            task.save()
-            messages.success(request, 'Your theft report is submitted.')
-            return HttpResponseRedirect("/vms/your-theft-reports")
+            if request.user.user.is_student:
+                vehicles=StudentVehicle.objects.filter(user=request.user)
+            else:
+                vehicles=EmployeeVehicle.objects.filter(user=request.user)
+            if task in vehicles:
+                task.save()
+                messages.success(request, 'Your theft report is submitted.')
+                return HttpResponse("submitted")
+            else:
+                return HttpResponse("Not your vehicle")
     else:
         form = TheftForm()
-    return render(request, "users/theft.html", {
+  
+    return render(request, "vms/theft.html", {
         'form':form,
-        'is_admin': True if request.path == "/vms/admin/theft/" else False,
-        'is_user': True if request.path == "/vms/users/theft/" else False,
+        'user':request.user,
     })
 
 @login_required(login_url="/vms/")
