@@ -23,12 +23,12 @@ urlpatterns = [
     url('admin/parking-slot-update/$', admin_views.parking_slot_update),
     url('admin/upload-log/$', admin_views.upload_log),
     url('admin/registered-vehicles', admin_views.registered_vehicles),
-    url('admin/add-users', admin_views.add_users),
-    url('admin/edit-user-details', admin_views.edit_user_details),
+    url('admin/add-guards', admin_views.add_guards),
+    # url('admin/edit-user-details', admin_views.edit_user_details),
     url('admin/security',admin_views.security),
-    url('admin/admin-role',admin_views.admin_role),
+    # url('admin/admin-role',admin_views.admin_role),
     url('admin/update-bus-details',admin_views.update_bus_details),
-    url('admin/block-passes',admin_views.block_passes), #abhilasha
+    url('admin/block-passes',admin_views.block_passes), 
     
     #URLs Common for Users and Admin
     url('users/register-vehicle/$', users_views.register_vehicle),
@@ -43,7 +43,7 @@ urlpatterns = [
     #Common URLs for Security and Admin
     url('security/log/$',security_views.log),
     url('security/log-form',security_views.log_form),
-    url('security/passes',security_views.passes),       #abhilasha
+    url('security/passes',security_views.passes),      
     #EndSection
 
 

@@ -14,6 +14,9 @@
     <!-- Bootstrap Core CSS -->
     {% load staticfiles %}
     <link href="{% static 'vms/bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- dataTables -->
+
+    <link href="{% static 'vms/bower_components/datatables/media/css/jquery.dataTables.min.css' %}" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
     <link href="{% static 'vms/bower_components/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet">
@@ -27,7 +30,8 @@
 
     <!-- jQuery -->
     <script src="{% static 'vms/bower_components/jquery/dist/jquery.min.js' %}"></script>
-
+    <!-- dataTables -->
+    <script src="{% static 'vms/bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static 'vms/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
@@ -292,17 +296,17 @@
                             <a href="/vms/admin/registered-vehicles"><i class="fa fa-edit fa-fw"></i>Vehicles Registered</a>
                         </li>
                         <li>
-                            <a href="/vms/admin/add-users"><i class="fa fa-edit fa-fw"></i>Add Users</a>
+                            <a href="/vms/admin/add-guards"><i class="fa fa-edit fa-fw"></i>Add Guards</a>
                         </li>
-                        <li>
+<!--                         <li>
                             <a href="/vms/admin/edit-user-details"><i class="fa fa-edit fa-fw"></i>Edit User Details</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="/vms/admin/security"><i class="fa fa-edit fa-fw"></i>Guards List</a>
                         </li>
-                        <li>
+<!--                    <li>
                             <a href="/vms/admin/admin-role"><i class="fa fa-edit fa-fw"></i>Admin Role Panel</a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="/vms/admin/update-bus-details"><i class="fa fa-edit fa-fw"></i>Update Bus Details</a>
                         </li>

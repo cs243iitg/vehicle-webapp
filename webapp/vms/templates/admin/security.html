@@ -1,0 +1,29 @@
+{% include 'site_base.html' %}
+<div id="page-wrapper">
+<h3>List of Guards on Work</h3>
+
+            <div class="container-fluid form-horizontal">
+<hr>
+<table id="myTable" class="table table-striped">
+<thead>
+	<tr>
+		<th>Guard Name</th>
+		<th>Guard Phone Number</th>
+	</tr>
+</thead>
+<tbody>
+{% for guard in guards %}
+<tr>
+	<td>{{guard.user.first_name}} {{guard.user.last_name}}</td>
+	<td>{{guard.guard_phone_number}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+</script>

@@ -1,0 +1,43 @@
+{% include 'site_base.html' %}
+<div id="page-wrapper">
+<h3>Change Admin Roles</h3>
+
+            <div class="container-fluid form-horizontal">
+<hr>
+<table id="myTable" class="table table-striped">
+<thead>
+	<tr>
+		<th>Full Name</th>
+		<th>Email ID</th>
+		<th>Date of Join</th>
+	</tr>
+</thead>
+<tbody>
+{% for admin in admins %}
+<tr>
+	<td>{{admin.first_name}} {{admin.user.last_name}}</td>
+	<td>{{admin.email}}</td>
+	<td>{{admin.date_joined}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<hr>
+</div>
+<h3>Add an Admin</h3>
+<form method="post" action="/vms/admin/admin-roles">
+	{% csrf_token %}
+	<table >
+		
+		{{ form }}
+		
+	</table>
+</form>
+
+
+</div>
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+</script>

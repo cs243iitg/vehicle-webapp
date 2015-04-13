@@ -30,7 +30,7 @@ class StudentVehicle(models.Model):
     room_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
     user_photo = models.ImageField()
-    identity_card = models.FileField(upload_to='identity_card')
+    identity_card = models.FileField(upload_to='identity_card', null=True)
     """
     Parents' Contact Details
     """
@@ -56,8 +56,8 @@ class StudentVehicle(models.Model):
     relation_with_owner = models.CharField(max_length=32)
     vehicle_insurance_no = models.CharField(max_length=100, unique=True)
     insurance_valid_upto = models.DateField()
-    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card')
-    vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
+    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card', null=True)
+    vehicle_insurance = models.FileField(upload_to='vehicle_insurance', null=True)
     vehicle_photo = models.ImageField()
     """
     Driving License
@@ -65,7 +65,7 @@ class StudentVehicle(models.Model):
     driving_license_number = models.CharField(max_length=15)
     driving_license_issue_date = models.DateField()
     driving_license_expiry_date = models.DateField()
-    driving_license = models.FileField(upload_to='driving_license')
+    driving_license = models.FileField(upload_to='driving_license', null=True)
     declaration = models.TextField(blank=True, null=True,
         default="By submitting this form, I hereby declare that " +
                 "I will be obliged to the following terms and conditions:\n\n" +
@@ -77,7 +77,7 @@ class StudentVehicle(models.Model):
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.vehicle_pass_no
 
 class EmployeeVehicle(models.Model):
     """
@@ -92,7 +92,7 @@ class EmployeeVehicle(models.Model):
     flat_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
     user_photo = models.ImageField()
-    identity_card = models.FileField(upload_to='identity_card')
+    identity_card = models.FileField(upload_to='identity_card', null=True)
     parking_slot_no =models.CharField(max_length=50)    
     """
     Vehicle Details
@@ -107,15 +107,15 @@ class EmployeeVehicle(models.Model):
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(
         upload_to='vehicle_registration_card')
-    vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
-    vehicle_photo = models.ImageField()
+    vehicle_insurance = models.FileField(upload_to='vehicle_insurance', null=True)
+    vehicle_photo = models.ImageField(null=True)
     """
     Driving License
     """
     driving_license_number = models.CharField(max_length=15)
     driving_license_issue_date = models.DateField()
     driving_license_expiry_date = models.DateField()
-    driving_license = models.FileField(upload_to='driving_license')
+    driving_license = models.FileField(upload_to='driving_license', null=True)
     declaration = models.TextField(blank=True, null=True,
         default="By submitting this form, I hereby declare that " +
                 "I will be obliged to the following terms and conditions:\n\n" +
@@ -127,7 +127,7 @@ class EmployeeVehicle(models.Model):
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.vehicle_pass_no
 
 class Guard(IITGUser):
     """
@@ -137,6 +137,11 @@ class Guard(IITGUser):
     
     def __str__(self):
         return self.user.username
+
+class OnDutyGuard(models.Model):
+    guard = models.OneToOneField('Guard', related_name='guard')
+    place = models.CharField(max_length=100)
+    is_gate = models.BooleanField()
 
 class Gate(models.Model):
     """
@@ -161,11 +166,6 @@ class ParkingSlot(models.Model):
     def __str__(self):
         return self.parking_area_name
 
-
-class OnDutyGuard(models.Model):
-    guard = models.OneToOneField('Guard')
-    place = models.CharField(max_length=100)
-    is_gate = models.BooleanField()
 
 
 class VehiclePass(models.Model):
@@ -199,7 +199,8 @@ class PersonPass(models.Model):
     nature_of_work = models.CharField(max_length=255) 
     issue_date=models.DateField() 
     expiry_date=models.DateField() 
-    is_blocked=models.BooleanField() 
+    is_blocked=models.BooleanField()
+    reason_for_block=models.TextField(blank=True) 
     def __str__(self): 
         return self.pass_number
 
@@ -280,7 +281,7 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    registration_number = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
+    vehicle_pass_no = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
     reporter = models.ForeignKey(User, blank=True, null=True) #VEHICLE SHOULD BE USERS
     stud_vehicle = models.ForeignKey('StudentVehicle', blank=True, null=True)
     emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True, null=True)
@@ -303,16 +304,6 @@ class TheftReport(models.Model):
 
     def __str__(self):
         return self.registration_number
-
-# class Route(models.Model):
-#     place=models.ForeignKey('Place')
-#     bus=models.ForeignKey('BusTiming')
-#     numbering=models.PositiveSmallIntegerField()
-#     class Meta:
-#         ordering=('numbering',)
-
-#     def __str__(self):
-#         return str(self.place)+" "+str(self.numbering)+" "+str(self.bus)
 
 class Place(models.Model):
     place_name=models.CharField(max_length=32, unique=True)

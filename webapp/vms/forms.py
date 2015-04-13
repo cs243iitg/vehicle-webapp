@@ -2,6 +2,7 @@ from vms import models
 from django.contrib.auth.models import User
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
+from django.contrib.admin.widgets import AdminSplitDateTime
 from django.utils.translation import ugettext_lazy as _
 from datetimewidget.widgets import DateTimeWidget, DateWidget
 from crispy_forms.helper import FormHelper
@@ -11,10 +12,17 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, InlineCheckboxes
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from django.contrib.auth import forms as UserForms
 
-class EditUserForm(UserForms.UserChangeForm):
-    class Meta:
-        model=models.IITGUser
-        exclude=('',)
+# class GuardForm(forms.ModelForm):
+#     username = forms.CharField(required=True, label="Username")
+#     password = forms.CharField(required=True, widget=forms.PasswordInput)
+#     first_name = forms.CharField(required=True, label="First Name")
+#     last_name = forms.CharField(required=True, label="Last Name")
+#     guard_phone_number = forms.IntegerField(required=True, label="Contact No.")
+
+#     class Meta:
+#         model = User
+#         exclude = ('',)
+
 
 class SuspiciousVehicleForm(forms.ModelForm):
     """
@@ -86,9 +94,11 @@ class TheftForm(forms.ModelForm):
 
     class Meta:
         model = models.TheftReport
-        exclude = ('reporter', 'status')
+        exclude = ('reporter', 'status','stud_vehicle','emp_vehicle')
         widgets = {
-            'theft_time': DateTimeWidget(usel10n = True, bootstrap_version=3),
+            # 'theft_time': DateTimeWidget(usel10n = True, bootstrap_version=3),
+            'theft_date_and_time': SelectDateWidget(),
+            # 'theft_time': AdminSplitDateTime(),
             'remarks': forms.Textarea(attrs={'rows':6}),
         }
 
