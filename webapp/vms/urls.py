@@ -17,7 +17,7 @@ urlpatterns = [
     url('vehicles-missing/$',views.vehicles_missing),
     url('suspicious-vehicle-report-form/$', views.suspicious_vehicle_report_form),
     url('suspicious-vehicles/$', views.suspicious_vehicles),
-
+    url(r'^suspicious-vehicles/delete/$', views.delete_suspicious_vehicles),
     #Admin urls
     url('admin/guards-on-duty/$', admin_views.guards_on_duty),
     url('admin/parking-slot-update/$', admin_views.parking_slot_update),

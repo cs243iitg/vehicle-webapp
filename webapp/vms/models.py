@@ -220,7 +220,7 @@ class SuspiciousVehicle(models.Model):
                                         ('other', 'other'),
                                     ])
     vehicle_model = models.CharField(max_length=100, blank=True, null=True)
-    vehicle_image = models.ImageField(blank=True, null=True)
+    vehicle_image = models.ImageField(blank=True, null=True, upload_to='suspicious_image')
     remarks = models.TextField(max_length=1000, blank=True, null=True)
 
     def __str__(self):
@@ -281,22 +281,24 @@ class VisitorLog(models.Model):
 
 class TheftReport(models.Model):
     vehicle_pass_no = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
-    reporter = models.ForeignKey(User, blank=True, null=True) #VEHICLE SHOULD BE USERS
+    reporter = models.ForeignKey(User, null=True) #VEHICLE SHOULD BE USERS
     stud_vehicle = models.ForeignKey('StudentVehicle', blank=True, null=True)
     emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True, null=True)
-    theft_date_and_time = models.DateTimeField(blank=True, null=True)
-    theft_place = models.CharField(max_length=100, blank=True, null=True)
+    theft_date = models.DateField(blank=False, null=True)
+    theft_time = models.DateTimeField(blank=False, null=True)
+    theft_place = models.CharField(max_length=100, blank=False, null=True)
     remarks = models.TextField(max_length=1000, blank=True, null=True)
     status = models.CharField(max_length=100, default="Submitted", choices=[("Submitted", "Submitted"), ("Received by Security Section", "Received by Security Section"), ("Search in Progress","Search in Progress"), ("Vehicle Found","Vehicle Found"), ("Case Closed (Vehicle Not Found)","Case Closed (Vehicle Not Found)"), ("Vehicle Returned","Vehicle Returned")])
 
 
     def __str__(self):
-        return self.registration_number
+        return self.vehicle_pass_no
 
 class Place(models.Model):
     place_name=models.CharField(max_length=32, unique=True)
     def __str__(self):
         return self.place_name
+
 
 class Day(models.Model):
     day=models.CharField(max_length=32, unique=True)

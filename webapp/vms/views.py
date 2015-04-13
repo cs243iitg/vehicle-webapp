@@ -9,8 +9,8 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-from .forms import TheftForm, StudentVehicleForm
-from .models import TheftReport, StudentVehicle, BusTiming, EmployeeVehicle
+from .forms import TheftForm, StudentVehicleForm, SuspiciousVehicleForm
+from .models import TheftReport, StudentVehicle, BusTiming, EmployeeVehicle, SuspiciousVehicle
 from datetime import datetime
 
 
@@ -81,16 +81,33 @@ def theft_report_form(request):
     if request.method == 'POST':
         form = TheftForm(request.POST)
         if form.is_valid():
-            task = form.save(commit=False)
+            task = form.save(commit = False)
             task.reporter = request.user
             if request.user.user.is_student:
                 vehicles=StudentVehicle.objects.filter(user=request.user)
+                try:
+                    vehicle = StudentVehicle.objects.get(vehicle_pass_no=task.vehicle_pass_no)
+                except:
+                    vehicle = None
             else:
                 vehicles=EmployeeVehicle.objects.filter(user=request.user)
-            if task in vehicles:
+                try:
+                    vehicle = EmployeeVehicle.objects.get(vehicle_pass_no=task.vehicle_pass_no)
+                except:
+                    vehicle = None
+            
+            if vehicle != None and vehicle in vehicles:
+                if request.user.user.is_student:
+                    task.stud_vehicle=vehicle
+                else:
+                    task.emp_vehicle=vehicle
                 task.save()
                 messages.success(request, 'Your theft report is submitted.')
-                return HttpResponse("submitted")
+                return render(request, "vms/theft.html",{
+                    'message':"Theft Report successfully submitted.",
+                    'user':request.user,
+                    'form':form,
+                    }) 
             else:
                 return HttpResponse("Not your vehicle")
     else:
@@ -107,10 +124,10 @@ def vehicles_missing(request):
     Displays to users their theft reports
     """
     reports = TheftReport.objects.filter(reporter=request.user)
-    return render_to_response("users/theft_reports.html", {
-        "reports": reports,
-        'is_user': True,
-    }, context_instance=RequestContext(request))
+    return render(request, "vms/theft_reports.html", {
+        'reports': reports,
+        'is_student':request.user.user.is_student,
+    })
 
 @login_required(login_url="/vms/")
 def parking_slot_availability(request):
@@ -126,20 +143,50 @@ def parking_slot_availability(request):
 @login_required(login_url="/vms/")
 def suspicious_vehicle_report_form(request):
     """
-    DUMMY: Function to report suspicious vehicles
+    Function to report suspicious vehicles
     """
-    return render(request, 'users/suspicious.html', {
-        'username': request.user.username,
-        'is_user': True,
+    if request.method == 'POST':
+        form = SuspiciousVehicleForm(request.POST, request.FILES)
+        if form.is_valid():
+            task = form.save(commit = False)
+            task.reporter=request.user
+            task.save()
+            return render(request, 'vms/suspicious.html',{
+                'user':request.user,
+                'form':form,
+                'message':"Vehicle has been reported. Thanks for the caution."
+                })
+
+    else:
+        form=SuspiciousVehicleForm()
+    return render(request, 'vms/suspicious.html', {
+        'user': request.user,
+        'form':form,
         })
 
 def suspicious_vehicles(request):
     """
-    DUMMY: Function to allow admin to view all suspicious reported activity
+    Function to allow users to view all suspicious reported activity
     """
+    str1=""
+    if request.POST:
+        SuspiciousVehicle.objects.get(id=request.POST['Delete']).delete()
+        vehicles = SuspiciousVehicle.objects.all()
+        messages.success(request,"Report for suspicious activity is deleted")
+        return render(request, 'vms/suspicious_vehicles.html',{
+            'user':request.user,
+            'vehicles':vehicles,
+            })
+        
+    else:
+        vehicles = SuspiciousVehicle.objects.all()
+        return render(request, 'vms/suspicious_vehicles.html', {
+            'user': request.user,
+            'vehicles':vehicles,
+            })
 
-    return render(request, 'admin/suspicious.html', {
-        'username': request.user.username,
-        'is_admin': True,
-        })
+def delete_suspicious_vehicles(request, suspicious_vehicle_id):
+    SuspiciousVehicle.objects.get(id=suspicious_vehicle_id).delete()
+    pass
+
 

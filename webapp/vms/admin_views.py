@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm
-from .models import TheftReport, StudentVehicle, BusTiming, Guard
+from .models import TheftReport, StudentVehicle, BusTiming, Guard, Place, ParkingSlot
 from datetime import datetime
 
 #------------------------------------------------------------
@@ -56,7 +56,13 @@ def upload_log(request):
     pass
 
 def parking_slot_update(request):
-    pass
+    if request.method == "POST":
+
+    parkings=ParkingSlot.objects.all()
+    return render(request, 'admin/parking_slot_update.html',{
+        'parkings':parkings,
+        'parking1':parkings[0],
+        })
 
 def guards_on_duty(request):
     pass
