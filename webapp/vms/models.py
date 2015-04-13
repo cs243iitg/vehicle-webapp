@@ -281,7 +281,7 @@ class VisitorLog(models.Model):
 
 
 class TheftReport(models.Model):
-    vehicle_pass_no = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
+    registration_number = models.CharField(max_length=50, unique=True) #CHECK BETWEEN STUDENT AND EMPLOYEE VEHICLE
     reporter = models.ForeignKey(User, blank=True, null=True) #VEHICLE SHOULD BE USERS
     stud_vehicle = models.ForeignKey('StudentVehicle', blank=True, null=True)
     emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True, null=True)
