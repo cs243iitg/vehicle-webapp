@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm, PersonPassForm
-from .models import TheftReport, StudentVehicle, BusTiming, Guard, Place, ParkingSlot, PersonPass
+from .models import TheftReport, StudentVehicle, BusTiming, Guard, Place, ParkingSlot, PersonPass, OnDutyGuard, Gate
 from datetime import datetime
 
 #------------------------------------------------------------
@@ -153,7 +153,40 @@ def parking_slot_update(request):
         })
 
 def guards_on_duty(request):
-    pass
+    guards = Guard.objects.all()
+    places = Place.objects.all()
+    gates = Gate.objects.all()
+    if request.method == "POST":
+        try:
+            user=User.objects.get(username=request.POST['guard_name'])
+            guard=Guard.objects.get(guard_user=user)
+        except:
+            messages.error(request, "Username not found")
+        place=Place.objects.filter(place_name=request.POST['place'])
+        is_gate=False
+        if len(place) == 0:
+            place = Gate.objects.filter(gate_name=request.POST['place'])
+            is_gate=True
+        ondutyguard=OnDutyGuard.objects.filter(guard=guard)
+        if len(ondutyguard) == 0:
+            OnDutyGuard.objects.create(guard=guard, place=place.place_name, is_gate=is_gate)
+        else:
+            update=OnDutyGuard.objects.get(guard=guard)
+            update.place=place.place_name
+            update.is_gate=is_gate
+            update.save()
+            messages.success(request, "Guard has been alloted the duty.")
+        return render(request, 'admin/onduty_guards.html',{
+            'guards':guards,
+            'places':places,
+            'gates':gates,
+            })   
+    return render(request, 'admin/onduty_guards.html', {
+        'guards': guards,
+        'places':places,
+        'gates':gates,
+        })
+
 
 def security(request):
     guards=Guard.objects.all()
