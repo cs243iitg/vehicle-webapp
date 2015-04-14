@@ -79,7 +79,7 @@ class PersonPassForm(forms.ModelForm):
 
     class Meta:
         model = models.PersonPass
-        exclude = ('is_blocked',)
+        exclude = ('is_blocked','reason')
         widgets = {
             'expiry_date': DateWidget(usel10n = True, bootstrap_version=3,),
             'issue_date': DateWidget(usel10n = True, bootstrap_version=3,),
@@ -117,8 +117,8 @@ class TheftForm(forms.ModelForm):
         model = models.TheftReport
         exclude = ('reporter', 'status','stud_vehicle','emp_vehicle')
         widgets = {
-            'theft_time': DateTimeWidget(usel10n = True, bootstrap_version=3),
-            'theft_date': SelectDateWidget(),
+            # 'theft_time': DateTimeWidget(usel10n = True, bootstrap_version=3),
+            'theft_time':SelectDateWidget(),
             'remarks': forms.Textarea(attrs={'rows':6}),
         }
 

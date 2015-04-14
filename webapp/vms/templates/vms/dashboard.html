@@ -75,7 +75,7 @@
                                         <tr class="success">
                                             <td>{{buses.0.bus_no}}</td>
                                             <td>{{buses.0.from_time}}</td>
-                                            <td>{{buses.0.starting_point.place_name}}</td>                                            
+                                            <td><a href="javascript:void(0);" name="HI" title="HI" onclick="openWindow()">PBWT-</a></td>                                            
                                         </tr>
                                         {% endif %}
                                         {% if buses.1 %}
@@ -105,5 +105,11 @@
 				</div>
     <!-- /#wrapper -->
 </body>
+<script type="text/javascript">
+    function openWindow()
+    {
+        window.open("/vms/busdetails/","hi", "width=550,height=170,toolbar=1,status=1,");
+    }
 
+</script>
 </html>

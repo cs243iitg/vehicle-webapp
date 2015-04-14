@@ -17,7 +17,9 @@ urlpatterns = [
     url('vehicles-missing/$',views.vehicles_missing),
     url('suspicious-vehicle-report-form/$', views.suspicious_vehicle_report_form),
     url('suspicious-vehicles/$', views.suspicious_vehicles),
+    url('busdetails/$',views.busdetails),
     url(r'^suspicious-vehicles/delete/$', views.delete_suspicious_vehicles),
+
     #Admin urls
     url('admin/guards-on-duty/$', admin_views.guards_on_duty),
     url('admin/parking-slot-update/$', admin_views.parking_slot_update),
@@ -29,6 +31,7 @@ urlpatterns = [
     # url('admin/admin-role',admin_views.admin_role),
     url('admin/update-bus-details',admin_views.update_bus_details),
     url('admin/block-passes',admin_views.block_passes), 
+    url('admin/issue-pass',admin_views.issue_pass),
     
     #URLs Common for Users and Admin
     url('users/register-vehicle/$', users_views.register_vehicle),
@@ -43,7 +46,8 @@ urlpatterns = [
     #Common URLs for Security and Admin
     url('security/log/$',security_views.log),
     url('security/log-form',security_views.log_form),
-    url('security/passes',security_views.passes),      
+    url('security/passes',security_views.passes), 
+    url(r'^(?P<pass_id>\d+)/personpass/$',security_views.persondetails),     
     #EndSection
 
 

@@ -13,15 +13,15 @@
                     {% csrf_token %}
                     <tr>
                         <td><label>Parking Name</label></td>
-                        <td><input name="parking_area_name" value="{{parking.parking_area_name}}"></label></td>
+                        <td><label id="label_parking_area_name">{{parking.parking_area_name}}</label><input id="parking_area_name" name="parking_area_name" style="display:none"value="{{parking.parking_area_name}}"></td>
                     </tr>
                     <tr>
                         <td><label>Total Slots</label></td>
-                        <td><input id="total_slots" value="{{parking.total_slots}}" class="form-control" name="total_slots" type="number"/></td>
+                        <td><input id="total_slots" value="{{parking.total_slots}}" class="form-control" name="total_slots" type="number" required/></td>
                     </tr>
                     <tr>
                         <td><label>Available Slots</label></td>
-                        <td><input class="form-control" name="available_slots" type="number" /></td>
+                        <td><input class="form-control" name="available_slots" type="number" required/></td>
                     <td><div class="row">
                        <button type="submit" class="btn btn-default col-md-offset-5 col-xs-offset-7">Submit</button>
                     </div></td>
@@ -43,4 +43,11 @@
         <!-- /#page-wrapper -->
         </div>
 </body>
+<script type="text/javascript">
+    // function editFunction()
+    // {
+    //     document.getElementById('label_parking_area_name').style.display="none";
+    //     document.getElementById('parking_area_name').style.display="inline";
+    // }
+</script>
 </html>

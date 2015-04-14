@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm
-from .models import TheftReport, StudentVehicle, BusTiming
+from .models import TheftReport, StudentVehicle, BusTiming, PersonPass
 from datetime import datetime
 
 def log_form(request):
@@ -28,9 +28,19 @@ def log(request):
 
 def passes(request):
     """
-    DUMMY: Function to allow the administrator create/delete/update the passes issued
+    Function to allow the administrator create/delete/update the passes issued
     """
-    return render(request, 'admin/passes.html', {
+    passes=PersonPass.objects.all()
+    return render(request, 'security/passes.html', {
         'username': request.user.username,
         'is_admin': True,
+        'passes' :passes,
         })
+
+def persondetails(request, pass_id):
+    personpass=PersonPass.objects.get(id=pass_id)
+    return render(request, 'security/person_pass.html',{
+        'user':request.user,
+        'passes':personpass,
+        })
+

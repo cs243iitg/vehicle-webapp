@@ -10,8 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm, SuspiciousVehicleForm
-from .models import TheftReport, StudentVehicle, BusTiming, EmployeeVehicle, SuspiciousVehicle
+from .models import TheftReport, StudentVehicle, BusTiming, EmployeeVehicle, SuspiciousVehicle, Guard
 from datetime import datetime
+import requests, threading
 
 
 def login(request):
@@ -65,13 +66,33 @@ def home(request):
     today = str.lower(datetime.now().strftime("%A"))    
     buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
 
-    return render(request, 'users/dashboard.html',{
+    return render(request, 'vms/dashboard.html',{
         'username': request.user.first_name,
         'is_user': True,
         'user': request.user,
         'buses': buses[0:3],        
     })
 
+@login_required(login_url="/vms/")
+def busdetails(request):
+    return render(request, 'vms/busdetails.html')
+
+
+#Ayush Mananiya
+#----------thread function for sending sms---------------------------------------------
+def send_sms(message, numbers):
+    proxy = "http://sumeet.ranka:weh,hftg@202.141.80.24:3128"             #change the username and password
+    status1=''
+    for i in numbers:
+        response = requests.get("https://site2sms.p.mashape.com/index.php?msg="+message+"&phone="+str(i)+"&pwd=CS243iitg&uid=8011035945",headers={"X-Mashape-Key": "CW4gX5MRw2mshX6uxzLHMxEVoB0Op1v4cMrjsnZoeRXbk3LD46", "Accept": "application/json"},proxies={"http":proxy,"https":proxy,"ftp":proxy},)
+        try:
+            status1 = status1 + str(response.json())
+        except ValueError:
+            continue
+    f= open('/2.txt', 'a')
+    f.write(status1+'message is sent')
+    f.close()
+#-------------------------end-----------------------------------------------------  
 
 @login_required(login_url="/vms/")
 def theft_report_form(request):
@@ -101,6 +122,14 @@ def theft_report_form(request):
                     task.stud_vehicle=vehicle
                 else:
                     task.emp_vehicle=vehicle
+
+                #ayush Mananiya
+    #my funct started--------------------------------------------------------------------------
+                numbers = list(Guard.objects.values_list('guard_phone_number', flat=True)) #retrieves the phone numbers of all the guards
+                message =  vehicle.make_and_model +' '+ task.vehicle_pass_no + ' is stolen from ' + task.theft_place +' at '+ str(task.theft_time.strftime('%d-%b-%Y %H:%M'))   #extract the form fields and generate message text
+                sms_thread = threading.Thread(target=send_sms, args=(message, numbers)) #threading
+                sms_thread.start()
+    #ended here--------------------------------------------------------------------------------------------------------------------------
                 task.save()
                 messages.success(request, 'Your theft report is submitted.')
                 return render(request, "vms/theft.html",{

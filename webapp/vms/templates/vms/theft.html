@@ -12,7 +12,7 @@
             <form action="/vms/theft-report-form/" method="POST">
                 {% csrf_token %}
                 <div class="row">
-                    <table class="col-sm-12 col-md-11">
+                    <table class="table table-striped">
                         {% for field in form %}
                             <tr>
                                 <td class="col-sm-3 col-md-3">{{ field.label_tag }}</td>

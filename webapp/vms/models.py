@@ -10,11 +10,18 @@ class IITGUser(models.Model):
     user=models.OneToOneField(User, related_name='user', default=False)
     is_student = models.BooleanField(_('Is student'), default=False,
         help_text=_('Designates whether the user is a student or a professor.'))
-    is_security = models.BooleanField(_('Is security personnal'), default=False,
-        help_text=_('Designates whether this user is security personnal or not.'))
 
     def __str__(self):
         return self.user.username
+
+class StudentCycle(models.Model):
+    user=models.ForeignKey(User)
+    cycle_company=models.CharField(max_length=32, blank=False)
+    cycle_color=models.CharField(max_length=32)
+    cycle_pass_no=models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.vehicle_pass_no
 
 class StudentVehicle(models.Model):
     """
@@ -129,14 +136,16 @@ class EmployeeVehicle(models.Model):
     def __str__(self):
         return self.vehicle_pass_no
 
-class Guard(IITGUser):
+class Guard(models.Model):
     """
     Details of all security guards
     """
+    guard_user = models.OneToOneField(User, related_name='guard_user')
     guard_phone_number=models.IntegerField()
     
+    
     def __str__(self):
-        return self.user.username
+        return self.guard_user.username
 
 class OnDutyGuard(models.Model):
     guard = models.OneToOneField('Guard', related_name='guard')
@@ -167,24 +176,6 @@ class ParkingSlot(models.Model):
         return self.parking_area_name
 
 
-class VehiclePass(models.Model):
-
-    pass_number=models.CharField(max_length=10, unique=True)
-    vehicle_no=models.CharField(max_length=20)
-    issue_date=models.DateField()
-    expiry_date=models.DateField()
-    vehicle_type = models.CharField(max_length=50, blank=True, null=True,
-                                    choices=[
-                                        ('bicycle', 'bicycle'),
-                                        ('bike', 'bike'),
-                                        ('car', 'car'),
-                                        ('truck', 'truck'),
-                                        ('courier', 'courier'),
-                                        ('auto', 'auto'),
-                                        ('other', 'other'),
-                                    ])
-    def __str__(self):
-        return self.pass_numer
 
 class PersonPass(models.Model):
     old_card_reference=models.CharField(max_length=10)
@@ -199,7 +190,7 @@ class PersonPass(models.Model):
     issue_date=models.DateField() 
     expiry_date=models.DateField() 
     is_blocked=models.BooleanField()
-    reason_for_block=models.TextField(blank=True) 
+    reason=models.TextField(blank=True) 
     def __str__(self): 
         return self.pass_number
 
@@ -284,7 +275,7 @@ class TheftReport(models.Model):
     reporter = models.ForeignKey(User, null=True) #VEHICLE SHOULD BE USERS
     stud_vehicle = models.ForeignKey('StudentVehicle', blank=True, null=True)
     emp_vehicle = models.ForeignKey('EmployeeVehicle', blank=True, null=True)
-    theft_date = models.DateField(blank=False, null=True)
+    # theft_date = models.DateField(blank=False, null=True)
     theft_time = models.DateTimeField(blank=False, null=True)
     theft_place = models.CharField(max_length=100, blank=False, null=True)
     remarks = models.TextField(max_length=1000, blank=True, null=True)

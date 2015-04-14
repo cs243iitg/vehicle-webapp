@@ -1,0 +1,75 @@
+{% include "site_base.html" %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <h2 class="page-header">Pass Details
+                </h2>
+            </br>
+            <div class="row" style="border:solid 2px #EEE;">
+                    <table class="table table-striped">
+                      
+                            <tr>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Card Reference</th>
+                                <td class="col-sm-6 col-md-4" >{{passes.pass_number}}</td>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Old Card Reference</th>
+                                <td class="col-sm-6 col-md-4">{{passes.old_card_reference}}</td>
+                            </tr>  
+                             <tr>
+
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Name</th>
+                                <td class="col-sm-4 col-md-4" >{{passes.name}}</span></td>
+                                <td class="col-sm-6 col-md-3" ><img src ="{{passes.user_photo}}" /></td>
+                            </tr>  
+                             <tr>
+
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Age</th>
+                                <td class="col-sm-3 col-md-3" >{{passes.age}}</td>
+                            </tr>  
+                             <tr>
+
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Idntified By</th>
+                                <td class="col-sm-3 col-md-4" >{{passes.identified_by}}</td>
+                            </tr>  
+                             <tr>
+
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Work Area</th>
+                                <td class="col-sm-3 col-md-4" >{{passes.work_area}}</span></td>
+                            </tr>    
+                                <th class="col-sm-3 col-md-3"style="color: #428bca; font-weight: bold;">Working Time</th>
+                                <td class="col-sm-3 col-md-4" >{{passes.working_time}}</td>                          
+                            
+                            <tr>
+                                <th class="col-sm-3 col-md-3"style="color: #428bca; font-weight: bold;">Nature of Work</th>
+                                <td class="col-sm-3 col-md-4" >{{passes.nature_of_work}}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Issue Date</th>
+                                <td class="col-sm-6 col-md-4" >{{passes.issue_date}}</td>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Expiry Date</th>
+                                <td class="col-sm-6 col-md-4">{{passes.expiry_date}}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Blocked</th>
+                                <td class="col-sm-6 col-md-4" >{{passes.is_blocked}}</td>
+                            </tr>
+                            <tr>
+                            {% if passes.is_blocked %}
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Reason for Blocking</th>
+                                <td class="col-sm-6 col-md-4" >{{passes.reason}}</td>
+                            {% endif %}
+                            </tr>
+                    </table>
+            </div>
+                                                   
+            </div>
+            <!-- /.container-fluid -->
+            
+        
+        
+                
+            
+        <!-- /#page-wrapper -->
+        </div>
+</body>
+
+</html>
