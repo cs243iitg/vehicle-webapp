@@ -2,14 +2,14 @@
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
-                 <h2 class="page-header">Report Theft
+                 <h2 class="page-header">Report Suspicious Activity
                 <span style="font-size: 14px; margin-left: 20px;">
                     <a href="/vms/your-theft-reports">View your reports</a>
                 </span>
             </h2>
             </br>
             <h4>{{message}}</h4>
-            <form action="/vms/theft-report-form/" method="POST">
+            <form action="/vms/suspicious-vehicle-report-form/" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                     <table class="table table-striped">

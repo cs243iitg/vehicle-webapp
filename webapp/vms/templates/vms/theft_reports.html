@@ -1,0 +1,39 @@
+{% include 'site_base.html' %}
+<div id="page-wrapper">
+<h2>Theft Reports</h2>
+
+            <div class="container-fluid form-horizontal">
+<hr>
+<table id="myTable" class="table table-striped">
+<thead>
+	<tr>
+		<th>Theft Report ID</th>
+		<th>Vehicle Pass Number</th>
+		<th>Vehicle Model</th>
+		<th>Theft Date</th>
+		<th>Theft Place</th>
+	</tr>
+</thead>
+<tbody>
+{% for report in reports %}
+<tr>
+	<td>{{report.id}}</td>
+	<td>{{report.vehicle_pass_no}}</td>
+	{% if is_student %}
+		<td>{{report.stud_vehicle.make_and_model}}</td>
+	{% else %}
+		<td>{{report.emp_vehicle.is_student}}</td>
+	{% endif %}
+	<td>{{report.theft_date_and_time}}</td>
+	<td>{{report.place}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+</script>

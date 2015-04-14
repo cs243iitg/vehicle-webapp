@@ -11,6 +11,8 @@ from crispy_forms.bootstrap import TabHolder, Tab, Div, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, InlineCheckboxes
 from crispy_forms.bootstrap import Accordion, AccordionGroup
 from django.contrib.auth import forms as UserForms
+from django.core.validators import RegexValidator
+
 
 # class GuardForm(forms.ModelForm):
 #     username = forms.CharField(required=True, label="Username")
@@ -23,6 +25,23 @@ from django.contrib.auth import forms as UserForms
 #         model = User
 #         exclude = ('',)
 
+class TimeField(forms.MultiValueField):
+    def __init__(self, *args, **kwargs):
+        # Define one message for all fields.
+        error_messages = {
+            'incomplete': 'Enter proper time.',
+        }
+        # Or define a different message for each field.
+        fields = (
+            forms.CharField(error_messages={'incomplete': 'Enter an hour'},
+                      validators=[RegexValidator(r'^[01][0-9]|2[0-3]', 'Enter a valid country calling code.')]),
+            forms.CharField(error_messages={'incomplete': 'Enter a phone number.'},
+                      validators=[RegexValidator(r'^[0-5][0-9]', 'Enter a valid phone number.')]),
+            
+        )
+        super(TimeField, self).__init__(
+            error_messages=error_messages, fields=fields,
+            require_all_fields=False, *args, **kwargs)
 
 class SuspiciousVehicleForm(forms.ModelForm):
     """
@@ -32,13 +51,14 @@ class SuspiciousVehicleForm(forms.ModelForm):
     class Meta:
         model = models.SuspiciousVehicle
         exclude = ('reporter',)
+
         widgets = {
             'remarks': forms.Textarea(attrs={'rows':6}),
-            
+
         }
         labels = {
             'vehicle_image': _('Vehicle Photo'),
-            'vehicle_number': _('Registration Number'),
+            'vehicle_number': _('Vehicle Number'),
             'vehicle_type': _('Vehicle Type'),
             'vehicle_model': _('Vehicle Model'),
         }
@@ -59,7 +79,7 @@ class PersonPassForm(forms.ModelForm):
 
     class Meta:
         model = models.PersonPass
-        exclude = ('is_blocked',)
+        exclude = ('is_blocked','reason')
         widgets = {
             'expiry_date': DateWidget(usel10n = True, bootstrap_version=3,),
             'issue_date': DateWidget(usel10n = True, bootstrap_version=3,),
@@ -91,14 +111,14 @@ class TheftForm(forms.ModelForm):
     """
     User form for reporting theft
     """
+    # theft_time=TimeField()
 
     class Meta:
         model = models.TheftReport
         exclude = ('reporter', 'status','stud_vehicle','emp_vehicle')
         widgets = {
             # 'theft_time': DateTimeWidget(usel10n = True, bootstrap_version=3),
-            'theft_date_and_time': SelectDateWidget(),
-            # 'theft_time': AdminSplitDateTime(),
+            'theft_time':SelectDateWidget(),
             'remarks': forms.Textarea(attrs={'rows':6}),
         }
 
@@ -109,6 +129,7 @@ class TheftForm(forms.ModelForm):
                 'class': 'form-control',
                 'tabindex': index+1,
             })
+
 
 class StudentVehicleForm(forms.ModelForm):
     """

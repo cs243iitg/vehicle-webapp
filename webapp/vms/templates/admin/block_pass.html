@@ -1,0 +1,54 @@
+{% include "site_base.html" %}
+        <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <h2 class="page-header">Block/Unblock Pass
+            </h2>
+        </br>
+
+        <div id="wrapper">
+
+        <!-- Navigation -->            
+                        
+        
+            <div class="row">
+            <center>
+            <div class="col-lg-6" style="margin-left:5%">
+                 <form class="form-horizontal" method="post" action="/vms/admin/block-passes/">
+                 {% csrf_token %}
+                    <div class="form-group">
+                {% if messages %}
+                <ul class = "messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><font color="red">{{ message }}</font></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}               
+                    <label style="margin-left:10%"  class="col-sm-5 control-label">Pass number to block:</label>
+                    
+            <div class="col-sm-5">
+            <input class="form-control" id="passnumber" placeholder="Enter pass number to block " name='passnumber'>
+            </div>
+                </div>
+            <div class="form-group">
+                    <label style="margin-left:10%"  class="col-sm-5 control-label">Reason for blocking/unblocking pass:</label>
+            <div class="col-sm-5">
+            <input class="form-control" id="reason" placeholder="Reason for blocking/unblocking pass " name='reason'>
+            </div>
+        </div>
+            </br>
+            <input  style="margin-left: 10%" type="submit" class="btn btn-primary" value="Block" name="block">
+            <input  style="margin-left: 30%" type="submit" class="btn btn-primary" value="UnBlock" name="unblock">
+                </form>
+        <!-- /#page-wrapper -->
+        </div>
+            </center>
+            </div>
+        </div>
+
+        </div>
+    </div>        
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+   
