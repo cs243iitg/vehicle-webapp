@@ -15,6 +15,10 @@ from django.core.validators import RegexValidator
 from datetime import datetime
 from bootstrap3_datetime.widgets import DateTimePicker
 
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(
+        label='Select a file'
+    )
 class StudentCycleForm(forms.ModelForm):
     class Meta:
         model = models.StudentCycle

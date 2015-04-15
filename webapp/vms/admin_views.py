@@ -354,3 +354,49 @@ def old_registered_vehicles(request):
         'empl_reg_veh': empl_reg_veh,
         'stud_cycles':stud_cycles,
         })
+
+def csventer(request):
+    form=DocumentForm()
+    return render_to_response('list.html',{'type':'type','form':form},context_instance=RequestContext(request))
+def uploadcsv(request):
+    return render_to_response('admin/csv.html',
+                 {'type':"type" },context_instance=RequestContext(request))
+
+def viewcsv(request):
+    # Handle file upload
+    if request.method == 'POST':
+        f=request.FILES['docfile']
+        #form = DocumentForm(request.POST, request.FILES)
+        # handle_uploaded_file(request.FILES['file'])
+        #jainam=f.read()
+        if f.name.split('.')[-1]!="csv":
+            return HttpResponse("File not in proper format") 
+        with open('/git/vehicle-webapp/webapp/vms', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+    #checkcsv('/home/fireman/Django-1.6/mysite/article/jai.csv')
+        
+    import csv
+    
+    #csvfile(jai)
+    jai=open('/git/vehicle-webapp/webapp/vms','r')
+    data=[j for j in csv.reader(jai)]
+    jai.close()
+    #dataReader=csv.reader(open('/home/fireman/Django-1.6/mysite/article/jai.csv'),delimiter=',',quotechar='"')
+    for row in data:
+        if row[0]=="" or row[1]=="":
+            return HttpResponse("wrong Format")
+    for row in data:
+        test=Guard()
+        #return HttpResponse("dataReasd") 
+        #return HttpResponse(row[0])
+        
+        test.guard_user=row[0]
+        test.guard_phone_number=row[1]
+        
+        test.save()
+    return HttpResponseRedirect("../security/viewlog")
+    #return HttpResponse("dataReader")  
+    
+    return render_to_response('enter_log.html', {'form': 'form'})    
+

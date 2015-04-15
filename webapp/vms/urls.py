@@ -41,6 +41,10 @@ urlpatterns = [
     url(r'^admin/empl/(?P<vehicle_id>\d+)/deny-registration/$', admin_views.deny_reg),
     url(r'^admin/stud/(?P<vehicle_id>\d+)/deny-registration/$', admin_views.deny_reg),    
 
+    ######JAINAM#######
+    url('admin/guardcsv/$', admin_views.csventer),
+    url('admin/viewcsv/$', admin_views.viewcsv),
+    ###################
 
     
     #URLs Common for Users and Admin
@@ -57,6 +61,9 @@ urlpatterns = [
     #Common URLs for Security and Admin
     url('security/log/$',security_views.log),
     url('security/log-form',security_views.log_form),
+    url('security/updatelog/$',security_views.updatelog),       #jainam display log
+    url('security/finallog/$',security_views.finallog),       #jainam display log
+    url('security/submitlog/$',security_views.submitlog),       #jainam display log
     url('security/passes',security_views.passes), 
     url(r'^(?P<pass_id>\d+)/personpass/$',security_views.persondetails),     
     #EndSection

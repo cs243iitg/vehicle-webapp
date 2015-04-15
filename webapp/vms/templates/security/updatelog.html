@@ -1,0 +1,135 @@
+{% include 'site_base.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                       
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+      
+      
+<h2>Upadate Visitor Logs</h2>
+<hr>
+                <table id="myTable" class="table table-striped">
+<thead>
+    <tr>
+        <tr>
+<th>Vehicle Number</th>
+<th>Gate In</th>
+<th>Gate Out</th>
+<th>Vehicle Type</th>
+<th>Driver Name</th>
+<th>License Number</th>
+<th>Place To Visit</th>
+<th>Pupose of Visit</th>
+<th>In Time</th>
+<th>Out Time</th>
+
+</tr>
+    </tr>
+</thead>
+<tbody>
+<form method="POST" action="../finallog/">
+{% csrf_token %}
+{% for log in logs %}
+
+<tr>
+
+<td id="vehiclenumber{{forloop.counter}}" class="col-sm-1 col-md-1">{{log.vehicle_number}}</td>
+
+<td class="col-sm-1 col-md-1">{{log.in_gate}}</td>
+
+
+
+
+
+{% if log.out_gate  %}
+<td class="col-sm-1 col-md-1">{{log.out_gate}}</td>
+{% else %}
+<td class="col-sm-1 col-md-1"><span style="color:blue;">Still in Campus</span></td>
+{% endif %}
+
+
+
+
+
+<td class="col-sm-1 col-md-1">{{log.vehicle_type}}</td>
+<!--<td class="col-sm-1 col-md-1">{{log.vehivle_model}}</td>-->	
+<td class="col-sm-1 col-md-1">{{log.driver_name}}</td>
+<td class="col-sm-1 col-md-1">{{log.licence_number}}</td>
+<td class="col-sm-1 col-md-1">{{log.place_to_visit}}</td>
+
+<td class="col-sm-1 col-md-1">{{log.purpose_of_visit}}</td>
+<td class="col-sm-1 col-md-1">{{log.in_time}}</td>
+{% if log.out_time  %}
+<td class="col-sm-1 col-md-1">{{log.out_time}}</td>
+{% else %}	
+<td id="campus{{forloop.counter}}" class="col-sm-1 col-md-1"><span style="color:blue;">Still in Campus</span></td>
+{% endif %}
+</tr>
+{% endfor %}
+
+
+
+
+</tbody>
+</table>
+<br>
+<center>
+<div class="form-group">
+    <label style="margin-left:10%,width:50px"  class="control-label" >Enter The Out Gate</label>
+    
+      <input style="width:300px"class="form-control"  id="gate"  name="gate" placeholder="Enter the Out Gate" onfocus="func()" onkeyup="func()" onkeydown="func()">
+      <br>
+     
+
+      <input type="submit" value="Update" id="update" name="update"  class="btn btn-primary">
+        <!-- /#page-wrapper -->
+   
+  </div>
+  <center>
+</form>
+        <!-- /#page-wrapper -->
+        </div>
+        </center>
+    </div>
+</div>
+    <!-- /#wrapper -->
+</body>
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+</script> 
+<script type="text/javascript">
+    function clickfunction(click_id){
+alert
+id="vehiclenumber"+(click_id);
+
+//alert(document.getElementById("jai").innerHTML);
+//alert(document.getElementById(id).innerHTML);
+document.getElementById("information").value=document.getElementById(id).innerHTML;
+//alert(document.getElementById(id).innerHTML);
+document.getElementById("dfg").click();
+//alert(document.getElementById("information").value);
+//alert(document.getElementById("information").value);
+
+
+
+
+    }
+function func2(){
+alert("hello");
+
+
+
+}
+
+
+</script>
+</html>

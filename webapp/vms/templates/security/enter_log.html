@@ -1,0 +1,100 @@
+{% include 'site_base.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3 class="page-header">Enter The Log</h3>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+      
+      <div class="panel-body">
+        </div>
+    <div class="row">
+    <center>
+    <div class="col-lg-6" style="margin-left:5%">
+                 <form class="form-horizontal" action="../security/submitlog/" method="post">
+                 {% csrf_token %}
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The vehicle number :</label>
+    <div class="col-sm-5">
+      <input class="form-control" type="text" name="vehiclenumber" id="vehicle" placeholder="Enter The vehicle number" onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The license number :</label>
+    <div class="col-sm-5">
+      <input class="form-control"  name="licensenumber" id="license" placeholder="Enter The license number"onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The Gatenumber :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="gatenumber" id="gate" placeholder="Enter The Gatenumber" onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The vehicle model :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="vehiclemodel" id="model" placeholder="Enter The vehicle model"onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The place to visit :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="placetovisit" id="visit" placeholder="Enter The place to visit"onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The place to visit :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="purposeofvisit" id="purpose" placeholder="Enter The place to visit"onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter Driver Name :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="drivername" id="driver" placeholder="Enter Driver Name" onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <br>
+  <input type="submit" name="submit" value="ADD LOG" id ="name" class="btn btn-primary" >   
+<script type="text/javascript">document.getElementById("name").disabled=true</script>
+</form>
+  </br>
+</form>        
+    </div>
+    </center> 
+
+        <div class="row">
+        <center>
+        <div class="col-lg-6" style="margin-left:5%">
+        <hr>
+
+        <!-- /#page-wrapper -->
+        </div>
+        </center>
+    </div>
+</div>
+    <!-- /#wrapper -->
+</body>
+<script>
+
+</script> 
+<script>
+function func(){
+if(document.getElementById("vehicle").value.trim()!=""&&document.getElementById("license").value.trim()!=""&&document.getElementById("gate").value.trim()!=""&&document.getElementById("model").value.trim()!=""&&document.getElementById("driver").value.trim()!=""&&document.getElementById("visit").value.trim()!=""&&document.getElementById("purpose").value.trim()!="")
+document.getElementById("name").disabled=false;
+else {
+    document.getElementById("name").disabled=true;
+
+}
+
+    }
+</script>
+</html>
+	

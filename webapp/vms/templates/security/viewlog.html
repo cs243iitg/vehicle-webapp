@@ -1,0 +1,111 @@
+{% include 'site_base.html' %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                       
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+      
+      
+<h2>View Visitor Logs</h2>
+<hr>
+                <table id="myTable" class="table table-striped">
+<thead>
+    <tr>
+        <tr>
+<th>Vehicle Number</th>
+<th>Gate In</th>
+<th>Gate Out</th>
+<th>In Time</th>
+<th>Out Time</th>
+<th>Update</th>
+
+</tr>
+    </tr>
+</thead>
+<tbody>
+<form method="POST" action="../updatelog/">
+{% csrf_token %}
+{% for log in logs %}
+
+<tr>
+
+<td id="vehiclenumber{{forloop.counter}}" class="col-sm-2 col-md-2">{{log.vehicle_number}}</td>
+
+<td class="col-sm-2 col-md-2">{{log.in_gate}}</td>
+
+
+
+
+
+{% if log.out_gate  %}
+<td class="col-sm-2 col-md-2">{{log.out_gate}}</td>
+{% else %}
+<td class="col-sm-2 col-md-2"><span style="color:blue;">Still in Campus</span></td>
+{% endif %}
+
+
+
+
+<td class="col-sm-2 col-md-2">{{log.in_time}}</td>
+{% if log.out_time  %}
+<td class="col-sm-2 col-md-2">{{log.out_time}}</td>
+{% else %}
+<td id="campus{{forloop.counter}}" class="col-sm-2 col-md-2"><span style="color:blue;">Still in Campus</span></td>
+{% endif %}
+<td class="col-sm-2 col-md-2"><button id="{{forloop.counter}}" onclick="clickfunction(this.id)" class="btn btn-primary" >Update</button></td>
+</tr>
+{% endfor %}
+
+<input id="information" style="display:none" name="number">
+<input type="submit" value="submit" id="sub" >
+
+
+</tbody>
+</table>
+</form>
+        <!-- /#page-wrapper -->
+        </div>
+        </center>
+    </div>
+</div>
+    <!-- /#wrapper -->
+</body>
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+</script> 
+<script type="text/javascript">
+    function clickfunction(click_id){
+alert
+id="vehiclenumber"+(click_id);
+
+//alert(document.getElementById("jai").innerHTML);
+//alert(document.getElementById(id).innerHTML);
+document.getElementById("information").value=document.getElementById(id).innerHTML;
+//alert(document.getElementById(id).innerHTML);
+document.getElementById("dfg").click();
+//alert(document.getElementById("information").value);
+//alert(document.getElementById("information").value);
+
+
+
+
+    }
+function func2(){
+alert("hello");
+
+
+
+}
+
+
+</script>
+</html>
