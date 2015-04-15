@@ -15,13 +15,29 @@ class IITGUser(models.Model):
         return self.user.username
 
 class StudentCycle(models.Model):
-    user=models.ForeignKey(User)
-    cycle_company=models.CharField(max_length=32, blank=False)
+    user=models.OneToOneField(User, related_name='cycle_user')
+    cycle_model=models.CharField(max_length=32, blank=False)
     cycle_color=models.CharField(max_length=32)
     cycle_pass_no=models.CharField(max_length=10)
+    hostel=models.CharField(max_length=50, blank=True, 
+                                    choices=[
+                                        ('Manas', 'Manas'),
+                                        ('Dihing', 'Dihing'),
+                                        ('Kameng', 'Kameng'),
+                                        ('Umiam', 'Umiam'),
+                                        ('Barak', 'Barak'),
+                                        ('Brahmaputra', 'Brahmaputra'),
+                                        ('Kapili', 'Kapili'),
+                                        ('Siang','Siang'),
+                                        ('Dibang','Dibang'),
+                                        ('Lohit','Lohit'),
+                                        ('Subansiri','Subansiri'),
+                                        ('Dhansiri','Dhansiri'),
+                                    ])
+    room_number=models.CharField(max_length=5)
 
     def __str__(self):
-        return self.vehicle_pass_no
+        return self.cycle_pass_no
 
 class StudentVehicle(models.Model):
     """
@@ -33,7 +49,21 @@ class StudentVehicle(models.Model):
     department = models.CharField(max_length=100)
     programme = models.CharField(max_length=10)
     date_of_birth = models.DateField()
-    hostel_name = models.CharField(max_length=32)
+    hostel_name = models.CharField(max_length=32,choices=[
+                                        ('Manas', 'Manas'),
+                                        ('Dihing', 'Dihing'),
+                                        ('Kameng', 'Kameng'),
+                                        ('Umiam', 'Umiam'),
+                                        ('Barak', 'Barak'),
+                                        ('Brahmaputra', 'Brahmaputra'),
+                                        ('Kapili', 'Kapili'),
+                                        ('Siang','Siang'),
+                                        ('Dibang','Dibang'),
+                                        ('Siang','Siang'),
+                                        ('Lohit','Lohit'),
+                                        ('Subansiri','Subansiri'),
+                                        ('Dhansiri','Dhansiri'),
+                                    ])
     room_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
     user_photo = models.ImageField()
@@ -80,8 +110,10 @@ class StudentVehicle(models.Model):
                 "2) I will not cause inconvenience to other road users.")
     
     date_of_application = models.DateTimeField(blank=True, null=True)
-    registered_with_security_section = models.BooleanField()
+    registered_with_security_section = models.NullBooleanField(default=None)
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
+    issue_date = models.DateField()
+    expiry_date = models.DateField()
 
     def __str__(self):
         return self.vehicle_pass_no
@@ -130,8 +162,10 @@ class EmployeeVehicle(models.Model):
                 "2) I will not cause inconvenience to other road users.")
     
     date_of_application = models.DateTimeField(blank=True, null=True)
-    registered_with_security_section = models.BooleanField()
+    registered_with_security_section = models.NullBooleanField(default=None)
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
+    issue_date = models.DateField()
+    expiry_date = models.DateField()
 
     def __str__(self):
         return self.vehicle_pass_no
@@ -142,6 +176,7 @@ class Guard(models.Model):
     """
     guard_user = models.OneToOneField(User, related_name='guard_user')
     guard_phone_number=models.IntegerField()
+    is_security=models.BooleanField(default=True)
     
     
     def __str__(self):
@@ -222,32 +257,21 @@ class ResidentLog(models.Model):
     """
     Log for residents of the campus
     """
-    registration_number = models.CharField(max_length=50)
-    vehicle_type = models.CharField(max_length=50, blank=True, null=True,
-                                    choices=[
-                                        ('bicycle', 'bicycle'),
-                                        ('bike', 'bike'),
-                                        ('car', 'car'),
-                                        ('truck', 'truck'),
-                                        ('courier', 'courier'),
-                                        ('auto', 'auto'),
-                                        ('other', 'other'),
-                                    ])
-    vehicle_model = models.CharField(max_length=100, blank=True, null=True)
-    gate = models.ForeignKey(Gate, null=True)
-    is_entering = models.BooleanField('Is the vehicle entering?')
-
+    vehicle_pass_no = models.CharField(max_length=50)
+    in_gate = models.ForeignKey(Gate, related_name='resident_in_gate', null=True)
+    out_gate = models.ForeignKey(Gate, related_name='resident_out_gate', null=True)
+    in_time = models.DateTimeField(blank=True, null=True)
+    out_time = models.DateTimeField(blank=True, null=True)
     def __str__(self):
-        return self.registration_number
-
+        return self.vehicle_pass_no
 
 class VisitorLog(models.Model):
     """
     Log of visitors for additional details
     """
     vehicle_number = models.CharField(max_length=20)
-    in_gate = models.ForeignKey(Gate, related_name='in_gate_log', null=True)
-    out_gate = models.ForeignKey(Gate, related_name='out_gate_log', null=True)
+    in_gate = models.ForeignKey(Gate, related_name='visitor_in_gate', null=True)
+    out_gate = models.ForeignKey(Gate, related_name='visitor_out_gate', null=True)
     vehicle_type = models.CharField(max_length=50, blank=True, null=True,
                                     choices=[
                                         ('bicycle', 'bicycle'),

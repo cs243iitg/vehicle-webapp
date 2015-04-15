@@ -1,7 +1,10 @@
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 from vms import urls as vms_urls
 from rest import urls as rest_urls
+from webapp import settings
+
 
 
 urlpatterns = patterns('',
@@ -13,4 +16,4 @@ urlpatterns = patterns('',
     url(r'^vms/', include(vms_urls)),
     url(r'^rest/', include(rest_urls))
 
-)
+)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

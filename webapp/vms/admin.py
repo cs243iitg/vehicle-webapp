@@ -1,5 +1,5 @@
 from django.contrib import admin
-from vms.models import IITGUser,StudentVehicle, EmployeeVehicle , Guard, Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , Place, BusTiming, OnDutyGuard, StudentCycle, PersonPass
+from vms.models import IITGUser,StudentVehicle, EmployeeVehicle , Guard,  Gate, ParkingSlot, SuspiciousVehicle, ResidentLog, VisitorLog, TheftReport , Place, BusTiming, OnDutyGuard, StudentCycle, PersonPass
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -38,7 +38,8 @@ class SuspiciousVehicleAdmin(admin.ModelAdmin):
 
 class ResidentLogAdmin(admin.ModelAdmin):
     model = ResidentLog
-    list_display = ('registration_number', 'gate', 'is_entering')
+    list_display = ('vehicle_pass_no', 'in_time', 'out_time', 'in_gate', 'out_gate')
+
 
 class VisitorLogAdmin(admin.ModelAdmin):
     model = VisitorLog

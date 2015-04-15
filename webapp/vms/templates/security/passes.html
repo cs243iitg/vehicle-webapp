@@ -18,37 +18,35 @@
     <center>
     <div class="col-lg-6" style="margin-left:5%">
                  <form class="form-horizontal">
-  <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Total passes till yesterday :</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Total passes till yesterday " placeholder="Total passes till yesterday ">
-    </div>
-  </div>
-  <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Total passes issued today :</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Total passes issued today" placeholder="Total passes issued today ">
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label style="margin-left:10%"   class="col-sm-5 control-label">Total passes alloted till today:</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Time to update" placeholder="Total passes alloted till today">
-    </div>
-  </div>
-  </br>
-</form>        
+  <form class="form-horizontal">
+        <div class="form-group">
+          <label style="margin-left:10%"  class="col-sm-5 control-label">Total Issued Passes </label>
+          <div class="col-sm-5">
+            <label class="form-control" id="id_pending_registrations"> {{total_issued}} pass(es) </label>
+          </div>
+          <label style="margin-left:10%"  class="col-sm-5 control-label">Total blocked passes: </label>
+          <div class="col-sm-5">
+            <label class="form-control" id="id_pending_registrations"> {{total_blocked}} pass(es) </label>
+          </div>
+          <label style="margin-left:10%"  class="col-sm-5 control-label">Expired passes: </label>
+          <div class="col-sm-5">
+            <label class="form-control" id="id_pending_registrations"> {{total_expired}} pass(es) </label>         
+        </div>
+        </div> 
+
+    </form>
+
     </div>
     </center> 
 
         <div class="row">
         <center>
-        <div class="col-lg-6" style="margin-left:5%">
+        <div class="col-lg-10" style="margin-left:5%">
         <hr>
+<p></p>
 <h3>List of Passes alloted till now</h3>
 <hr>
-                <table id="myTable" class="table table-striped">
+                <table id="myTable" class="col-lg-6 table table-striped">
 <thead>
     <tr>
         <th>Name</th>
@@ -73,6 +71,7 @@
         </center>
     </div>
 </div>
+
     <!-- /#wrapper -->
 </body>
 <script>
@@ -81,3 +80,5 @@ $(document).ready(function(){
 });
 </script> 
 </html>
+
+

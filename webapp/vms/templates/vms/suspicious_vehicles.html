@@ -31,7 +31,7 @@
                             <td>{{ vehicle.vehicle_number }}</td>
                             <td>{{ vehicle.vehicle_type }}</td>
                             <td>{{ vehicle.vehicle_model }}</td>
-                            <td><img src="#######"></td>
+                            <td><img src="/media/{{vehicle.vehicle_image.name}}"></td>
                             {% if user.is_superuser %}
                             <td>
                                 <form action="/vms/suspicious-vehicles/" method="post">

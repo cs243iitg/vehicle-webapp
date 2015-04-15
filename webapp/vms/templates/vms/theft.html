@@ -1,14 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- Bootstrap core CSS -->
+    {% load staticfiles %}
+
+    <link href= "{% static 'vms/css/datetimepicker.css' %}" rel="stylesheet" type="text/css">
+    <link href= "{% static 'vms/css/bootstrap-datetimepicker.css' %}" rel="stylesheet" type="text/css">
+    <link href= "{% static 'vms/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
+
+ 
+     <script src="{% static 'vms/js/moment.js' %}"></script>
+    <script src="{% static 'vms/js/jquery.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap-datetimepicker.js' %}"></script>
+
+
+  </head>
+
 {% include "site_base.html" %}
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                  <h2 class="page-header">Report Theft
                 <span style="font-size: 14px; margin-left: 20px;">
-                    <a href="/vms/your-theft-reports">View your reports</a>
+                    <a href="/vms/users/user_theft_reports">View your reports</a>
                 </span>
             </h2>
             </br>
-            <h4>{{message}}</h4>
+            <h4>{{message}}{% if success %}<span style="font-size: 14px; margin-left: 20px;">
+                    <a id="download" href="#">Download confirmation</a>
+                </span></h4>{% endif %}
             <form action="/vms/theft-report-form/" method="POST">
                 {% csrf_token %}
                 <div class="row">
@@ -37,4 +59,25 @@
         <!-- /#page-wrapper -->
         </div>
 </body>
+<script type="text/javascript">
+$.noConflict();
+$(function(){
+               $('#id_theft_time').datetimepicker();
+             });
+              </script> 
+
+
+   
+<script src="{% static 'vms/js/docs.min.js' %}"></script>
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    <script>
+                $("#download").click(function(){                    
+                    location.replace('/vms/{{id}}/download-theft-report/');
+                });
+            </script>
 </html>

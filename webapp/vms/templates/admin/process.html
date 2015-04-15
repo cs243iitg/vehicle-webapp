@@ -1,0 +1,62 @@
+{% include "site_base.html" %}        
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+        	<center>
+            <div class="container-fluid form-horizontal">
+            <h2>Registration Form</h2>
+			<hr>
+            	<div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Form Details
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Form Item</th>
+                                            <th>Details {{ form.driving_license }}              </th>                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+            						{% for field in form %}
+            						<tr>
+            						<td >{{ field.label }}</td>
+            						<td id="{{field.label}}">{{ field.data }}</td>
+            						</tr>
+									{% endfor %}
+    						</div>    						
+    					</div>		
+            </div>
+    		</div>
+    		</div>
+    		</div>
+    		<br />
+
+    		 <div class="buttonHolder">
+                <form id="submission">
+            						<button type="submit" id="btn_approve" class="btn btn-success">Approve</button>
+									<button type="submit" id="btn_deny" class="btn col-md-offset-5 btn-warning">Deny</button>
+                </form>
+			</div>									
+            <script>
+                $(document).ready(
+                    $("#btn_approve").click(function(){
+                        $('#submission').attr('action', "/vms/admin/{{type}}/{{reg_id}}/approve-registration").submit();
+                    })                    
+                );
+                $(document).ready(
+                    $("#btn_deny").click(function(){
+                        
+                        $('#submission').attr('action', "/vms/admin/{{type}}/{{reg_id}}/deny-registration").submit();         
+                    })
+                    );
+            </script>
+          </div>
+          <br/>
+      </center>    
+</body>
+</html>    

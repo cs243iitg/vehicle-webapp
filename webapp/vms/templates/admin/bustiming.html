@@ -1,57 +1,84 @@
-{% include 'site_base.html' %}
+
+{% include "site_base.html" %}
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
+                 <h2 class="page-header">Update Bus Timing</h2>
+            </br>
+            <h4>{{message}}</h4>
+            <form action="/vms/admin/update-bus-details/" method="POST">
+                {% csrf_token %}
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">ADD FORMS!!Welcome {{username}}</h1>
-                    </div>
-                    <!-- /.col-lg-12 -->
+                    <table class="" id="form_table">
+                        {% for field in form %}
+                            <tr>
+                                <td class="col-sm-3 col-md-3 a">{{ field.label_tag }}</td>
+                                <td class="col-sm-6 col-md-4 a">{{ field }}</td>
+                                <td class="col-sm-3 col-md-5 a">{{ field.errors }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
-                <!-- /.row -->
+                </br>                
+                <div class="row">
+                       <button id="submit_form" type="submit" class="btn btn-default col-md-offset-5 col-xs-offset-7">Submit</button>
+                </div>
+            </form>                            
             </div>
             <!-- /.container-fluid -->
-			
-			<div class="panel-body">	
-        </div>
-		<div class="row">
-		<center>
-		<div class="col-lg-6" style="margin-left:5%">
-                 <form class="form-horizontal">
-  <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Bus number :</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Bus number:" placeholder="Enter Bus number to change the time">
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Present time :</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Present time" placeholder="Present time of the bus">
-    </div>
-  </div>
-  
-  <div class="form-group">
-    <label style="margin-left:10%"   class="col-sm-5 control-label">Time to update :</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="Time to update" placeholder="Enter the updated bus time">
-    </div>
-  </div>
-  </br>
-  <button style="margin-left: 10%" type="button" class="btn btn-primary">Update</button>
-</form>
         <!-- /#page-wrapper -->
-		</div>
-		</center>
-		
-				<div class="col-lg-3" style="margin-left:13%">
-				<center>	
-                    
-					</center>
-				</div>
-				</div>
-    <!-- /#wrapper -->
+        </div>
 </body>
+<script type="text/javascript">
+$.noConflict();
+$(function(){
+               $('#id_from_time').datetimepicker();
+             });
+</script> 
 
 </html>
+<script>
+              var counter = 1;
+              var places = [ {% for p in places %} "{{p}}", {% endfor %}]
+              $(document).ready(
+                $("#id_bus_route").hide()               
+              );
+              $(document).ready(
+               $('label[for="id_bus_route"]').hide()
+              );
+              $(document).ready(function(){
+                // var s = $("<select id=\"selectId\" name=\"selectName\" />");
+                // for(var val in places) {
+                //     $("<option />", {value: val, text: val).appendTo(s);
+                // }
+                $("#form_table").append(" <tr><td class='col-sm-3 col-md-3 a'><label for=loc"+counter+">Location "+ (counter) + "</label></td><td class='col-sm-6 col-md-4 a'><input class='form-control' id=loc"+counter+" /> </td><td class='col-sm-3 col-md-5 a'><button type='button' class='add'>Add</button></td></tr>");
+                counter++;
+              }                
+              );             
+              $("body").on("click",".add",function(){
+                $(".add").remove();
+                $("#form_table").append(" <tr><td class='col-sm-3 col-md-3 a'><label for=loc"+counter+">Location "+ (counter) + "</label></td><td class='col-sm-6 col-md-4 a'><input class='form-control' id=loc"+counter+" /> </td><td class='col-sm-3 col-md-5 a'><button type='button' class='add'>Add</button></td></tr>");   
+                counter++;
+              });
+              $("#submit_form").click(function(event){
+                var s = ""
+                for (i = 1; i < counter ; i++) { 
+                    if($("#loc"+i).val() == "")
+                    {
+                      window.alert("Please fill all fields before submitting");
+                      event.preventDefault();
+                      return false;
+                    }
+                    s += ($("#loc"+i).val() + "-");
+                    console.log(s);
+                }
+                $("#id_bus_route").val(s);
+                console.log($("#id_bus_route").val());                
+                return true;
+              });
+            </script>
+            <style>
+              td.a{
+                    padding: 10px;
+                  }              
+            </style>

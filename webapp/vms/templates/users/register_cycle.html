@@ -1,0 +1,74 @@
+{% include "site_base.html" %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+            <centre>
+                 <h2 class="page-header">Cycle Registration Form
+               
+            </h2>
+            </br>
+            <form action="/vms/users/register-cycle/" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                {% if messages %}
+                <ul class = "messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><font color="red">{{ message }}</font></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}   
+                    <table class="table table-striped">
+                        {% for field in form %}
+                            <tr>
+                                <td class="col-sm-3 col-md-3">{{ field.label_tag }}</td>
+                                <td class="col-sm-6 col-md-4">{{ field }}</td>
+                                <td class="col-sm-3 col-md-5"><font color="red">{{ field.errors }}</font></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                </br>
+                <div class="row">
+                       <button type="submit" class="btn btn-default col-md-offset-5 col-xs-offset-7">Submit</button>
+                </div>
+            </form>                            
+            </div>
+            <!-- /.container-fluid -->
+            
+        
+        <div class="col-lg-6" style="margin-left:5%">
+         </centre>       
+        </div>
+        <!-- /#page-wrapper -->
+        </div>
+
+
+<!-- 
+        <!-- Page Content -->
+       <!-- <div id="page-wrapper">
+            <div class="container-fluid">
+                <h2 class="page-header">Passes Alotted
+                </h2>
+            </br>
+            <div class="row">
+                    <table class="col-sm-12 col-md-11">
+                      
+                            <tr>
+                                <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Name</th>
+                                <th class="col-sm-6 col-md-4"style="color: #428bca; font-weight: bold;">Pass Number</th>
+                                <th class="col-sm-3 col-md-5" style="color: #428bca; font-weight: bold;">Expiry Date</th>
+                                <th class="col-sm-6 col-md-6" style="color: #428bca; font-weight: bold;">Blocked</th>
+                            </tr>
+                            {% for pass in passes %}
+                            <tr>
+                                <td class="col-sm-3 col-md-3" ><a href = "/vms/{{ pass.id }}/personpass/" method="post"><span style="color:blue;">{{pass.name}}</span></td>
+                                <td class="col-sm-6 col-md-4">{{ pass.pass_number}}</td>
+                                <td class="col-sm-3 col-md-5" >{{ pass.expiry_date}}</td>
+                                <td class="col-sm-6 col-md-6">{{ pass.is_blocked}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+            </div>
+                                                   
+            </div> -->
+            <!-- /.container-fluid -->

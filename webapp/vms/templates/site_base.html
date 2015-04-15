@@ -15,7 +15,13 @@
     {% load staticfiles %}
     <link href="{% static 'vms/bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- dataTables -->
-
+    <link href= "{% static 'vms/css/datetimepicker.css' %}" rel="stylesheet" type="text/css">
+    <link href= "{% static 'vms/css/bootstrap-datetimepicker.css' %}" rel="stylesheet" type="text/css">
+    <link href= "{% static 'vms/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'vms/js/moment.js' %}"></script>
+    <script src="{% static 'vms/js/jquery.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap.js' %}"></script>
+    <script src="{% static 'vms/js/bootstrap-datetimepicker.js' %}"></script>
     <link href="{% static 'vms/bower_components/datatables/media/css/jquery.dataTables.min.css' %}" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
@@ -27,9 +33,14 @@
     <!-- Custom Fonts -->
     <link href="{% static 'vms/bower_components/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vms/css/pace-theme-barber-shop.css' %}" rel="stylesheet" />
-
     <!-- jQuery -->
     <script src="{% static 'vms/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <!-- DateTime Picker -->
+    <script type="text/javascript" src="{% static   'vms/bower_components/moment/moment.js' %}"></script>
+    <script type="text/javascript" src="{% static    'vms/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <!-- DateTime Picker -->
+  
+  <link rel="stylesheet" href="{% static 'vms/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" />
     <!-- dataTables -->
     <script src="{% static 'vms/bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
     <!-- Bootstrap Core JavaScript -->
@@ -239,13 +250,13 @@
                         </li>
                         {% endif %}
                         
-                        {% if user.is_superuser or user.user.is_security %}
+                        {% if user.is_superuser or user.guard_user.is_security %}
                         <li>
                             <a href="/vms/security/log"><i class="fa fa-edit fa-fw"></i>Entry/Exit Log</a>
                         </li>
                         {% endif %}
                         
-                        {% if user.user.is_security %}
+                        {% if user.guard_user.is_security %}
                         <li>
                             <a href="/vms/security/log-form"><i class="fa fa-edit fa-fw"></i>Entry/Exit Form</a>
                         </li>
@@ -269,7 +280,7 @@
                         </li>
                         
                         <!-- This will lead to page where you can block a pass and also see the list. However, blocking feature only for the superusers -->             
-                        {% if user.is_superuser or user.user.is_security %}
+                        {% if user.is_superuser or user.guard_user.is_security %}
                         <li>
                             <a href="/vms/security/passes"><i class="fa fa-edit fa-fw"></i>Entry Passes</a>
                         </li>
@@ -284,19 +295,24 @@
                         </li>
                         {% endif %}
                                     
-                        {% if not user.user.is_security and user.user.is_student %}
+                        {% if not user.guard_user.is_security and user.user.is_student %}
+                        <li>
+                            <a href="/vms/users/register-cycle"><i class="fa fa-car fa-car"></i>Cycle Registration Form</a>
+                        </li>
                         <li>
                             <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Student Vehicle Registration Form</a>
                         </li>
                         {% endif %}
-                        {% if not user.user.is_security and not user.user.is_student %}
+                        {% if not user.guard_user.is_security and not user.user.is_student %}
                         <li>
                             <a href="/vms/users/register-vehicle"><i class="fa fa-car fa-car"></i>Employee Vehicle Registration Form</a>
                         </li>
                         {% endif %}
                         {% if user.is_superuser %}
+                        <li><a href="/vms/admin/vehicle-applications"><i class="fa fa-edit fa-fw"></i>Registration Applications</a>
+                        </li>
                         <li>
-                            <a href="/vms/admin/registered-vehicles"><i class="fa fa-edit fa-fw"></i>Vehicles Registered</a>
+                            <a href="/vms/admin/registered-vehicles"><i class="fa fa-edit fa-fw"></i>Registered Vehicles</a>
                         </li>
                         <li>
                             <a href="/vms/admin/add-guards"><i class="fa fa-edit fa-fw"></i>Add Guards</a>
@@ -323,4 +339,24 @@
 
            
         </nav>
-        
+        <style type="text/css">
+a.tooltip {outline:none; }
+a.tooltip strong {line-height:30px;}
+a.tooltip:hover {text-decoration:none;} 
+a.tooltip span {
+    z-index:10;display:none; padding:14px 20px;
+    margin-top:-30px; margin-left:28px;
+    width:300px; line-height:16px;
+}
+a.tooltip:hover span{
+    display:inline; position:absolute; color:#111;
+    border:1px solid #DCA; background:#fffAF0;}
+.callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
+    
+/*CSS3 extras*/
+a.tooltip span
+{
+    border-radius:4px;
+    box-shadow: 5px 5px 8px #CCC;
+}
+        </style>  
