@@ -11,10 +11,13 @@ from vms.models import SuspiciousVehicle
 from vms.models import ParkingSlot
 from vms.models import StudentVehicle
 from vms.models import EmployeeVehicle
+from vms.models import BusTiming
 from rest.serializers import TheftReportSerializer
 from rest.serializers import SuspiciousVehicleSerializer
 from rest.serializers import ParkingSlotSerializer
+from rest.serializers import BusTimingSerializer
 from rest.permissions import IsReporter
+
 
 
 
@@ -38,8 +41,8 @@ def theft_report(request):
         serializer = TheftReportSerializer(data=request.data)
         if serializer.is_valid():
             #check if vehicle exists in db
-            vehicles_student = StudentVehicle.objects.filter(vehicle_registration_number=serializer.data['registration_number'])
-            vehicles_emp = EmployeeVehicle.objects.filter(vehicle_registration_number=serializer.data['registration_number'])
+            vehicles_student = StudentVehicle.objects.filter(vehicle_registration_number=serializer.data['vehicle_pass_no'])
+            vehicles_emp = EmployeeVehicle.objects.filter(vehicle_registration_number=serializer.data['vehicle_pass_no'])
             if(len(vehicles_student) > 0):
                 serializer.save(reporter=request.user, stud_vehicle=vehicles_student[0])
             elif(len(vehicles_emp) > 0):
@@ -101,4 +104,12 @@ def parking_slot(request):
     if request.method == 'GET':
         parking_slots = ParkingSlot.objects.all()
         serializer = ParkingSlotSerializer(parking_slots, many=True)
+        return Response(serializer.data)
+
+#list of bus times
+@api_view(['GET'])
+def bus_timing(request):
+    if request.method == 'GET':
+        bus_timings = BusTiming.objects.all()
+        serializer = BusTimingSerializer(bus_timings, many=True)
         return Response(serializer.data)
