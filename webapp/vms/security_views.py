@@ -31,11 +31,19 @@ def passes(request):
     Function to allow the administrator create/delete/update the passes issued
     """
     passes=PersonPass.objects.all()
+    total_blocked = len(passes.filter(is_blocked=True))
+    total_issued = len(passes.filter(is_blocked=False))
+    x = [j for j in passes if j.expiry_date < datetime.now().date()]
+    total_expired = len(x)
     return render(request, 'security/passes.html', {
         'username': request.user.username,
         'is_admin': True,
         'passes' :passes,
+        'total_blocked': total_blocked,
+        'total_expired': total_expired,
+        'total_issued': total_issued,
         })
+
 
 def persondetails(request, pass_id):
     personpass=PersonPass.objects.get(id=pass_id)

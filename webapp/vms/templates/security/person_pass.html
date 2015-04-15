@@ -1,3 +1,4 @@
+
 {% include "site_base.html" %}
         <!-- Page Content -->
         <div id="page-wrapper">
@@ -18,25 +19,21 @@
 
                                 <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Name</th>
                                 <td class="col-sm-4 col-md-4" >{{passes.name}}</span></td>
-                                <td class="col-sm-6 col-md-3" ><img src ="{{passes.user_photo}}" /></td>
+                                <td class="col-sm-6 col-md-3" ><img width="75px" height="75px" src ="/media/{{passes.user_photo.name}}" /></td>
                             </tr>  
                              <tr>
 
                                 <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Age</th>
                                 <td class="col-sm-3 col-md-3" >{{passes.age}}</td>
-                            </tr>  
-                             <tr>
-
                                 <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Idntified By</th>
                                 <td class="col-sm-3 col-md-4" >{{passes.identified_by}}</td>
-                            </tr>  
+                            </tr>                               
                              <tr>
-
                                 <th class="col-sm-3 col-md-3" style="color: #428bca; font-weight: bold;">Work Area</th>
-                                <td class="col-sm-3 col-md-4" >{{passes.work_area}}</span></td>
-                            </tr>    
+                                <td class="col-sm-3 col-md-4" >{{passes.work_area}}</td>
                                 <th class="col-sm-3 col-md-3"style="color: #428bca; font-weight: bold;">Working Time</th>
-                                <td class="col-sm-3 col-md-4" >{{passes.working_time}}</td>                          
+                                <td class="col-sm-3 col-md-4" >{{passes.working_time}}</td>
+                            </tr>                                                         
                             
                             <tr>
                                 <th class="col-sm-3 col-md-3"style="color: #428bca; font-weight: bold;">Nature of Work</th>
@@ -73,3 +70,5 @@
 </body>
 
 </html>
+
+

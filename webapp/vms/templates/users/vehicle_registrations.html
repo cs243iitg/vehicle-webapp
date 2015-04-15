@@ -30,12 +30,14 @@
                             <td>{{ registration.make_and_model }}</td>
                             <td>{{ registration.vehicle_registration_number }}</td>
                             <td>{{ registration.vehicle_pass_no }}</td>
-                            {% if registration.registered_with_security_section %}
+                            {% if registration.registered_with_security_section == True %}
                                 <td>Registered</td>
+                            {% elif registration.registered_with_security_section == False %}
+                                <td>Denied</td>
                             {% else %}
                                 <td>Pending</td>
                             {% endif %}
-                            {% if not registration.registered_with_security_section %}
+                            {% if registration.registered_with_security_section == None %}
                                 <td>
                                     <a href="/vms/users/{{ registration.id }}/cancel-vehicle-registration" onclick="return confirm('Are you sure you want to delete this pending registration?')">
                                         Delete
