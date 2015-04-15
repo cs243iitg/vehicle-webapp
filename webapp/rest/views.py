@@ -7,8 +7,17 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from vms.models import TheftReport
+from vms.models import SuspiciousVehicle
+from vms.models import ParkingSlot
+from vms.models import StudentVehicle
+from vms.models import EmployeeVehicle
+from vms.models import BusTiming
 from rest.serializers import TheftReportSerializer
+from rest.serializers import SuspiciousVehicleSerializer
+from rest.serializers import ParkingSlotSerializer
+from rest.serializers import BusTimingSerializer
 from rest.permissions import IsReporter
+
 
 
 
@@ -31,7 +40,16 @@ def theft_report(request):
     elif request.method == 'POST':
         serializer = TheftReportSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(reporter=request.user)
+            #check if vehicle exists in db
+            vehicles_student = StudentVehicle.objects.filter(vehicle_registration_number=serializer.data['vehicle_pass_no'])
+            vehicles_emp = EmployeeVehicle.objects.filter(vehicle_registration_number=serializer.data['vehicle_pass_no'])
+            if(len(vehicles_student) > 0):
+                serializer.save(reporter=request.user, stud_vehicle=vehicles_student[0])
+            elif(len(vehicles_emp) > 0):
+                serializer.save(reporter=request.user, emp_vehicle=vehicles_emp[0])
+            else:
+                #vehicle does not exist stud_vehicle and emp_vehicle are left blank
+                serializer.save(reporter=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,3 +77,39 @@ def theft_detail(request, pk):
     elif request.method == 'DELETE':
         TheftReport.delete(theft_report)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#list of suspicious vehicles
+@api_view(['GET', 'POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def suspicious_vehicle(request):
+    if request.method == 'GET':
+        suspicious_vehicles = SuspiciousVehicle.objects.filter(reporter=request.user)
+        serializer = SuspiciousVehicleSerializer(suspicious_vehicles, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = SuspiciousVehicleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(reporter=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#list of parking slots
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def parking_slot(request):
+    if request.method == 'GET':
+        parking_slots = ParkingSlot.objects.all()
+        serializer = ParkingSlotSerializer(parking_slots, many=True)
+        return Response(serializer.data)
+
+#list of bus times
+@api_view(['GET'])
+def bus_timing(request):
+    if request.method == 'GET':
+        bus_timings = BusTiming.objects.all()
+        serializer = BusTimingSerializer(bus_timings, many=True)
+        return Response(serializer.data)

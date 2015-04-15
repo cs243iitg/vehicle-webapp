@@ -212,6 +212,8 @@ class ParkingSlot(models.Model):
 
 
 
+
+
 class PersonPass(models.Model):
     old_card_reference=models.CharField(max_length=10)
     pass_number=models.CharField(max_length=10, unique=True) 

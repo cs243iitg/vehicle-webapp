@@ -8,4 +8,4 @@ class IsReporter(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
        
-        return obj.reporter == request.user
+        return obj.reporter == request.user.IITGUser
