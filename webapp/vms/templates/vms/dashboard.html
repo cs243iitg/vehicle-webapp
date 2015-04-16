@@ -3,43 +3,153 @@
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">Welcome, {{username}}</h1>
-                    </div>
-                    <!-- /.col-lg-12 -->
+                <div class="col-lg-12">
+                    <h1 class="page-header">{{username}} Dashboard</h1>
                 </div>
+                <!-- /.col-lg-12 -->
+            </div>
                 <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
-			
-			<div class="panel-body">    
+            
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{num_suspicious}}</div>
+                                    <div>{% if user.user.is_student %}Your {%endif%}Suspicious Repts.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% if user.user.is_student %}/vms/suspicious-vehicle-report-form{%else%}/vms/suspicious-vehicles/{%endif%}">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{num_pending}}</div>
+                                    <div>{% if user.user.is_student %}Your{%endif%} Pending Regns.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% if user.user.is_student %}/vms/users/your-vehicle-registrations{%else%}/vms/admin/registered-vehicles{%endif%}">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{num_guards}}</div>
+                                    <div>{% if user.user.is_student %} Available Parking {%else%}Guards On Duty{%endif%}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% if user.user.is_student %}/vms/parking-slot-availability{%else%}/vms/admin/guards-on-duty/{%endif%}">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{num_thefts}}</div>
+                                    <div>{% if user.user.is_student %}Your {%endif%}Thefts Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% if user.user.is_student %}/vms/users/user_theft_reports{%else%}/vms/vehicles-missing/{%endif%}">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
-		<div class="row">
-		<center>
-		<div class="col-lg-6" style="margin-left:5%">
+
+            <div class="panel-body">    
+            </div>
+        <div class="row">
+        <center>
+        <div class="col-lg-7" style="">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                          <font size="5"><i class="fa fa-rss-square fa-rss-square"></i> <b> News feed</b></font>
+                          <font size="5"><i class="fa fa-rss-square fa-rss-square"></i> <b> Important Information </b></font>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table">
-                                    
+                                <table class="table">             {% if not user.user.is_student %}                       
                                     <tbody>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-										</br>
-                                    </tbody>
+                                        <tr>
+                                            <th> Total Passes Issued </th> <td>{{total_issued}} Pass(es)</td>
+                                        </tr>
+                                        <tr>
+                                            <th> Total Passes Blocked </th> <td>{{total_blocked}} Pass(es)</td>
+                                        </tr>
+                                        <tr>
+                                            <th> Total Passes Expired </th> <td>{{total_expired}} Pass(es)</td>
+                                        </tr>
+                                        <tr>
+                                            <th> Number of Registrations Approved </th> <td>{{num_approved}} Application(s)</td>
+                                        </tr>
+                                        <tr>
+                                            <th> Number of Registrations Denied </th> <td>{{num_denied}} Application(s)</td>
+                                        </tr>
+                                        {%endif%}
+                                        <tr>
+                                            <th> Number of Suspicious Vehicles Reported </th> <td>{{num_suspicious}} Vehicle(s)</td>
+                                        </tr>
+                                        <tr>
+                                            <th> Number of Pending Registrations </th> <td>{{num_pending}} Application(s)</td>
+                                        </tr>
+                                        {% if user.user.is_student %}
+                                            {% for theft in user_thefts %}
+                                                <tr>
+                                                    <th>Theft#{{theft.id}} Status
+                                                    </th>
+                                                    <td>{{theft.status}}</td>
+
+                                                </tr>
+                                            {%endfor%}
+                                        {%endif%}
+                                  </tbody>
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
@@ -47,18 +157,18 @@
                         <!-- /.panel-body -->
                     </div>
         <!-- /#page-wrapper -->
-		</div>
-		</center>
-		
-				<div class="col-lg-3" style="margin-left:13%">
-				<center>	
+        </div>
+        </center>
+        
+                <div class="col-lg-4" style="margin-left:7%">
+                <center>    
                     <div class="panel panel-default">
-					
+                    
                         <div class="panel-heading">
                             <font size="4"> <i class="fa fa-bus"></i> <b>Upcoming Buses</b></font>
                         </div>
                         <!-- /.panel-heading -->
-						
+                        
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table">
@@ -99,10 +209,10 @@
                        </div>
                         <!-- /.panel-body -->
                     
-					</div>
-					</center>
-				</div>
-				</div>
+                    </div>
+                    </center>
+                </div>
+                </div>
     <!-- /#wrapper -->
 </body>
 <script type="text/javascript">
@@ -113,3 +223,5 @@
 
 </script>
 </html>
+
+

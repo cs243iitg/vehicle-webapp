@@ -15,10 +15,13 @@
       
 <h2>View Visitor Logs</h2>
 <hr>
+<form method="POST" action="../updatelog/">
+{% csrf_token %}
                 <table id="myTable" class="table table-striped">
 <thead>
     <tr>
         <tr>
+        <th style="display:none;">ID</th>
 <th>Vehicle Number</th>
 <th>Gate In</th>
 <th>Gate Out</th>
@@ -30,13 +33,11 @@
     </tr>
 </thead>
 <tbody>
-<form method="POST" action="../updatelog/">
-{% csrf_token %}
 {% for log in logs %}
 
 <tr>
-
-<td id="vehiclenumber{{forloop.counter}}" class="col-sm-2 col-md-2">{{log.vehicle_number}}</td>
+<td style="display:none;" id="vehiclenumber{{forloop.counter}}">{{log.id}}</td>
+<td  class="col-sm-2 col-md-2">{{log.vehicle_number}}</td>
 
 <td class="col-sm-2 col-md-2">{{log.in_gate}}</td>
 
@@ -53,7 +54,7 @@
 
 
 
-<td class="col-sm-2 col-md-2">{{log.in_time}}</td>
+<td class="col-sm-2 col-md-2" >{{log.in_time}}</td>
 {% if log.out_time  %}
 <td class="col-sm-2 col-md-2">{{log.out_time}}</td>
 {% else %}
@@ -64,7 +65,7 @@
 {% endfor %}
 
 <input id="information" style="display:none" name="number">
-<input type="submit" value="submit" id="sub" >
+<input type="submit" value="submit" id="submit" style="display:none;">
 
 
 </tbody>
@@ -84,14 +85,14 @@ $(document).ready(function(){
 </script> 
 <script type="text/javascript">
     function clickfunction(click_id){
-alert
-id="vehiclenumber"+(click_id);
 
+id="vehiclenumber"+(click_id);
 //alert(document.getElementById("jai").innerHTML);
 //alert(document.getElementById(id).innerHTML);
+
 document.getElementById("information").value=document.getElementById(id).innerHTML;
 //alert(document.getElementById(id).innerHTML);
-document.getElementById("dfg").click();
+document.getElementById("submit").click();
 //alert(document.getElementById("information").value);
 //alert(document.getElementById("information").value);
 

@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
-from .forms import TheftForm, StudentVehicleForm, PersonPassForm, BusTimingForm, EmployeeVehicleForm
+from .forms import TheftForm, StudentVehicleForm, PersonPassForm, BusTimingForm, EmployeeVehicleForm, DocumentForm
 from .models import TheftReport, StudentVehicle, EmployeeVehicle, BusTiming, Guard, Place, ParkingSlot, PersonPass, OnDutyGuard, Gate, StudentCycle
 from datetime import datetime
 from django.forms.models import model_to_dict
@@ -112,9 +112,6 @@ def block_passes(request):
         #     return render_to_response('admin/block.pass.html' ,{'error' : "You have entered an invalid pass number"}, context_instance=RequestContext(request))
     return render_to_response('admin/block_pass.html' , context_instance=RequestContext(request))
 
-@login_required(login_url="/vms/")
-def add_guards(request):
-    return HttpResponse("CSV Upload to be included")
 
 @login_required(login_url="/vms/")
 def update_bus_details(request):    
@@ -142,10 +139,6 @@ def update_bus_details(request):
             })
 
 @login_required(login_url="/vms/")
-def upload_log(request):
-    pass
-
-
 def issue_pass(request):
     if request.method == "POST":
         form = PersonPassForm(request.POST,request.FILES)
@@ -355,9 +348,15 @@ def old_registered_vehicles(request):
         'stud_cycles':stud_cycles,
         })
 
-def csventer(request):
+@login_required(login_url="/vms/")
+def add_guards(request):
+    form = DocumentForm()
+    return render_to_response('admin/add_guards.html',{'type':'type','form':form},context_instance=RequestContext(request))
+
+def upload_log(request):
     form=DocumentForm()
-    return render_to_response('list.html',{'type':'type','form':form},context_instance=RequestContext(request))
+    return render_to_response('admin/csv.html',{'type':'type','form':form},context_instance=RequestContext(request))
+
 def uploadcsv(request):
     return render_to_response('admin/csv.html',
                  {'type':"type" },context_instance=RequestContext(request))
@@ -366,12 +365,11 @@ def viewcsv(request):
     # Handle file upload
     if request.method == 'POST':
         f=request.FILES['docfile']
-        #form = DocumentForm(request.POST, request.FILES)
-        # handle_uploaded_file(request.FILES['file'])
-        #jainam=f.read()
+        
         if f.name.split('.')[-1]!="csv":
-            return HttpResponse("File not in proper format") 
-        with open('/git/vehicle-webapp/webapp/vms', 'wb+') as destination:
+            messages.error(request, "Upload CSV File only.")
+            return render(request, 'admin/csv.html',{})
+        with open('/git/vehicle-webapp/webapp/vms/media/csv/cs243iitg.csv', 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
     #checkcsv('/home/fireman/Django-1.6/mysite/article/jai.csv')
@@ -379,24 +377,35 @@ def viewcsv(request):
     import csv
     
     #csvfile(jai)
-    jai=open('/git/vehicle-webapp/webapp/vms','r')
-    data=[j for j in csv.reader(jai)]
-    jai.close()
+    upload=open('/git/vehicle-webapp/webapp/vms/media/csv/cs243iitg.csv', 'r') 
+    # upload=open('csv/cs243iitg.csv','r')
+    data=[j for j in csv.reader(upload)]
+    upload.close()
+    rowNo=1
+    flag=0
+    f=open('/git/vehicle-webapp/webapp/vms/media/csv/log.txt', 'wb+') 
     #dataReader=csv.reader(open('/home/fireman/Django-1.6/mysite/article/jai.csv'),delimiter=',',quotechar='"')
     for row in data:
-        if row[0]=="" or row[1]=="":
-            return HttpResponse("wrong Format")
-    for row in data:
-        test=Guard()
-        #return HttpResponse("dataReasd") 
-        #return HttpResponse(row[0])
+        if not row[0] or row[0]=="" or not row[1] or row[1]=="" or  not row[2] or row[2]=="" or not row[3] or  row[3]=="" or not row[4] or  row[4]=="":
+            # f.truncate()
+            f.write("The row number " +rowNo+ " has some error.\n")
+            flag=1
+        rowNo=rowNo+1
+    f.close()
+
+    if flag==1:
+        messages.error(request, "Check the file log.txt to see the error in CSV file data.")
+        return render(request, 'admin/csv.html',{})
+    else:
+        for row in data:
+            test=Guard()
+            u = User.objects.create_user(username=row[2], password=row[3],first_name=row[0],last_name=row[1])
+            u.save()
+            test.guard_user=u
+            test.guard_phone_number=int(row[4])
+            test.save()
+        return HttpResponseRedirect("../security/viewlog")
+        #return HttpResponse("dataReader")  
         
-        test.guard_user=row[0]
-        test.guard_phone_number=row[1]
-        
-        test.save()
-    return HttpResponseRedirect("../security/viewlog")
-    #return HttpResponse("dataReader")  
-    
-    return render_to_response('enter_log.html', {'form': 'form'})    
+        return render_to_response('enter_log.html', {'form': 'form'})    
 

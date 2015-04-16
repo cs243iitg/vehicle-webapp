@@ -272,24 +272,15 @@ class VisitorLog(models.Model):
     Log of visitors for additional details
     """
     vehicle_number = models.CharField(max_length=20)
-    in_gate = models.ForeignKey(Gate, related_name='visitor_in_gate', null=True)
-    out_gate = models.ForeignKey(Gate, related_name='visitor_out_gate', null=True)
-    vehicle_type = models.CharField(max_length=50, blank=True, null=True,
-                                    choices=[
-                                        ('bicycle', 'bicycle'),
-                                        ('bike', 'bike'),
-                                        ('car', 'car'),
-                                        ('truck', 'truck'),
-                                        ('courier', 'courier'),
-                                        ('auto', 'auto'),
-                                        ('other', 'other'),
-                                    ])
-    vehicle_model = models.CharField(max_length=100, blank=True, null=True)
     driver_name = models.CharField(max_length=255, blank=True, null=True)
     license_number = models.CharField(max_length=20, blank=True, null=True)
+    in_gate = models.ForeignKey(Gate, related_name='visitor_in_gate', null=True)
     place_to_visit = models.CharField(max_length=100, blank=True, null=True)
     purpose_of_visit = models.TextField(max_length=1000, blank=True, null=True)
+    out_gate = models.ForeignKey(Gate, related_name='visitor_out_gate', null=True)
     in_time = models.DateTimeField(blank=True, null=True)
+    vehicle_type = models.CharField(max_length=50, blank=True, null=True)
+    vehicle_model = models.CharField(max_length=100, blank=True, null=True)
     out_time = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):

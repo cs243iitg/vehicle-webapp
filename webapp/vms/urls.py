@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^admin/stud/(?P<vehicle_id>\d+)/deny-registration/$', admin_views.deny_reg),    
 
     ######JAINAM#######
-    url('admin/guardcsv/$', admin_views.csventer),
+    # url('admin/guardcsv/$', admin_views.csventer),
     url('admin/viewcsv/$', admin_views.viewcsv),
     ###################
 

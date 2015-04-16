@@ -13,7 +13,7 @@
             <!-- /.container-fluid -->
       
       
-<h2>Upadate Visitor Logs</h2>
+<h2>Update Visitor Logs</h2>
 <hr>
                 <table id="myTable" class="table table-striped">
 <thead>
@@ -34,9 +34,6 @@
     </tr>
 </thead>
 <tbody>
-<form method="POST" action="../finallog/">
-{% csrf_token %}
-{% for log in logs %}
 
 <tr>
 
@@ -59,20 +56,19 @@
 
 
 <td class="col-sm-1 col-md-1">{{log.vehicle_type}}</td>
-<!--<td class="col-sm-1 col-md-1">{{log.vehivle_model}}</td>-->	
+<!--<td class="col-sm-1 col-md-1">{{log.vehivle_model}}</td>--> 
 <td class="col-sm-1 col-md-1">{{log.driver_name}}</td>
-<td class="col-sm-1 col-md-1">{{log.licence_number}}</td>
+<td class="col-sm-1 col-md-1">{{log.license_number}}</td>
 <td class="col-sm-1 col-md-1">{{log.place_to_visit}}</td>
 
 <td class="col-sm-1 col-md-1">{{log.purpose_of_visit}}</td>
 <td class="col-sm-1 col-md-1">{{log.in_time}}</td>
 {% if log.out_time  %}
 <td class="col-sm-1 col-md-1">{{log.out_time}}</td>
-{% else %}	
+{% else %}  
 <td id="campus{{forloop.counter}}" class="col-sm-1 col-md-1"><span style="color:blue;">Still in Campus</span></td>
 {% endif %}
 </tr>
-{% endfor %}
 
 
 
@@ -80,12 +76,18 @@
 </tbody>
 </table>
 <br>
+<form method="POST" action="../finallog/">
+{% csrf_token %}
+<input style="display:none;" name="number" value="{{log.id}}">
 <center>
 <div class="form-group">
     <label style="margin-left:10%,width:50px"  class="control-label" >Enter The Out Gate</label>
     
-      <input style="width:300px"class="form-control"  id="gate"  name="gate" placeholder="Enter the Out Gate" onfocus="func()" onkeyup="func()" onkeydown="func()">
-      <br>
+      <select name="gate">
+          {% for gate in gates %}
+          <option>{{gate.gate_name}}</option>
+          {% endfor%}
+      </select>
      
 
       <input type="submit" value="Update" id="update" name="update"  class="btn btn-primary">

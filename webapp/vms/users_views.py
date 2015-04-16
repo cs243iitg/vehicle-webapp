@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from .forms import TheftForm, StudentVehicleForm, EmployeeVehicleForm, StudentCycleForm
-from .models import TheftReport, StudentVehicle, BusTiming, StudentCycle
+from .models import TheftReport, StudentVehicle, BusTiming, StudentCycle, EmployeeVehicle
 from datetime import datetime
 from django.db import IntegrityError
 
@@ -69,8 +69,10 @@ def register_vehicle(request):
                 return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
             else:
                 return HttpResponseRedirect("/vms/admin/registered-vehicles")
-        # else:
-        #     return HttpResponse("form is invalid")
+        else:
+            return render(request, "users/register.html", {
+                'form': form,
+                })
     elif request.user.user.is_student == True:
         form = StudentVehicleForm()
     else:

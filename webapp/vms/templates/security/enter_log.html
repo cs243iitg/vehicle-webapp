@@ -19,10 +19,23 @@
     <div class="col-lg-6" style="margin-left:5%">
                  <form class="form-horizontal" action="../security/submitlog/" method="post">
                  {% csrf_token %}
+                 {% if messages %}
+                <ul class = "messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><font color="red">{{ message }}</font></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}   
   <div class="form-group">
     <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The vehicle number :</label>
     <div class="col-sm-5">
       <input class="form-control" type="text" name="vehiclenumber" id="vehicle" placeholder="Enter The vehicle number" onfocus="func()" onkeyup="func()" onkeydown="func()">
+    </div>
+  </div>
+  <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter Driver Name :</label>
+    <div class="col-sm-5">
+      <input class="form-control" name="drivername" id="driver" placeholder="Enter Driver Name" onfocus="func()" onkeyup="func()" onkeydown="func()">
     </div>
   </div>
   <div class="form-group">
@@ -32,9 +45,13 @@
     </div>
   </div>
   <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The Gatenumber :</label>
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Entry Gate :</label>
     <div class="col-sm-5">
-      <input class="form-control" name="gatenumber" id="gate" placeholder="Enter The Gatenumber" onfocus="func()" onkeyup="func()" onkeydown="func()">
+      <select class="form-control" name="gatenumber" id="gate" placeholder="Enter The Gatenumber" onkeyup="func()" onkeydown="func()">
+        {% for gate in gates %}
+          <option>{{gate.gate_name}}</option>
+        {% endfor %}
+      </select>
     </div>
   </div>
   <div class="form-group">
@@ -44,21 +61,29 @@
     </div>
   </div>
   <div class="form-group">
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The vehicle type :</label>
+    <div class="col-sm-5">
+      <select class="form-control" name="vehicletype" id="type" placeholder="Enter The vehicle type" onkeyup="func()" onkeydown="func()">
+        <option value="bicycle">Bicycle</option>
+        <option value="bike">Bike</option>
+        <option value="car">Car</option>
+        <option value="truck">Truck</option>
+        <option value="courier">Courier</option>
+        <option value="auto">Auto</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
     <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The place to visit :</label>
     <div class="col-sm-5">
       <input class="form-control" name="placetovisit" id="visit" placeholder="Enter The place to visit"onfocus="func()" onkeyup="func()" onkeydown="func()">
     </div>
   </div>
   <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The place to visit :</label>
+    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter the purpose of visit :</label>
     <div class="col-sm-5">
-      <input class="form-control" name="purposeofvisit" id="purpose" placeholder="Enter The place to visit"onfocus="func()" onkeyup="func()" onkeydown="func()">
-    </div>
-  </div>
-  <div class="form-group">
-    <label style="margin-left:10%"  class="col-sm-5 control-label">Enter Driver Name :</label>
-    <div class="col-sm-5">
-      <input class="form-control" name="drivername" id="driver" placeholder="Enter Driver Name" onfocus="func()" onkeyup="func()" onkeydown="func()">
+      <input class="form-control" name="purposeofvisit" id="purpose" placeholder="Enter The purpose of visit"onfocus="func()" onkeyup="func()" onkeydown="func()">
     </div>
   </div>
   <br>

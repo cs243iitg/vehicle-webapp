@@ -10,7 +10,7 @@
                 {% csrf_token %}
                 <div class="row">
                     <table class="" id="form_table">
-                        {% for field in form %}
+                        {% for field in form %}                           
                             <tr>
                                 <td class="col-sm-3 col-md-3 a">{{ field.label_tag }}</td>
                                 <td class="col-sm-6 col-md-4 a">{{ field }}</td>
@@ -29,23 +29,24 @@
         <!-- /#page-wrapper -->
         </div>
 </body>
+
+</html>
 <script type="text/javascript">
-$.noConflict();
-$(function(){
+$.noConflict();  
+$(document).ready(function(){
                $('#id_from_time').datetimepicker();
              });
 </script> 
-
-</html>
 <script>
               var counter = 1;
               var places = [ {% for p in places %} "{{p}}", {% endfor %}]
-              $(document).ready(
+              jQuery(document).ready(
                 $("#id_bus_route").hide()               
               );
               $(document).ready(
                $('label[for="id_bus_route"]').hide()
               );
+
               $(document).ready(function(){
                 // var s = $("<select id=\"selectId\" name=\"selectName\" />");
                 // for(var val in places) {
@@ -55,23 +56,28 @@ $(function(){
                 counter++;
               }                
               );             
+
               $("body").on("click",".add",function(){
                 $(".add").remove();
                 $("#form_table").append(" <tr><td class='col-sm-3 col-md-3 a'><label for=loc"+counter+">Location "+ (counter) + "</label></td><td class='col-sm-6 col-md-4 a'><input class='form-control' id=loc"+counter+" /> </td><td class='col-sm-3 col-md-5 a'><button type='button' class='add'>Add</button></td></tr>");   
                 counter++;
               });
+
               $("#submit_form").click(function(event){
                 var s = ""
                 for (i = 1; i < counter ; i++) { 
+
                     if($("#loc"+i).val() == "")
                     {
                       window.alert("Please fill all fields before submitting");
                       event.preventDefault();
                       return false;
                     }
+
                     s += ($("#loc"+i).val() + "-");
                     console.log(s);
                 }
+
                 $("#id_bus_route").val(s);
                 console.log($("#id_bus_route").val());                
                 return true;
