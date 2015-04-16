@@ -58,20 +58,6 @@ def auth_view(request):
 #------------------------------------------------------------
 #       Theft Reporting for User
 #------------------------------------------------------------
-@login_required(login_url="/vms/")
-def home(request):
-    """
-    Home page for user, with his previous tasks
-    """
-    today = str.lower(datetime.now().strftime("%A"))    
-    buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
-
-    return render(request, 'vms/dashboard.html',{
-        'username': request.user.first_name,
-        'is_user': True,
-        'user': request.user,
-        'buses': buses[0:3],        
-    })
 # @login_required(login_url="/vms/")
 # def home(request):
 #     """
@@ -79,53 +65,67 @@ def home(request):
 #     """
 #     today = str.lower(datetime.now().strftime("%A"))    
 #     buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
-#     if request.user.user.is_student:
-#         num_suspicious = len(SuspiciousVehicle.objects.filter(reporter=request.user))
-#         x1 = [j for j in StudentVehicle.objects.all() if (j.user == request.user and j.registered_with_security_section==None)]
-#         num_pending = len(x1)
-#         x2 = [j.available_slots for j in ParkingSlot.objects.all()]
-#         num_guards = sum(x2)
-#         x3 = [j for j in TheftReport.objects.all() if j.reporter==request.user]
-#         num_thefts = len(x3)
 
-#         return render(request, 'vms/dashboard.html',{
-#             'username': request.user.first_name,            
-#             'user': request.user,
-#             'buses': buses[0:3],  
-#             'num_suspicious': num_suspicious,
-#             'num_pending': num_pending,
-#             'num_guards': num_guards,
-#             'num_thefts': num_thefts,
-#             'user_thefts': x3,
-#         })
-#     else:
-#         num_suspicious = len(SuspiciousVehicle.objects.all())
-#         num_pending = len(StudentVehicle.objects.filter(registered_with_security_section=None)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=None))
-#         num_approved = len(StudentVehicle.objects.filter(registered_with_security_section=True)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=True))
-#         num_denied = len(StudentVehicle.objects.filter(registered_with_security_section=False)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=False))
-#         num_guards = len(OnDutyGuard.objects.all())
-#         num_thefts = len(TheftReport.objects.filter(status="Submitted"))
-#         passes=PersonPass.objects.all()
-#         total_blocked = len(passes.filter(is_blocked=True))
-#         total_issued = len(passes.filter(is_blocked=False))
-#         x = [j for j in passes if j.expiry_date < datetime.now().date()]
-#         total_expired = len(x)
+#     return render(request, 'vms/dashboard.html',{
+#         'username': request.user.first_name,
+#         'is_user': True,
+#         'user': request.user,
+#         'buses': buses[0:3],        
+#     })
+@login_required(login_url="/vms/")
+def home(request):
+    """
+    Home page for user, with his previous tasks
+    """
+    today = str.lower(datetime.now().strftime("%A"))    
+    buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
+    if request.user.user.is_student:
+        num_suspicious = len(SuspiciousVehicle.objects.filter(reporter=request.user))
+        x1 = [j for j in StudentVehicle.objects.all() if (j.user == request.user and j.registered_with_security_section==None)]
+        num_pending = len(x1)
+        x2 = [j.available_slots for j in ParkingSlot.objects.all()]
+        num_guards = sum(x2)
+        x3 = [j for j in TheftReport.objects.all() if j.reporter==request.user]
+        num_thefts = len(x3)
 
-#         return render(request, 'vms/dashboard.html',{
-#             'username': request.user.first_name,
-#             'is_user': True,
-#             'user': request.user,
-#             'buses': buses[0:3],  
-#             'num_suspicious': num_suspicious,
-#             'num_pending': num_pending,
-#             'num_guards': num_guards,
-#             'num_thefts': num_thefts,
-#             'num_approved': num_approved,
-#             'num_denied': num_denied, 
-#             'total_issued': total_issued,
-#             'total_expired': total_expired,
-#             'total_blocked': total_blocked,    
-#         })
+        return render(request, 'vms/dashboard.html',{
+            'username': request.user.first_name,            
+            'user': request.user,
+            'buses': buses[0:3],  
+            'num_suspicious': num_suspicious,
+            'num_pending': num_pending,
+            'num_guards': num_guards,
+            'num_thefts': num_thefts,
+            'user_thefts': x3,
+        })
+    else:
+        num_suspicious = len(SuspiciousVehicle.objects.all())
+        num_pending = len(StudentVehicle.objects.filter(registered_with_security_section=None)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=None))
+        num_approved = len(StudentVehicle.objects.filter(registered_with_security_section=True)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=True))
+        num_denied = len(StudentVehicle.objects.filter(registered_with_security_section=False)) + len(EmployeeVehicle.objects.filter(registered_with_security_section=False))
+        num_guards = len(OnDutyGuard.objects.all())
+        num_thefts = len(TheftReport.objects.filter(status="Submitted"))
+        passes=PersonPass.objects.all()
+        total_blocked = len(passes.filter(is_blocked=True))
+        total_issued = len(passes.filter(is_blocked=False))
+        x = [j for j in passes if j.expiry_date < datetime.now().date()]
+        total_expired = len(x)
+
+        return render(request, 'vms/dashboard.html',{
+            'username': request.user.first_name,
+            'is_user': True,
+            'user': request.user,
+            'buses': buses[0:3],  
+            'num_suspicious': num_suspicious,
+            'num_pending': num_pending,
+            'num_guards': num_guards,
+            'num_thefts': num_thefts,
+            'num_approved': num_approved,
+            'num_denied': num_denied, 
+            'total_issued': total_issued,
+            'total_expired': total_expired,
+            'total_blocked': total_blocked,    
+        })
 
 
 

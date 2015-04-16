@@ -7,7 +7,7 @@
                
             </h2>
             </br>
-            <form action="/vms/admin/issue-pass/" method="POST">
+            <form action="/vms/admin/issue-pass/" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                 {% if messages %}
