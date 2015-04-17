@@ -112,8 +112,8 @@ class StudentVehicle(models.Model):
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.NullBooleanField(default=None)
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
-    issue_date = models.DateField()
-    expiry_date = models.DateField()
+    issue_date = models.DateField(null=True) #Vehicle Pass issue Date
+    expiry_date = models.DateField(null=True) #Vehicle Pass Expiry Date
 
     def __str__(self):
         return self.vehicle_pass_no
@@ -164,8 +164,8 @@ class EmployeeVehicle(models.Model):
     date_of_application = models.DateTimeField(blank=True, null=True)
     registered_with_security_section = models.NullBooleanField(default=None)
     vehicle_pass_no = models.CharField(max_length=32, blank=True, null=True, unique=True)
-    issue_date = models.DateField()
-    expiry_date = models.DateField()
+    issue_date = models.DateField(null=True)
+    expiry_date = models.DateField(null=True)
 
     def __str__(self):
         return self.vehicle_pass_no

@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage{hyperref}
+\title{\textbf{WebSite Renamer}}
+\author{Venkat Arun, 130101085\\Duddu Sai Meher Karthik, 130101084\\Sumeet Ranka, 130101062}
+\date{\oldstylenums{04}/\oldstylenums{04}/\oldstylenums{2015}}
+%--------------------Make usable space all of page
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\headsep}{-.25in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+%--------------------Indention
+\setlength{\parindent}{1cm}
+
+\begin{document}
+%--------------------Title Page
+\maketitle
+ 
+%--------------------Begin Outline
+\section{Aim}
+To write a script that downloads an ill organised website from the server, renames and edits the file paths in an organised tree fashion and then hosts it in a local server.\\Note: For testing we had to run the script on website: \href{http://iitg.vlab.co.in}{Virtual Lab, IIT Guwahati}
+\subsection{Constraints:}
+    	
+\begin{enumerate}
+\item To organise the site files in a tree structure with at least three levels 
+\item To download the files that are on some external server and save it in the local server
+\item To point out all the broken links to the user by redirecting to a 404 page.
+\end{enumerate}
+\section{Technologies Used}
+Python 2.7.6
+\subsection{Libraries Used and their purposes}
+\begin{enumerate}
+\item \textit{Beautiful Soup}: Used to extract various html attributes' content from the html files.
+\item \textit{os}: Used to edit the details of the file.
+\item \textit{urllib}: 
+\end{enumerate}
+\section{Idea}
+Aiming to implement it in as generalise manner as possible and considering \textit{index.html} as the tree node, we created a breadth-first-search tree. The relation between the child and the parent is that the parent html file has the link to the child html file.
+\newpage
+However in this approach there is a catch.
+\textbf{What if two html files A and B call a common child html file?} To resolve this we then move the child html file to the least common ancestor of A and B. As a result a modified BFS Tree gets generated. It is stored in a dictionary named \textit{RenameFiles} in which the key denotes the original name of the HTML file and the value has two components in it.
+\begin{enumerate}
+\item New File Path
+\item Parent's Old HTML File Name
+\end{enumerate}
+This dictionary stores the new file path for each file. The idea of moving and modifying now becomes simple. They work in following steps:
+\begin{enumerate}
+\item Open a file and convert its code in a string form 
+\item Find all tags and check for attributes' content
+\item If value is none skip it, else retrieve the new file path from the \textit{RenameFiles} dictionary
+\item Check if the file link is a local link or external link. If local then replace the link with the new file path obtained from the dictionary \textit{RenameFiles}.
+\item If external link then try downloading the file and save in an external file folder. If very large or could not be downloaded then replace with link which will redirect to some page that shows the error message
+\item After all the edits in the HTML string is done, retrieve the new file path of this file and check if the appropriate directory exists. It not then create it and save the file to the appropriate location. 
+\end{enumerate}
+\textbf{How are the name and the new file paths decided?}\\
+We take the names either from the title of the page or from the URL Label Name. For HTML files we use the title of the page whereas for the other file types (that are initially available in the local repository) we take the labels associated with that link.
+
+\section{Usage}
+For this you require \textit{Python 2.7.6}, \textit{BeautifulSoup} library and \textit{wget} in your computer. use the \textit{download-website.sh} file to download all the files from the server. Save the folder at the location where you want to host the local website. Then in the same folder make a folder named \textit{python-scripts} and paste he four python files: 
+\begin{enumerate}
+\item main.py
+\item htmlUtils.py
+\item organise.py
+\item RenameFiles.py
+\end{enumerate}
+Execute \textit{main.py} file. After some time, you will find a folder \textit{Home} that will contain the server files in an organised manner. Then host this folder on the server and the work is done. 
+
+\newpage
+\section{Working}
+\textit{main()} function in the \textit{main.py} calls the function \textit{renameResources} taking the folder name as the argument in which the server files are present. This function in \textit{RenameFiles} defines \textit{renameTable}, \textit{bfsQueue} and \textit{baseAddr} as global. First variable as described before is a dictionary that contains the information of the old file path, new file path and the parent's old file name. Second variable is a 2-D array \textit{Nx3} whose each row is of the form:
+\begin{enumerate}
+\item First Column: Old file path of the file being processed 
+\item Second Column: Parent's Old File path
+\item Third Column: New file path of the file being processed.
+\end{enumerate}
+The third variable defines the base address of the folder that contains the server files. 
+After that the first row \textit{bfsQueue} or the base case of the modified BFS algorithm is defined.
+Then is called the function which is responsible for the creation of the BFS tree i.e. \textit{doBFS()}.
+As when the new file path is determined for the file being processed it is added to the dictionary.
+After the \textit{doBFS()} completes its work the function \textit{renameResources} also returns and from the \textit{main.py}, \textit{moveAndModify()} gets called.
+\end{document}

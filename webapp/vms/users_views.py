@@ -13,6 +13,10 @@ from .forms import TheftForm, StudentVehicleForm, EmployeeVehicleForm, StudentCy
 from .models import TheftReport, StudentVehicle, BusTiming, StudentCycle, EmployeeVehicle
 from datetime import datetime
 from django.db import IntegrityError
+from django.contrib.messages import constants as message_constants
+MESSAGE_LEVEL = message_constants.DEBUG
+SUCCESS=1
+ERROR=1
 
 @login_required(login_url="/vms/")
 def register_cycle(request):

@@ -55,7 +55,7 @@ urlpatterns = [
     url('users/your-vehicle-registrations/$', users_views.vehicle_registrations),    
     url(r'^users/(?P<student_vehicle_id>\d+)/cancel-vehicle-registration/$', users_views.cancel_vehicle_registration),
     url('users/register-vehicle/$', users_views.register_vehicle),
-    url('users/submit-vehicl    e-registration/$', users_views.register_vehicle),
+    url('users/submit-vehicle-registration/$', users_views.register_vehicle),
     url(r'^users/(?P<theft_report_id>\d+)/cancel-theft-report/$',users_views.cancel_theft_report),
     
     #Common URLs for Security and Admin

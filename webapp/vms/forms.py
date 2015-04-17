@@ -146,6 +146,7 @@ class StudentVehicleForm(forms.ModelForm):
     """
     Student form for registering vehicle
     """
+    # date_of_birth = forms.DateTimeField(required=True, widget=DateTimePicker(options={"format": "DD-MM-YYYY", "pickTime":False}))
 
     class Meta:
         model = models.StudentVehicle
@@ -154,7 +155,8 @@ class StudentVehicleForm(forms.ModelForm):
             'startView': 4,
         }
         widgets = {
-            'date_of_birth': SelectDateWidget(years=range(1950, datetime.now().year)),#(usel10n = True, bootstrap_version=3, options = dateOptions),
+            'date_of_birth':DateTimePicker(options={"format": "DD-MM-YYYY", "pickTime":False}),
+            # 'date_of_birth': SelectDateWidget(years=range(1950, datetime.now().year)),#(usel10n = True, bootstrap_version=3, options = dateOptions),
             'insurance_valid_upto': SelectDateWidget(years=range(1950, datetime.now().year)), #(usel10n = True, bootstrap_version=3,                                            options = dateOptions),
             'driving_license_issue_date': SelectDateWidget(years=range(1950, datetime.now().year)), #(usel10n = True,   bootstrap_version=3,                                                    options = dateOptions),
             'driving_license_expiry_date': SelectDateWidget(years=range(datetime.now().year, 2035)), #(usel10n = True,     bootstrap_version=3,                                                    options = dateOptions),

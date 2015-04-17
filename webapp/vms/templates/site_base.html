@@ -37,10 +37,6 @@
     <script src="{% static 'vms/bower_components/jquery/dist/jquery.min.js' %}"></script>
     <!-- DateTime Picker -->
     <script type="text/javascript" src="{% static   'vms/bower_components/moment/moment.js' %}"></script>
-    <script type="text/javascript" src="{% static    'vms/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
-    <!-- DateTime Picker -->
-  
-  <link rel="stylesheet" href="{% static 'vms/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" />
     <!-- dataTables -->
     <script src="{% static 'vms/bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
     <!-- Bootstrap Core JavaScript -->
@@ -113,7 +109,6 @@
                     <!-- /.dropdown-messages -->
                 </li>
                 <!-- /.dropdown -->
-                {% if is_user %}
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -170,7 +165,6 @@
                     </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
-                {% elif is_admin %}
 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -204,7 +198,6 @@
                     <!-- /.dropdown-tasks -->
                 </li>
 
-                {% endif %}
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
