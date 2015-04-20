@@ -79,7 +79,7 @@ def home(request):
     """
     today = str.lower(datetime.now().strftime("%A"))    
     buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
-    if request.user.user.is_student:
+    if not request.user.is_superuser == True:
         num_suspicious = len(SuspiciousVehicle.objects.filter(reporter=request.user))
         x1 = [j for j in StudentVehicle.objects.all() if (j.user == request.user and j.registered_with_security_section==None)]
         num_pending = len(x1)
@@ -137,7 +137,7 @@ def busdetails(request):
 #Ayush Mananiya
 #----------thread function for sending sms---------------------------------------------
 def send_sms(message, numbers):
-    proxy = "http://sumeet.ranka:@202.141.80.24:3128"             #change the username and password
+    proxy = "http://sumeet.ranka:weh,hftg@202.141.80.24:3128"             #change the username and password
     status1=''
     for i in numbers:
         response = requests.get("https://site2sms.p.mashape.com/index.php?msg="+message+"&phone="+str(i)+"&pwd=CS243iitg&uid=8011035945",headers={"X-Mashape-Key": "CW4gX5MRw2mshX6uxzLHMxEVoB0Op1v4cMrjsnZoeRXbk3LD46", "Accept": "application/json"},proxies={"http":proxy,"https":proxy,"ftp":proxy},)

@@ -46,6 +46,12 @@ coverage.xml
 
 # Django stuff:
 *.log
+*.gif
+*.png
+*.jpg
+*.jpeg
+*.doc
+*.docx
 db.sqlite3
 migrations/
 # Sphinx documentation

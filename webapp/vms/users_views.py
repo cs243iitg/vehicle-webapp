@@ -13,6 +13,7 @@ from .forms import TheftForm, StudentVehicleForm, EmployeeVehicleForm, StudentCy
 from .models import TheftReport, StudentVehicle, BusTiming, StudentCycle, EmployeeVehicle
 from datetime import datetime
 from django.db import IntegrityError
+import random
 from django.contrib.messages import constants as message_constants
 MESSAGE_LEVEL = message_constants.DEBUG
 SUCCESS=1
@@ -52,7 +53,9 @@ def register_vehicle(request):
     Displays form for registering vehicle -- NOTE: This form is common to users and admin
     """
     if request.method == 'POST':
-        if request.user.user.is_student:
+        if request.user.is_superuser:
+            form = EmployeeVehicleForm(request.POST, request.FILES)
+        elif request.user.user.is_student:
             form = StudentVehicleForm(request.POST, request.FILES)
         else:
             form = EmployeeVehicleForm(request.POST, request.FILES)
@@ -61,7 +64,7 @@ def register_vehicle(request):
             task = form.save(commit=False)
             task.user = request.user
             task.date_of_application = datetime.now().date()
-            task.vehicle_pass_no = "Not generated"
+            task.vehicle_pass_no = str(datetime.now())+str(random.randint(0,1000000))
             task.registered_with_security_section = None
             task.save()
             # print "trying to save the original form instance \n\n\n"
@@ -69,15 +72,19 @@ def register_vehicle(request):
             messages.success(request,
                 'Your vehicle registration is sent to security for ' + 
                 'processing. You will be contacted through your webmail.')
-            if request.user.user.is_student:
+            if request.user.is_superuser:
+                return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
+            elif request.user.user.is_student:
                 return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
             else:
-                return HttpResponseRedirect("/vms/admin/registered-vehicles")
+                return HttpResponseRedirect("/vms/users/your-vehicle-registrations")
         else:
             return render(request, "users/register.html", {
                 'form': form,
                 })
-    elif request.user.user.is_student == True:
+    elif request.user.is_superuser:
+        form = EmployeeVehicleForm()
+    elif request.user.user.is_student:
         form = StudentVehicleForm()
     else:
         form = EmployeeVehicleForm()
@@ -91,18 +98,18 @@ def vehicle_registrations(request):
     """
     Displays vehicle registrations of a user
     """
-    if request.user.user.is_student:
-        print("here")
+    if request.user.is_superuser:
+        registrations=EmployeeVehicle.objects.filter(user=request.user)
+    elif request.user.user.is_student:
         registrations = StudentVehicle.objects.filter(user=request.user)
     else:
         registrations = EmployeeVehicle.objects.filter(user=request.user)
-    print(len(registrations))
-    #print(registrations.registered_with_security_section)
     return render_to_response("users/vehicle_registrations.html", {
         "registrations": registrations,        
     }, context_instance=RequestContext(request))
 
 
+@login_required(login_url="/vms/")
 def user_theft_reports(request):
     reports = TheftReport.objects.filter(reporter=request.user)
     return render(request, "vms/theft_reports.html", {

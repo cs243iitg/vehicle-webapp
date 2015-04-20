@@ -67,7 +67,7 @@ class StudentVehicle(models.Model):
     room_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
     user_photo = models.ImageField()
-    identity_card = models.FileField(upload_to='identity_card', null=True)
+    identity_card = models.FileField(upload_to='identity_card')
     """
     Parents' Contact Details
     """
@@ -93,8 +93,8 @@ class StudentVehicle(models.Model):
     relation_with_owner = models.CharField(max_length=32)
     vehicle_insurance_no = models.CharField(max_length=100, unique=True)
     insurance_valid_upto = models.DateField()
-    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card', null=True)
-    vehicle_insurance = models.FileField(upload_to='vehicle_insurance', null=True)
+    vehicle_registration_card = models.FileField(upload_to='vehicle_registration_card')
+    vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
     vehicle_photo = models.ImageField()
     """
     Driving License
@@ -102,7 +102,7 @@ class StudentVehicle(models.Model):
     driving_license_number = models.CharField(max_length=15)
     driving_license_issue_date = models.DateField()
     driving_license_expiry_date = models.DateField()
-    driving_license = models.FileField(upload_to='driving_license', null=True)
+    driving_license = models.FileField(upload_to='driving_license')
     declaration = models.TextField(blank=True, null=True,
         default="By submitting this form, I hereby declare that " +
                 "I will be obliged to the following terms and conditions:\n\n" +
@@ -131,7 +131,7 @@ class EmployeeVehicle(models.Model):
     flat_number = models.CharField(max_length=5)
     mobile_number = models.IntegerField()
     user_photo = models.ImageField()
-    identity_card = models.FileField(upload_to='identity_card', null=True)
+    identity_card = models.FileField(upload_to='identity_card')
     parking_slot_no =models.CharField(max_length=50)    
     """
     Vehicle Details
@@ -146,7 +146,7 @@ class EmployeeVehicle(models.Model):
     insurance_valid_upto = models.DateField()
     vehicle_registration_card = models.FileField(
         upload_to='vehicle_registration_card')
-    vehicle_insurance = models.FileField(upload_to='vehicle_insurance', null=True)
+    vehicle_insurance = models.FileField(upload_to='vehicle_insurance')
     vehicle_photo = models.ImageField(null=True)
     """
     Driving License
@@ -154,7 +154,7 @@ class EmployeeVehicle(models.Model):
     driving_license_number = models.CharField(max_length=15)
     driving_license_issue_date = models.DateField()
     driving_license_expiry_date = models.DateField()
-    driving_license = models.FileField(upload_to='driving_license', null=True)
+    driving_license = models.FileField(upload_to='driving_license')
     declaration = models.TextField(blank=True, null=True,
         default="By submitting this form, I hereby declare that " +
                 "I will be obliged to the following terms and conditions:\n\n" +

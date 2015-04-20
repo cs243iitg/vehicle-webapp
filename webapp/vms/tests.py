@@ -174,10 +174,7 @@ from django.contrib.auth.models import User
 # 	t4=TheftReport.objects.create(vehicle_pass_no="4235" , reporter=User.objects.all()[0] , theft_time=datetime.strptime('2015-07-05 06:38:57','%Y-%m-%d %H:%M:%S'), theft_place="hostel" , remarks="none" ,status="not found" ).save()
 # except Exception as e:
 
-# """
-# Day TestCase
 
-# """
 # d1=Day.objects.create(day="Monday").save()
 # d2=Day.objects.create(day="Tuesday").save()
 # d3=Day.objects.create(day="Wednesday").save()
@@ -196,14 +193,22 @@ from django.contrib.auth.models import User
 
 # dict2={'g1':'Ram','g2':'Shyam','g3':'Mohan','g4':'Santa'}
 # dict3={'g1':'8011028424','g2':'8011025814','g3':'8011035945','g4':'8011033247'}
+# dict4={'manjhil':'Manjhil Das','security':'security'}
 # for g in dict2:
-#  	Guard.objects.create(guard_user=User.objects.create_user(username=g,password=g,first_name=dict2[g]),is_security=True,guard_phone_number=dict3[g])
+#   Guard.objects.create(guard_user=User.objects.create_user(username=g,password=g,first_name=dict2[g]),is_security=True,guard_phone_number=dict3[g])
+# for a in dict4:
+#     IITGUser.objects.create(user=User.objects.create_superuser(username=a,password=a,first_name=dict4[a],email=str(a+"@vms.com")),is_student=False)
 
 # list4 = ['K. V. Gate','Lathia Bagicha Gate','Faculty Gate','Main Gate','ASEB Gate']
 # list5 = ['Academic Complex','Core1','Core2','Core3','Manas','Dihing','CSE Dept','Quarter D','Hospital','Admin Building','Library','Guest House']
+# list6=['Pan Bazar','Paltan Bazar','Jalukbari','Noonmati','Beltola','Tiniali']
 # for a in list4:
-# 	Gate.objects.create(gate_name=a)
-# 	Place.objects.create(place_name=a)
+#   Place.objects.create(place_name=a)
 # for a in list5:
-# 	Place.objects.create(place_name=a)
+#   Place.objects.create(place_name=a)
+# for a in list6:
+#     Place.objects.create(place_name=a).save()
+dict5={'Core1':'200','Core3':'50','CSE':'100','EEE':'10','Core4':'30','Acad Complex':'54','Conference Centre':'32'}
+for a in dict5:
+	ParkingSlot.objects.create(parking_area_name=a,total_slots=dict5[a]).save()
 

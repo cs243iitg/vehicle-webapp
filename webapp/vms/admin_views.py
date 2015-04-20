@@ -15,6 +15,8 @@ from .models import TheftReport, StudentVehicle, EmployeeVehicle, BusTiming, Gua
 from datetime import datetime
 from django.forms.models import model_to_dict
 from itertools import chain
+import os
+from django.conf import settings
 #------------------------------------------------------------
 #       User Authentication
 #------------------------------------------------------------
@@ -169,11 +171,12 @@ def parking_slot_update(request):
     if request.method == "POST":
         parkings=ParkingSlot.objects.all()
         parking=parkings.get(parking_area_name=request.POST['parking_area_name'])
-        if request.POST['total_slots'] < request.POST['available_slots'] or int(request.POST['total_slots']) <= 0 or int(request.POST['available_slots']) <=0 :
+        if int(request.POST['total_slots']) < int(request.POST['available_slots']) or int(request.POST['total_slots']) <  0 or int(request.POST['available_slots']) < 0 :
             return render(request, 'admin/parking_slot_update.html',{
                 'parkings':parkings,
                 'parking1':parkings[0],
-                'message':"Enter valid slot details for "+str(request.POST['parking_area_name'])
+                'message':"Enter valid slot details for "+str(request.POST['parking_area_name']),
+                'success':False,
                 })
         else:    
             parking.total_slots=request.POST['total_slots']
@@ -183,7 +186,8 @@ def parking_slot_update(request):
             return render(request, 'admin/parking_slot_update.html',{
                 'parkings':parkings,
                 'parking1':parkings[0],
-                'message':"Information of the parking area is updated"
+                'message':"Information of the parking area is updated",
+                'success':True,
                 }) 
     else:
         parkings=ParkingSlot.objects.all()
@@ -195,6 +199,8 @@ def parking_slot_update(request):
 @login_required(login_url="/vms/")
 def guards_on_duty(request):
     guards = Guard.objects.all()
+    success=True
+    message=""
     places = Place.objects.all()
     gates = Gate.objects.all()
     if request.method == "POST":
@@ -223,19 +229,26 @@ def guards_on_duty(request):
                     update.place=place.place_name
                 update.is_gate=is_gate
                 update.save()
-                messages.success(request, "Guard has been alloted the duty.")
+                message = "Guard has been alloted the duty"
+                success=True
             return render(request, 'admin/onduty_guards.html',{
                 'guards':guards,
                 'places':places,
                 'gates':gates,
+                'message':message,
+                'success':success,
                 })   
         except:
-            messages.error(request, "Username not found")
+            message="Username not found"
+            success=False
+
 
     return render(request, 'admin/onduty_guards.html', {
         'guards': guards,
         'places':places,
         'gates':gates,
+        'success':success,
+        'message':message,
         })
 
 
@@ -299,8 +312,15 @@ def approve_reg(request, vehicle_id):
     d = d.replace(year=d.year+1)    
     obj.expiry_date = d
     obj.save()
+    stud_reg_veh = StudentVehicle.objects.filter(registered_with_security_section=True)
+    empl_reg_veh = EmployeeVehicle.objects.filter(registered_with_security_section=True)
+    stud_cycles = StudentCycle.objects.all()
     return render(request, 'admin/old_registered.html', {
         'message': "Vehicle successfully approved. Pass generation and assignment completed successfully.",
+        'username': request.user.username,
+        'stud_reg_veh': stud_reg_veh,
+        'empl_reg_veh': empl_reg_veh,
+        'stud_cycles':stud_cycles,
         })
 
 @csrf_exempt
@@ -317,8 +337,15 @@ def deny_reg(request, vehicle_id):
     d = d.replace(year=d.year-1)    
     obj.expiry_date = d
     obj.save()
+    stud_reg_veh = StudentVehicle.objects.filter(registered_with_security_section=True)
+    empl_reg_veh = EmployeeVehicle.objects.filter(registered_with_security_section=True)
+    stud_cycles = StudentCycle.objects.all()
     return render(request, 'admin/old_registered.html', {
         'message': "Vehicle application successfully denied.",
+        'username': request.user.username,
+        'stud_reg_veh': stud_reg_veh,
+        'empl_reg_veh': empl_reg_veh,
+        'stud_cycles':stud_cycles,
         })
 
 @login_required(login_url="/vms/")
@@ -369,7 +396,7 @@ def viewcsv(request):
         if f.name.split('.')[-1]!="csv":
             messages.error(request, "Upload CSV File only.")
             return render(request, 'admin/csv.html',{})
-        with open('/git/vehicle-webapp/webapp/vms/media/csv/cs243iitg.csv', 'wb+') as destination:
+        with open(os.path.join(settings.MEDIA_ROOT,'csv/cs243iitg.csv'), 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
     #checkcsv('/home/fireman/Django-1.6/mysite/article/jai.csv')
@@ -377,13 +404,13 @@ def viewcsv(request):
     import csv
     
     #csvfile(jai)
-    upload=open('/git/vehicle-webapp/webapp/vms/media/csv/cs243iitg.csv', 'r') 
+    upload=open(os.path.join(settings.MEDIA_ROOT,'csv/cs243iitg.csv'), 'r') 
     # upload=open('csv/cs243iitg.csv','r')
     data=[j for j in csv.reader(upload)]
     upload.close()
     rowNo=1
     flag=0
-    f=open('/git/vehicle-webapp/webapp/vms/media/csv/log.txt', 'wb+') 
+    f=open(os.path.join(settings.MEDIA_ROOT,'csv/log.txt'), 'wb+') 
     #dataReader=csv.reader(open('/home/fireman/Django-1.6/mysite/article/jai.csv'),delimiter=',',quotechar='"')
     for row in data:
         if not row[0] or row[0]=="" or not row[1] or row[1]=="" or  not row[2] or row[2]=="" or not row[3] or  row[3]=="" or not row[4] or  row[4]=="":

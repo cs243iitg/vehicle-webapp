@@ -19,13 +19,8 @@
     <div class="col-lg-6" style="margin-left:5%">
                  <form class="form-horizontal" action="../security/submitlog/" method="post">
                  {% csrf_token %}
-                 {% if messages %}
-                <ul class = "messages">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><font color="red">{{ message }}</font></li>
-                    {% endfor %}
-                </ul>
-                {% endif %}   
+                                    <font {% if not success%}color="red"{% else %}color="green"{% endif %}>{{ message }}</font>
+  
   <div class="form-group">
     <label style="margin-left:10%"  class="col-sm-5 control-label">Enter The vehicle number :</label>
     <div class="col-sm-5">

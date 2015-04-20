@@ -75,8 +75,13 @@ def submitlog(request):
         intime = datetime.now()
         log = VisitorLog(vehicle_number=vehiclenumber,driver_name=drivername,in_gate=gate,license_number=licensenumber,place_to_visit=placetovisit,purpose_of_visit=purposeofvisit,in_time=intime, vehicle_type=vehicletype, vehicle_model=vehiclemodel)  
         log.save()
-        messages.success(request, "Log successfully added")
-        return render(request, 'security/enter_log.html',)
+        message="Log successfully added"
+        gates=Gate.objects.all()
+        return render(request, 'security/enter_log.html',{
+            'message':message,
+            'gates':gates,
+            })
+  
 
 #def enterlog(request):
     

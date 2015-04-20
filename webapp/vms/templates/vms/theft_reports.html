@@ -20,13 +20,14 @@
 <tr>
     <td>{{report.id}}</td>
     <td>{{report.reporter.first_name}} {{report.reporter.last_name}}</td>
-    {% if is_student %}
+    {% if report.reporter.user.is_student %}
         <td>{{report.stud_vehicle.make_and_model}}</td>
     {% else %}
-        <td>{{report.emp_vehicle.is_student}}</td>
+        <td>{{report.emp_vehicle.make_and_model}}</td>
+ 
     {% endif %}
-    <td>{{report.theft_date_and_time}}</td>
-    <td>{{report.place}}</td>
+    <td>{{report.theft_time}}</td>
+    <td>{{report.theft_place}}</td>
 </tr>
 {% endfor %}
 </tbody>

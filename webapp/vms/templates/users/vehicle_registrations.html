@@ -29,12 +29,14 @@
                             <td>{{ registration.name }}</td>
                             <td>{{ registration.make_and_model }}</td>
                             <td>{{ registration.vehicle_registration_number }}</td>
-                            <td>{{ registration.vehicle_pass_no }}</td>
                             {% if registration.registered_with_security_section == True %}
+                                <td>{{ registration.vehicle_pass_no }}</td>
                                 <td>Registered</td>
                             {% elif registration.registered_with_security_section == False %}
+                                <td>Registration Denied</td>
                                 <td>Denied</td>
                             {% else %}
+                                <td>Not Available</td>
                                 <td>Pending</td>
                             {% endif %}
                             {% if registration.registered_with_security_section == None %}

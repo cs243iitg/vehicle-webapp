@@ -155,9 +155,9 @@ class StudentVehicleForm(forms.ModelForm):
             'startView': 4,
         }
         widgets = {
-            'date_of_birth':DateTimePicker(options={"format": "DD-MM-YYYY", "pickTime":False}),
-            # 'date_of_birth': SelectDateWidget(years=range(1950, datetime.now().year)),#(usel10n = True, bootstrap_version=3, options = dateOptions),
-            'insurance_valid_upto': SelectDateWidget(years=range(1950, datetime.now().year)), #(usel10n = True, bootstrap_version=3,                                            options = dateOptions),
+            # 'date_of_birth':DateTimePicker(options={"format": "DD-MM-YYYY", "pickTime":False}),
+            'date_of_birth': SelectDateWidget(years=range(1950, datetime.now().year)),#(usel10n = True, bootstrap_version=3, options = dateOptions),
+            'insurance_valid_upto': SelectDateWidget(years=range(datetime.now().year, 2035)), #(usel10n = True, bootstrap_version=3,                                            options = dateOptions),
             'driving_license_issue_date': SelectDateWidget(years=range(1950, datetime.now().year)), #(usel10n = True,   bootstrap_version=3,                                                    options = dateOptions),
             'driving_license_expiry_date': SelectDateWidget(years=range(datetime.now().year, 2035)), #(usel10n = True,     bootstrap_version=3,                                                    options = dateOptions),
             'remarks': forms.Textarea(attrs={'rows':6}),
@@ -284,7 +284,7 @@ class EmployeeVehicleForm(forms.ModelForm):
             'date_of_birth': SelectDateWidget(years=range(1950, datetime.now().year)), #DateWidget(usel10n = True, bootstrap_version=3,
                               #          options = dateOptions),
             
-            'insurance_valid_upto': SelectDateWidget(years=range(1950, datetime.now().year)), #DateWidget(usel10n = True, bootstrap_version=3,options = dateOptions),
+            'insurance_valid_upto': SelectDateWidget(years=range(datetime.now().year, 2035)), #DateWidget(usel10n = True, bootstrap_version=3,options = dateOptions),
             'driving_license_issue_date':SelectDateWidget(years=range(1950, datetime.now().year)), # DateWidget(usel10n = True, bootstrap_version=3,                                                    options = dateOptions),
             'driving_license_expiry_date': SelectDateWidget(years=range(datetime.now().year, 2035)), #DateWidget(usel10n = True,                                               bootstrap_version=3,                                                     options = dateOptions),
             'remarks': forms.Textarea(attrs={'rows':6}),
