@@ -304,6 +304,7 @@ class TheftReport(models.Model):
 
 class Place(models.Model):
     place_name=models.CharField(max_length=32, unique=True)
+    in_campus=models.BooleanField(default=True)
     def __str__(self):
         return self.place_name
 

@@ -78,7 +78,7 @@ def home(request):
     Home page for user, with his previous tasks
     """
     today = str.lower(datetime.now().strftime("%A"))    
-    buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
+    # buses = sorted(j for j in BusTiming.objects.all() if (j.from_time >= datetime.now().time() and filter(lambda x: str(x).lower() == today, j.availability.all()) ))
     if not request.user.is_superuser == True:
         num_suspicious = len(SuspiciousVehicle.objects.filter(reporter=request.user))
         x1 = [j for j in StudentVehicle.objects.all() if (j.user == request.user and j.registered_with_security_section==None)]
@@ -91,7 +91,7 @@ def home(request):
         return render(request, 'vms/dashboard.html',{
             'username': request.user.first_name,            
             'user': request.user,
-            'buses': buses[0:3],  
+            # 'buses': buses[0:3],  
             'num_suspicious': num_suspicious,
             'num_pending': num_pending,
             'num_guards': num_guards,
@@ -115,7 +115,7 @@ def home(request):
             'username': request.user.first_name,
             'is_user': True,
             'user': request.user,
-            'buses': buses[0:3],  
+            # 'buses': buses[0:3],  
             'num_suspicious': num_suspicious,
             'num_pending': num_pending,
             'num_guards': num_guards,
@@ -274,7 +274,7 @@ def suspicious_vehicle_report_form(request):
         'user': request.user,
         'form':form,
         })
-
+@login_required(login_url="/vms/")
 def suspicious_vehicles(request):
     """
     Function to allow users to view all suspicious reported activity
@@ -296,6 +296,7 @@ def suspicious_vehicles(request):
             'vehicles':vehicles,
             })
 
+@login_required(login_url="/vms/")
 def delete_suspicious_vehicles(request, suspicious_vehicle_id):
     SuspiciousVehicle.objects.get(id=suspicious_vehicle_id).delete()
     pass

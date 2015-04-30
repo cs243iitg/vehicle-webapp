@@ -25,8 +25,11 @@
                 </div>
             </form>
             <form method="POST" action="/vms/admin/add-place/">
+             {% csrf_token %}
+            <font {% if not success%}color="red"{% else %}color="green"{% endif %}>{{ message }}</font>
               <input type="text" placeholder="Enter new Place Name" name="place"/>
-              <button type="submit">Add Place</button>
+              <input type="checkbox" name="in_campus"/>
+              <button type="submit" >Add Place</button>
             </form>                            
             </div>
             <!-- /.container-fluid -->

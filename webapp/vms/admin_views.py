@@ -201,7 +201,7 @@ def guards_on_duty(request):
     guards = Guard.objects.all()
     success=True
     message=""
-    places = Place.objects.all()
+    places = Place.objects.filter(in_campus=True)
     gates = Gate.objects.all()
     if request.method == "POST":
         try:
@@ -380,14 +380,17 @@ def add_guards(request):
     form = DocumentForm()
     return render_to_response('admin/add_guards.html',{'type':'type','form':form},context_instance=RequestContext(request))
 
+@login_required(login_url="/vms/")
 def upload_log(request):
     form=DocumentForm()
     return render_to_response('admin/csv.html',{'type':'type','form':form},context_instance=RequestContext(request))
 
+@login_required(login_url="/vms/")
 def uploadcsv(request):
     return render_to_response('admin/csv.html',
                  {'type':"type" },context_instance=RequestContext(request))
 
+@login_required(login_url="/vms/")
 def viewcsv(request):
     # Handle file upload
     if request.method == 'POST':
@@ -435,4 +438,28 @@ def viewcsv(request):
         #return HttpResponse("dataReader")  
         
         return render_to_response('enter_log.html', {'form': 'form'})    
+
+@login_required(login_url="/vms/")
+def add_place(request):
+    if request.method=="POST":
+        placename = request.POST['place']
+        try:
+            in_campus=request.POST['in_campus']
+        except:
+            in_campus=False
+        try:
+            Place.objects.create(place_name=placename, in_campus=in_campus)
+            message="Place Added successfully"
+            success=True
+        except:
+            message="Place already exists"
+            success=False
+        form=BusTimingForm()
+        return render(request, "admin/bustiming.html",{
+            'message':message,
+            'success':success,
+            'form':form,
+            })
+
+
 
